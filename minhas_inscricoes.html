@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minhas Inscrições - GSSA</title>
+    <link rel="Website Icon" href="gssa_logo_transp.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Estilos específicos para a página de inscrições */
+        .inscricoes-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--bg-map-border);
+        }
+
+        .page-header h1 {
+            color: var(--color-highlight);
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .page-header p {
+            color: var(--text-secondary);
+            font-size: 1.1em;
+        }
+
+        .inscricoes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .inscricao-card {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 8px var(--color-shadow);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .inscricao-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px var(--color-shadow);
+        }
+
+        .inscricao-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(to right, var(--color-highlight), var(--color-tint));
+        }
+
+        .ong-name {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: var(--text-primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .ong-name i {
+            color: var(--color-highlight);
+        }
+
+        .inscricao-info {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .info-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--bg-map-border);
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-row i {
+            width: 20px;
+            color: var(--color-highlight);
+            font-size: 0.9em;
+        }
+
+        .info-label {
+            font-weight: bold;
+            color: var(--text-secondary);
+            font-size: 0.85em;
+            text-transform: uppercase;
+        }
+
+        .info-value {
+            color: var(--text-primary);
+            flex: 1;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.85em;
+            text-transform: uppercase;
+        }
+
+        .status-pending {
+            background-color: rgba(241, 196, 15, 0.2);
+            color: #F1C40F;
+        }
+
+        .status-approved {
+            background-color: rgba(46, 204, 113, 0.2);
+            color: #2ECC71;
+        }
+
+        .status-rejected {
+            background-color: rgba(231, 76, 60, 0.2);
+            color: #E74C3C;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+
+        .empty-state i {
+            font-size: 5em;
+            color: var(--bg-map-border);
+            margin-bottom: 20px;
+        }
+
+        .empty-state h2 {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+
+        .empty-state p {
+            font-size: 1.1em;
+            margin-bottom: 30px;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background-color: var(--color-highlight);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--color-tint);
+            transform: translateY(-2px);
+        }
+
+        .loading-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .loading-state i {
+            font-size: 3em;
+            color: var(--color-highlight);
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn-cancel {
+            flex: 1;
+            padding: 8px 16px;
+            background-color: transparent;
+            border: 1px solid var(--color-error);
+            color: var(--color-error);
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .btn-cancel:hover {
+            background-color: var(--color-error);
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .inscricoes-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .page-header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <div class="header-left">
+            <img src="gssa_logo.png" alt="Logo GSSA" class="gssa-logo-img">
+            <div class="logo-titles">
+                <h1 class="logo-main-title">GSSA</h1>
+                <p class="logo-subtitle">Gravataí Support & Shelter Assist</p>
+            </div>
+        </div>
+
+        <nav class="header-right">
+            <a href="index.html" class="nav-button">Início</a>
+            <a href="minhas-inscricoes.html" class="nav-button" style="border-color: var(--color-highlight);">Contatos</a>
+            
+            <div id="user-dropdown" class="user-dropdown" style="display: none;">
+                <button id="user-menu-button" class="user-menu-button">
+                    <i class="fas fa-user-circle"></i>
+                    <span id="user-name-display"></span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div id="user-dropdown-menu" class="user-dropdown-menu">
+                    <a href="perfil.html"><i class="fas fa-user"></i> Meu Perfil</a>
+                    <a href="minhas-inscricoes.html"><i class="fas fa-address-book"></i> Minhas Inscrições</a>
+                    <hr>
+                    <a href="#" id="menu-logout"><i class="fas fa-sign-out-alt"></i> Sair</a>
+                </div>
+            </div>
+            
+            <button id="theme-toggle" class="toggle-button" aria-label="Alternar Tema">
+                <i class="fas fa-sun"></i> 
+            </button>
+        </nav>
+    </header>
+
+    <div class="inscricoes-container">
+        <div class="page-header">
+            <h1><i class="fas fa-clipboard-list"></i> Minhas Inscrições</h1>
+            <p>Acompanhe o status das suas candidaturas como voluntário</p>
+        </div>
+
+        <div id="loading-state" class="loading-state">
+            <i class="fas fa-spinner"></i>
+            <p>Carregando suas inscrições...</p>
+        </div>
+
+        <div id="inscricoes-content" style="display: none;">
+            <div id="inscricoes-list" class="inscricoes-grid">
+                <!-- Inscrições serão inseridas aqui pelo JavaScript -->
+            </div>
+        </div>
+
+        <div id="empty-state" class="empty-state" style="display: none;">
+            <i class="fas fa-inbox"></i>
+            <h2>Nenhuma inscrição ainda</h2>
+            <p>Você ainda não se inscreveu em nenhuma ONG. Que tal começar agora?</p>
+            <a href="index.html" class="btn-primary">
+                <i class="fas fa-search"></i> Explorar ONGs
+            </a>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, query, where, getDocs, doc, deleteDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Configuração Firebase (mesma do app.js)
+        const firebaseConfig = {
+            apiKey: "AIzaSyDhQs9Kz4LLGaKIhWV9nUiTjlst5YEWhjg",
+            authDomain: "gssa-gravatai.firebaseapp.com",
+            projectId: "gssa-gravatai",
+            storageBucket: "gssa-gravatai.firebasestorage.app",
+            messagingSenderId: "650753472587",
+            appId: "1:650753472587:web:65b706993648dc602975ce"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Dados das ONGs (temporário - depois migrar para Firestore)
+        const ONGS_DATA = [
+            {
+                id: 1,
+                nome: "AICA - Associação Irmãos do Caminho",
+                servicos: "Alimentação, Roupa, Suporte Psicossocial"
+            },
+            {
+                id: 2,
+                nome: "Fundação Casa dos Sonhos",
+                servicos: "Serviço de Convivência e Fortalecimento de Vínculos"
+            },
+            {
+                id: 3,
+                nome: "Sopa Solidária Gravataí",
+                servicos: "Distribuição de Alimentos, Kits de Higiene"
+            }
+        ];
+
+        // Elementos DOM
+        const loadingState = document.getElementById('loading-state');
+        const inscricoesContent = document.getElementById('inscricoes-content');
+        const emptyState = document.getElementById('empty-state');
+        const inscricoesList = document.getElementById('inscricoes-list');
+        const userDropdown = document.getElementById('user-dropdown');
+        const userNameDisplay = document.getElementById('user-name-display');
+        const menuLogout = document.getElementById('menu-logout');
+        const themeToggle = document.getElementById('theme-toggle');
+
+        // Sistema de tema
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+                themeToggle.querySelector('i').classList.replace('fa-sun', 'fa-moon');
+            }
+        }
+
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            const icon = themeToggle.querySelector('i');
+            
+            if (isDark) {
+                icon.classList.replace('fa-sun', 'fa-moon');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                icon.classList.replace('fa-moon', 'fa-sun');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+
+        // Tradução de status
+        function getStatusInfo(status) {
+            const statusMap = {
+                'pending': { 
+                    text: 'Pendente', 
+                    class: 'status-pending', 
+                    icon: 'fa-clock' 
+                },
+                'approved': { 
+                    text: 'Aprovado', 
+                    class: 'status-approved', 
+                    icon: 'fa-check-circle' 
+                },
+                'rejected': { 
+                    text: 'Rejeitado', 
+                    class: 'status-rejected', 
+                    icon: 'fa-times-circle' 
+                }
+            };
+            return statusMap[status] || statusMap['pending'];
+        }
+
+        // Carregar inscrições do usuário
+        async function loadInscricoes(userId) {
+            try {
+                const q = query(
+                    collection(db, 'applications'), 
+                    where('userId', '==', userId)
+                );
+                const querySnapshot = await getDocs(q);
+
+                if (querySnapshot.empty) {
+                    loadingState.style.display = 'none';
+                    emptyState.style.display = 'block';
+                    return;
+                }
+
+                const inscricoes = [];
+                querySnapshot.forEach((doc) => {
+                    inscricoes.push({
+                        id: doc.id,
+                        ...doc.data()
+                    });
+                });
+
+                // Ordena por data (mais recente primeiro)
+                inscricoes.sort((a, b) => {
+                    const dateA = a.createdAt?.toDate() || new Date(0);
+                    const dateB = b.createdAt?.toDate() || new Date(0);
+                    return dateB - dateA;
+                });
+
+                renderInscricoes(inscricoes);
+                
+                loadingState.style.display = 'none';
+                inscricoesContent.style.display = 'block';
+
+            } catch (error) {
+                console.error('Erro ao carregar inscrições:', error);
+                loadingState.innerHTML = `
+                    <i class="fas fa-exclamation-triangle" style="color: var(--color-error);"></i>
+                    <p>Erro ao carregar inscrições: ${error.message}</p>
+                `;
+            }
+        }
+
+        // Renderizar inscrições na tela
+        function renderInscricoes(inscricoes) {
+            inscricoesList.innerHTML = '';
+
+            inscricoes.forEach(inscricao => {
+                const ong = ONGS_DATA.find(o => o.id === inscricao.ongId);
+                const ongNome = ong ? ong.nome : 'ONG não encontrada';
+                const ongServicos = ong ? ong.servicos : '';
+                
+                const statusInfo = getStatusInfo(inscricao.status);
+                const dataInscricao = inscricao.createdAt?.toDate() 
+                    ? inscricao.createdAt.toDate().toLocaleDateString('pt-BR', {
+                        day: '2-digit',
+                        month: 'long',
+                        year: 'numeric'
+                    })
+                    : 'Data não disponível';
+
+                const card = document.createElement('div');
+                card.className = 'inscricao-card';
+                card.innerHTML = `
+                    <div class="ong-name">
+                        <i class="fas fa-hands-helping"></i>
+                        ${ongNome}
+                    </div>
+                    
+                    <div class="inscricao-info">
+                        <div class="info-row">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="info-value">${ongServicos}</span>
+                        </div>
+                        
+                        <div class="info-row">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span class="info-label">Data de Inscrição:</span>
+                            <span class="info-value">${dataInscricao}</span>
+                        </div>
+                        
+                        <div class="info-row">
+                            <i class="fas fa-flag"></i>
+                            <span class="info-label">Status:</span>
+                            <span class="status-badge ${statusInfo.class}">
+                                <i class="fas ${statusInfo.icon}"></i>
+                                ${statusInfo.text}
+                            </span>
+                        </div>
+                    </div>
+
+                    ${inscricao.status === 'pending' ? `
+                        <div class="action-buttons">
+                            <button class="btn-cancel" data-id="${inscricao.id}">
+                                <i class="fas fa-times"></i> Cancelar Inscrição
+                            </button>
+                        </div>
+                    ` : ''}
+                `;
+
+                inscricoesList.appendChild(card);
+            });
+
+            // Event listeners para cancelar inscrição
+            document.querySelectorAll('.btn-cancel').forEach(btn => {
+                btn.addEventListener('click', async (e) => {
+                    const inscricaoId = e.currentTarget.dataset.id;
+                    if (confirm('Tem certeza que deseja cancelar esta inscrição?')) {
+                        try {
+                            await deleteDoc(doc(db, 'applications', inscricaoId));
+                            alert('Inscrição cancelada com sucesso!');
+                            location.reload();
+                        } catch (error) {
+                            alert('Erro ao cancelar inscrição: ' + error.message);
+                        }
+                    }
+                });
+            });
+        }
+
+        // Autenticação
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                // Carrega perfil do usuário
+                const userDoc = await getDoc(doc(db, 'users', user.uid));
+                if (userDoc.exists()) {
+                    const userData = userDoc.data();
+                    userNameDisplay.textContent = userData.name || user.email;
+                    userDropdown.style.display = 'block';
+                    
+                    // Carrega inscrições
+                    loadInscricoes(user.uid);
+                }
+            } else {
+                // Redireciona para login se não estiver autenticado
+                window.location.href = 'index.html';
+            }
+        });
+
+        // Logout
+        menuLogout.addEventListener('click', async (e) => {
+            e.preventDefault();
+            await signOut(auth);
+            window.location.href = 'index.html';
+        });
+
+        // Dropdown do usuário
+        document.getElementById('user-menu-button')?.addEventListener('click', () => {
+            const menu = document.getElementById('user-dropdown-menu');
+            menu.classList.toggle('show');
+        });
+
+        // Fecha dropdown ao clicar fora
+        document.addEventListener('click', (e) => {
+            if (!userDropdown.contains(e.target)) {
+                document.getElementById('user-dropdown-menu')?.classList.remove('show');
+            }
+        });
+
+        // Inicializa tema
+        initTheme();
+    </script>
+</body>
+</html>

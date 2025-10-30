@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GSSA - Gravataí Support & Shelter Assist</title>
+    <link rel="icon" href="gssa_logo_transp.png">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="style.css"> 
+</head>
+<body>
+    <header class="main-header">
+        <div class="header-left">
+            <img src="gssa_logo.png" alt="Logo GSSA" class="gssa-logo-img">
+            <div class="logo-titles">
+                <h1 class="logo-main-title">GSSA</h1>
+                <p class="logo-subtitle">Gravataí Support & Shelter Assist</p>
+            </div>
+        </div>
+
+        <div class="header-center">
+            <div class="search-container-header">
+                <input type="text" id="search-input" placeholder="Buscar ONGs por nome, serviço ou bairro...">
+                <button id="search-button" aria-label="Buscar"><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+
+        <nav class="header-right">
+            <a href="index.html" class="nav-button" style="border-color: var(--color-highlight);">Início</a>
+            <a href="#" id="nav-inscricoes" class="nav-button">Contatos</a>
+            
+            <!-- Botão de autenticação -->
+            <button id="auth-button" class="volunteer-button">
+                <i class="fas fa-sign-in-alt"></i> <span id="auth-button-text">Entrar</span>
+            </button>
+            
+            <!-- Dropdown do usuário (aparece quando logado) -->
+            <div id="user-dropdown" class="user-dropdown" style="display: none;">
+                <button id="user-menu-button" class="user-menu-button">
+                    <i class="fas fa-user-circle"></i>
+                    <span id="user-name-display"></span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div id="user-dropdown-menu" class="user-dropdown-menu">
+                    <a href="#" id="menu-profile"><i class="fas fa-user"></i> Meu Perfil</a>
+                    <a href="#" id="menu-contacts"><i class="fas fa-address-book"></i> Minhas Inscrições</a>
+                    <a href="#" id="menu-admin-panel" style="display: none;"><i class="fas fa-cog"></i> Painel Admin</a>
+                    <hr>
+                    <a href="#" id="menu-logout"><i class="fas fa-sign-out-alt"></i> Sair</a>
+                </div>
+            </div>
+            
+            <button id="theme-toggle" class="toggle-button" aria-label="Alternar Tema">
+                <i class="fas fa-sun"></i> 
+            </button>
+        </nav>
+    </header>
+
+    <!-- MODAL DE AUTENTICAÇÃO -->
+    <div id="auth-modal" class="modal">
+        <div class="modal-content auth-modal-content">
+            <button id="close-auth-modal" class="modal-close-button" aria-label="Fechar"><i class="fas fa-times"></i></button>
+            
+            <!-- FORMULÁRIO DE LOGIN -->
+            <div id="login-form-container" class="auth-form-container active">
+                <h2 class="modal-title"><i class="fas fa-sign-in-alt"></i> Acesse sua Conta</h2>
+                <p class="modal-subtitle">Entre para gerenciar suas inscrições ou sua ONG</p>
+                
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="login-email">E-mail</label>
+                        <input type="email" id="login-email" required placeholder="seu@email.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="login-password">Senha</label>
+                        <input type="password" id="login-password" required placeholder="••••••••">
+                    </div>
+
+                    <button type="submit" class="submit-button">
+                        <i class="fas fa-sign-in-alt"></i> Entrar
+                    </button>
+                    
+                    <p class="auth-link">
+                        <a href="#" id="switch-to-register">Não tem conta? Cadastrar-se como voluntário</a>
+                    </p>
+                    
+                    <div id="login-message" class="form-message"></div>
+                </form>
+            </div>
+
+            <!-- FORMULÁRIO DE CADASTRO -->
+            <div id="register-form-container" class="auth-form-container">
+                <h2 class="modal-title"><i class="fas fa-hand-holding-heart"></i> Cadastro de Voluntário</h2>
+                <p class="modal-subtitle">Seu apoio é fundamental. Preencha seus dados para ajudar as ONGs de Gravataí.</p>
+                
+                <form id="register-form">
+                    <div class="form-group">
+                        <label for="register-name">Nome Completo</label>
+                        <input type="text" id="register-name" required placeholder="Seu nome">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="register-email">E-mail</label>
+                        <input type="email" id="register-email" required placeholder="seu@email.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="register-password">Senha</label>
+                        <input type="password" id="register-password" required placeholder="Mínimo 6 caracteres">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="register-password-confirm">Confirme a Senha</label>
+                        <input type="password" id="register-password-confirm" required placeholder="Digite a senha novamente">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="register-location">Localização (Bairro/Ponto de Partida)</label>
+                        <input type="text" id="register-location" required placeholder="Ex: Centro, Rincão da Madalena">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="register-skills">Habilidades/Serviços que Oferece (Separar por vírgula)</label>
+                        <input type="text" id="register-skills" required placeholder="Ex: Médico, Motorista, Ajuda Geral, Eletricista">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="register-availability">Disponibilidade</label>
+                        <textarea id="register-availability" rows="2" required placeholder="Ex: Diária após 18h, Finais de Semana, Integral."></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-button">
+                        <i class="fas fa-user-plus"></i> Criar Conta
+                    </button>
+                    
+                    <p class="auth-link">
+                        <a href="#" id="switch-to-login">Já tem conta? Entrar</a>
+                    </p>
+                    
+                    <div id="register-message" class="form-message"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE INSCRIÇÕES (para quando não houver arquivo separado) -->
+    <div id="inscricoes-modal" class="modal">
+        <div class="modal-content" style="max-width: 800px; max-height: 90vh; overflow-y: auto;">
+            <button id="close-inscricoes-modal" class="modal-close-button" aria-label="Fechar"><i class="fas fa-times"></i></button>
+            <h2 class="modal-title"><i class="fas fa-clipboard-list"></i> Minhas Inscrições</h2>
+            <p class="modal-subtitle">Acompanhe o status das suas candidaturas</p>
+            
+            <div id="modal-inscricoes-list" style="margin-top: 20px;">
+                <p style="text-align: center; color: var(--text-secondary);">Carregando...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE PERFIL (para quando não houver arquivo separado) -->
+    <div id="perfil-modal" class="modal">
+        <div class="modal-content" style="max-width: 700px; max-height: 90vh; overflow-y: auto;">
+            <button id="close-perfil-modal" class="modal-close-button" aria-label="Fechar"><i class="fas fa-times"></i></button>
+            <h2 class="modal-title"><i class="fas fa-user-circle"></i> Meu Perfil</h2>
+            <div id="modal-perfil-content" style="margin-top: 20px;">
+                <p style="text-align: center; color: var(--text-secondary);">Carregando...</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="map-container-wrapper">
+            <div id="map"></div>
+            
+            <!-- Painel Lateral de Detalhes -->
+            <aside id="details-panel" class="details-panel">
+                <button id="close-panel" class="close-button" aria-label="Fechar Painel"><i class="fas fa-times"></i></button>
+                <div class="panel-content"></div>
+            </aside>
+        </div>
+    </div>
+
+    <!-- Botão fixo de logout -->
+    <button id="fixed-logout-button" class="fixed-logout-button" style="display: none;">
+        <i class="fas fa-sign-out-alt"></i> Sair
+    </button>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="data.js"></script>
+    <script type="module" src="app.js"></script>
+</body>
+</html>

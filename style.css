@@ -1,0 +1,854 @@
+/* ----------------------------------------------------------------------
+    GSSA - Stylesheet
+    Correção: Aplicação consistente de variáveis CSS para Dark/Light Mode.
+    ---------------------------------------------------------------------- */
+
+/* 1. Variáveis CSS - TEMA CLARO (Padrão) */
+:root {
+    /* Cores de Fundo (Dominantes Claras) */
+    --bg-primary: #FFFFFF;      /* Fundo Principal (Body, Fundo Card) */
+    --bg-secondary: #F0F0F0;    /* Fundo Secundário/Card/Fundo Painel */
+    --bg-header: #FFFFFF;       /* Header no Claro */
+    --bg-map-border: #BBBBBB;   /* Borda no Claro */
+    --bg-input: #FFFFFF;        /* Fundo do Input */
+    --bg-modal: rgba(0, 0, 0, 0.7); /* Fundo do Modal (Overlay) */
+    
+    /* Cores de Texto/Elementos (Dominantes Escuras) */
+    --text-primary: #121212;    /* Texto Principal (Body, Input) */
+    --text-secondary: #333333;  /* Texto Secundário (Links/Menu/Header Text) */
+    --color-highlight: #D9534F; /* Vermelho Suave (Destaque) */
+    --color-tint: #992925;      /* Vermelho Tinto (Ação/Hover) */
+    --color-shadow: rgba(0, 0, 0, 0.15); /* Sombra escura no claro */
+    --color-success: #4CAF50;
+    --color-error: #F44336;
+}
+
+/* 2. Variáveis CSS - TEMA ESCURO (Classe .dark-mode) */
+.dark-mode {
+    /* Cores de Fundo (Dominantes Escuras) */
+    --bg-primary: #121212;      /* Fundo Principal (Body) */
+    --bg-secondary: #1E1E1E;    /* Fundo Secundário/Card/Fundo Painel */
+    --bg-header: #1E1E1E;       /* Header no Escuro */
+    --bg-map-border: #444444;   /* Borda no Escuro */
+    --bg-input: #333333;        /* Fundo do Input Escuro */
+    --bg-modal: rgba(0, 0, 0, 0.85); /* Fundo do Modal (Overlay) */
+
+    /* Cores de Texto/Elementos (Dominantes Claras) */
+    --text-primary: #E0E0E0;    /* Texto Principal (Body, Input) */
+    --text-secondary: #F0F0F0;  /* Texto Secundário (Links/Menu/Header Text) */
+    --color-highlight: #FF7F7F; /* Vermelho mais claro (Destaque) */
+    --color-tint: #C0392B;      /* Tinto adaptado (Ação/Hover) */
+    --color-shadow: rgba(255, 255, 255, 0.05); /* Sombra clara no escuro */
+    --color-success: #66BB6A;
+    --color-error: #EF5350;
+}
+
+/* 3. Estilos Gerais Aplicando as Variáveis */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    /* Aplica a cor do tema */
+    background-color: var(--bg-primary); 
+    color: var(--text-primary); 
+    
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    transition: background-color 0.5s, color 0.5s; /* Transição suave */
+}
+
+/* Header Reestruturado (Três Colunas) */
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 30px;
+    
+    /* Aplica as variáveis do tema */
+    background-color: var(--bg-header); 
+    color: var(--text-secondary); 
+    box-shadow: 0 2px 4px var(--color-shadow);
+    transition: background-color 0.5s, color 0.5s, box-shadow 0.5s;
+}
+
+/* --- Bloco Esquerdo: Logo e Títulos --- */
+.header-left {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.gssa-logo-img {
+    height: 40px;
+    margin-right: 10px;
+}
+
+.logo-titles {
+    line-height: 1.1;
+}
+
+/* Aplicação do Degradê */
+.logo-main-title, .logo-subtitle {
+    /* Usa variáveis para o Degradê */
+    background: linear-gradient(to right, var(--color-highlight), var(--color-tint)); 
+    -webkit-background-clip: text; 
+    background-clip: text;
+    color: transparent; 
+    font-weight: bold;
+    margin: 0;
+}
+
+.logo-main-title {
+    font-size: 24px;
+}
+
+.logo-subtitle {
+    font-size: 10px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+/* --- Bloco Central: Barra de Busca (Centralizada) --- */
+.header-center {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    padding: 0 20px;
+}
+
+.search-container-header {
+    display: flex;
+    width: 100%;
+    max-width: 500px;
+    
+    /* Aplica variáveis */
+    border: 1px solid var(--color-tint);
+    background-color: var(--bg-input); 
+    
+    border-radius: 20px; 
+    overflow: hidden; 
+}
+
+#search-input {
+    flex-grow: 1;
+    padding: 8px 15px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    
+    /* Aplica variáveis */
+    background-color: transparent; 
+    color: var(--text-primary); 
+}
+
+#search-button {
+    /* Aplica variáveis */
+    padding: 8px 15px;
+    background-color: var(--color-highlight); 
+    color: var(--bg-primary); /* Cor do ícone */
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#search-button:hover {
+    background-color: var(--color-tint); 
+}
+
+/* --- Bloco Direito: Navegação --- */
+.header-right {
+    display: flex;
+    flex-shrink: 0;
+}
+
+.nav-button {
+    text-decoration: none;
+    /* Aplica a cor do texto do header */
+    color: var(--text-secondary); 
+    
+    padding: 8px 15px;
+    margin-left: 10px;
+    border-bottom: 2px solid transparent; 
+    transition: border-color 0.3s, color 0.3s;
+}
+
+.nav-button:hover {
+    border-color: var(--color-highlight); 
+}
+
+.toggle-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2em;
+    padding: 0;
+    margin-left: 10px;
+    /* Usa a mesma cor dos nav-buttons */
+    color: var(--text-secondary); 
+}
+
+/* NOVO: Estilo para o Botão Voluntariar-se */
+.volunteer-button {
+    background-color: var(--color-success); /* Cor verde ou de ação primária */
+    color: white;
+    font-weight: bold;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-left: 10px;
+    box-shadow: 0 2px 4px var(--color-shadow);
+    transition: background-color 0.3s, transform 0.1s, opacity 0.3s;
+}
+.volunteer-button:hover {
+    background-color: #388E3C; /* Tom mais escuro de verde */
+    transform: translateY(-1px);
+}
+.volunteer-button i {
+    margin-right: 5px;
+}
+.volunteer-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* NOVO: Dropdown do Usuário (Meu Perfil, Minhas Inscrições, Sair) */
+.user-dropdown {
+    position: relative;
+    margin-left: 10px;
+}
+
+.user-menu-button {
+    display: flex;
+    align-items: center;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 8px 10px;
+    border-radius: 6px;
+    transition: background-color 0.3s;
+}
+
+.user-menu-button:hover {
+    background-color: var(--bg-secondary);
+}
+
+.user-menu-button i {
+    margin-right: 5px;
+}
+
+.user-dropdown-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--bg-map-border);
+    border-radius: 6px;
+    box-shadow: 0 4px 8px var(--color-shadow);
+    min-width: 150px;
+    display: none;
+    z-index: 1000;
+    transition: opacity 0.3s, transform 0.3s;
+    opacity: 0;
+    transform: translateY(-10px);
+}
+
+.user-dropdown-menu.show {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.user-dropdown-menu a {
+    display: block;
+    padding: 10px 15px;
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.user-dropdown-menu a:hover {
+    background-color: var(--bg-primary);
+}
+
+.user-dropdown-menu hr {
+    margin: 5px 0;
+    border: none;
+    border-top: 1px solid var(--bg-map-border);
+}
+
+/* 4. Conteúdo Principal, Mapa e Painel Lateral (Layout Flex) */
+.main-content {
+    flex-grow: 1; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 30px 30px 30px;
+    width: 100%;
+}
+
+/* Wrapper para Mapa e Painel Lateral (Desktop: Side-by-Side) */
+.map-container-wrapper {
+    display: flex;
+    position: relative; 
+    width: 100%;
+    max-width: 1200px; /* Aumenta a largura máxima para acomodar o painel */
+    height: 80vh;
+    border-radius: 8px;
+    overflow: hidden; 
+    box-shadow: 0 4px 8px var(--color-shadow); 
+    border: 1px solid var(--bg-map-border); /* Borda movida para o wrapper */
+    margin: 10px 0 0 0;
+    transition: box-shadow 0.5s, border-color 0.5s;
+    align-items: stretch; /* Garante alinhamento vertical */
+}
+
+/* NOVO: Centraliza o painel em mobile para evitar "pendência" */
+@media (max-width: 900px) {
+    .map-container-wrapper {
+        align-items: center;
+    }
+}
+
+#map {
+    flex-grow: 1; 
+    width: 100%; /* Largura inicial, será ajustada pelo JS/CSS */
+    height: 100%; 
+    transition: width 0.5s ease-in-out;
+}
+
+/* Estilos do Painel Lateral */
+.details-panel {
+    width: 0; /* Começa fechado */
+    height: 100%;
+    background-color: var(--bg-secondary); 
+    color: var(--text-primary);
+    overflow-y: auto;
+    transition: width 0.5s ease-in-out, height 0.5s ease-in-out, background-color 0.5s;
+    flex-shrink: 0;
+    padding: 0; 
+    position: relative; /* Para posicionar o botão de fechar */
+}
+
+.details-panel.open {
+    width: 35%; /* Largura quando aberto no desktop */
+    min-width: 300px; 
+    padding: 20px;
+}
+
+/* Ajusta o mapa quando o painel está aberto no desktop */
+.details-panel.open ~ #map {
+    width: 65%; /* Mapa ocupa o restante */
+}
+
+/* NOVO: Botão "Inscrever-se" no Painel Lateral */
+#apply-button {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--color-success); /* Verde para ação positiva */
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+    margin-top: 15px;
+    transition: background-color 0.3s, transform 0.1s;
+}
+
+#apply-button:hover {
+    background-color: #388E3C; /* Verde mais escuro */
+    transform: translateY(-1px);
+}
+
+#apply-button:disabled {
+    background-color: var(--text-secondary);
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+/* Estilos do Conteúdo do Painel */
+.panel-content {
+    opacity: 0;
+    transition: opacity 0.3s 0.2s; 
+}
+
+.details-panel.open .panel-content {
+    opacity: 1;
+}
+
+.panel-title {
+    color: var(--color-tint);
+    margin-bottom: 15px;
+    font-size: 1.5em;
+    border-bottom: 2px solid var(--bg-map-border);
+    padding-bottom: 10px;
+}
+
+.info-block {
+    margin-bottom: 20px;
+    padding: 12px 15px;
+    background-color: var(--bg-primary);
+    border-radius: 6px;
+    box-shadow: 0 2px 4px var(--color-shadow);
+    transition: background-color 0.5s, box-shadow 0.5s;
+}
+
+.info-block h3 {
+    font-size: 1em;
+    color: var(--text-secondary);
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.info-block h3 i {
+    margin-right: 8px;
+    color: var(--color-highlight);
+}
+
+.info-block p {
+    font-size: 0.9em;
+    /* Ajusta para evitar o espaço quando não há ícone */
+    margin-left: 0; 
+    padding-left: 28px; /* Espaço para alinhar com o texto após o ícone */
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.5em;
+    cursor: pointer;
+    z-index: 100; 
+    opacity: 0;
+    transition: opacity 0.3s;
+    padding: 5px;
+}
+
+.details-panel.open .close-button {
+    opacity: 1;
+}
+
+/* 6. Estilos do Modal (Pop-up de Cadastro) */
+
+.modal {
+    display: none; /* Escondido por padrão */
+    position: fixed;
+    z-index: 1000; 
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-modal); /* Overlay escuro semi-transparente */
+    justify-content: center;
+    align-items: center;
+    overflow: auto;
+}
+
+.modal.open {
+    display: flex;
+}
+
+.modal-content {
+    background-color: var(--bg-secondary);
+    margin: auto;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px var(--color-shadow);
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+    color: var(--text-primary);
+    transition: background-color 0.5s, box-shadow 0.5s;
+}
+
+.modal-close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.5em;
+    cursor: pointer;
+}
+
+.modal-title {
+    color: var(--color-highlight);
+    margin-bottom: 5px;
+    font-size: 1.6em;
+}
+
+.modal-subtitle {
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+    font-size: 0.9em;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 0.9em;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--bg-map-border);
+    border-radius: 6px;
+    background-color: var(--bg-input);
+    color: var(--text-primary);
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: var(--color-highlight);
+    outline: none;
+}
+
+.submit-button {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--color-highlight);
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.1em;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+}
+.submit-button:hover {
+    background-color: var(--color-tint);
+}
+.submit-button:disabled {
+    background-color: var(--text-secondary);
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+.form-message {
+    text-align: center;
+    padding: 10px;
+    margin-top: 15px;
+    border-radius: 6px;
+    font-weight: bold;
+}
+.form-message.success {
+    background-color: #e8f5e9; /* Light Green */
+    color: var(--color-success);
+}
+.dark-mode .form-message.success {
+    background-color: #1b5e20; /* Darker Green */
+}
+.form-message.error {
+    background-color: #ffebee; /* Light Red */
+    color: var(--color-error);
+}
+.dark-mode .form-message.error {
+    background-color: #b71c1c; /* Darker Red */
+}
+
+/* ================================
+   BOTÃO DE SAIR FIXO (CANTO INFERIOR DIREITO)
+   ================================ */
+   .fixed-logout-button {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    background-color: var(--color-error);
+    color: #fff;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 18px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 3px 6px var(--color-shadow);
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s, opacity 0.3s;
+    z-index: 999;
+}
+
+.fixed-logout-button:hover {
+    background-color: var(--color-tint);
+    transform: translateY(-2px);
+}
+
+.fixed-logout-button i {
+    font-size: 18px;
+}
+
+@media (max-width: 600px) {
+    .fixed-logout-button {
+        bottom: 15px;
+        right: 15px;
+        font-size: 14px;
+        padding: 10px 14px;
+        border-radius: 6px;
+    }
+}
+
+/* ================================
+   BOTÃO "ABRIR NO MAPA" (DENTRO DO PAINEL)
+   ================================ */
+.open-map-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+    background-color: transparent;
+    border: 1.5px solid var(--color-tint);
+    color: var(--color-tint);
+    border-radius: 6px;
+    padding: 8px 14px;
+    font-size: 14px;
+    font-weight: bold;
+    transition: all 0.3s;
+    margin-top: 10px;
+}
+
+.open-map-button:hover {
+    background-color: var(--color-tint);
+    color: var(--bg-primary);
+    transform: translateY(-1px);
+}
+
+.open-map-button i {
+    font-size: 14px;
+}
+
+/* ================================
+   LINKS DO LOGIN/CADASTRO
+   ================================ */
+.auth-link a {
+    color: var(--color-tint);
+    font-weight: bold;
+    text-decoration: none;
+    transition: color 0.3s, opacity 0.3s;
+    cursor: pointer;
+    margin-top: 100px;
+}
+
+.auth-link a:hover {
+    color: var(--color-highlight);
+    opacity: 0.85;
+}
+
+/* ================================
+   FORMULÁRIOS DE LOGIN E CADASTRO
+   ================================ */
+.auth-modal-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.auth-form-container {
+    width: 100%;
+    max-width: 450px;
+    margin: 0 auto;
+    background-color: var(--bg-primary);
+    border-radius: 12px;
+    padding: 25px 30px;
+    box-shadow: 0 4px 10px var(--color-shadow);
+}
+
+#register-form-container {
+    max-width: 600px;
+    padding: 25px 35px;
+}
+
+#login-form-container {
+    max-width: 400px;
+}
+
+.modal.open .auth-modal-content {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.applications-ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .application-item {
+    background: var(--card-bg, #f5f5f5);
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  }
+  .status {
+    font-weight: bold;
+    text-transform: capitalize;
+  }
+  .status-approved { color: #2ecc71; }
+  .status-rejected { color: #e74c3c; }
+  .status-pending { color: #f1c40f; }
+  
+
+/* Ajuste de centralização em todas as telas */
+@media (max-height: 700px) {
+    .modal.open .auth-modal-content {
+        justify-content: flex-start;
+        padding-top: 40px;
+    }
+}
+
+/* ================================
+   PAINEL DE USUÁRIO (MENU SUPERIOR)
+   ================================ */
+.user-menu-button {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--bg-map-border);
+    border-radius: 8px;
+    padding: 6px 10px;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.user-menu-button:hover {
+    background-color: var(--bg-primary);
+    box-shadow: 0 2px 6px var(--color-shadow);
+}
+
+.user-menu-button i:first-child {
+    font-size: 20px;
+    color: var(--color-tint);
+}
+
+.user-menu-button i.fa-chevron-down {
+    font-size: 12px;
+    margin-left: 5px;
+    color: var(--text-secondary);
+}
+
+/* Menu suspenso mais elegante */
+.user-dropdown-menu {
+    border-radius: 10px;
+    min-width: 180px;
+    background-color: var(--bg-primary);
+    border: 1px solid var(--bg-map-border);
+    box-shadow: 0 5px 10px var(--color-shadow);
+}
+
+
+/* 7. Responsividade */
+@media (max-width: 900px) {
+    /* Reorganiza o Header em mobile/tablet */
+    .main-header {
+        flex-wrap: wrap; 
+        padding: 10px 15px;
+    }
+
+    .header-left {
+        width: 100%; 
+        justify-content: center; 
+        margin-bottom: 10px;
+    }
+    
+    .header-center {
+        order: 3; 
+        width: 100%;
+        padding: 0;
+    }
+
+    .header-right {
+        order: 2; 
+        /* Alinha os botões de navegação, voluntário e tema */
+        width: 100%;
+        justify-content: center;
+        margin-bottom: 10px;
+    }
+    
+    .search-container-header {
+        max-width: 100%;
+    }
+    
+    /* Mobile: Mapa e Painel verticais */
+    .map-container-wrapper {
+        flex-direction: column;
+        height: auto; 
+        max-width: 100%;
+        box-shadow: none;
+        border: none;
+    }
+    
+    /* O mapa tem uma altura fixa no mobile */
+    #map {
+        width: 100%;
+        height: 50vh; 
+        border-radius: 8px;
+        box-shadow: 0 4px 8px var(--color-shadow);
+        order: 1;
+    }
+
+    .details-panel {
+        width: 100%;
+        height: 0; /* Começa fechado */
+        border-radius: 8px;
+        margin-top: 10px;
+        order: 2;
+    }
+
+    .details-panel.open {
+        height: 40vh; /* Ocupa a parte inferior da tela */
+        min-height: 250px;
+        /* Garante que o padding apareça ao abrir */
+        padding: 20px; 
+    }
+    
+    /* Ajustes para o mapa quando o painel está aberto em mobile */
+    .details-panel.open ~ #map {
+        width: 100%; /* Garante largura total */
+    }
+
+    /* Modal em Mobile */
+    .modal-content {
+        margin: 20px;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+}
+
+@media (max-width: 480px) {
+    
+    .gssa-logo-img {
+        height: 30px;
+    }
+    .logo-main-title {
+        font-size: 20px;
+    }
+    .logo-subtitle {
+        font-size: 9px;
+    }
+    .nav-button {
+        padding: 5px 10px;
+        font-size: 14px;
+    }
+}
