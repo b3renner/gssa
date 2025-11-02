@@ -1,9 +1,8 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-import { getFirestore, doc, getDoc, setDoc, addDoc, collection, serverTimestamp, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+import { getFirestore, doc, getDoc, setDoc, addDoc, collection, serverTimestamp, query, where, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Configuração do Firebase
     const firebaseConfig = {
         apiKey: "AIzaSyDhQs9Kz4LLGaKIhWV9nUiTjlst5YEWhjg",
         authDomain: "gssa-gravatai.firebaseapp.com",
@@ -14,16 +13,14 @@ document.addEventListener('DOMContentLoaded', () => {
         measurementId: "G-2HS4CYEZ9H"
     };
 
-    // Inicializar Firebase
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
     console.log("Firebase inicializado com sucesso.");
 
     let currentUser = null;
-    let userRole = null; // 'voluntario' ou 'ong'
+    let userRole = null;
 
-    // Elementos DOM
     const authModal = document.getElementById('auth-modal');
     const authButton = document.getElementById('auth-button');
     const loginFormContainer = document.getElementById('login-form-container');
@@ -37,34 +34,34 @@ document.addEventListener('DOMContentLoaded', () => {
     const menuLogout = document.getElementById('menu-logout');
     const fixedLogoutButton = document.getElementById('fixed-logout-button');
 
-    // ========== FUNÇÕES DE AUTENTICAÇÃO ==========
 
     function showLoginForm() {
-        loginFormContainer.classList.add('active');
-        loginFormContainer.style.display = 'block';
-        registerFormContainer.classList.remove('active');
-        registerFormContainer.style.display = 'none';
+        if (loginFormContainer && registerFormContainer) {
+            loginFormContainer.classList.add('active');
+            loginFormContainer.style.display = 'block';
+            registerFormContainer.classList.remove('active');
+            registerFormContainer.style.display = 'none';
+        }
     }
 
     function showRegisterForm() {
-        registerFormContainer.classList.add('active');
-        registerFormContainer.style.display = 'block';
-        loginFormContainer.classList.remove('active');
-        loginFormContainer.style.display = 'none';
+        if (loginFormContainer && registerFormContainer) {
+            registerFormContainer.classList.add('active');
+            registerFormContainer.style.display = 'block';
+            loginFormContainer.classList.remove('active');
+            loginFormContainer.style.display = 'none';
+        }
     }
 
-    // Abrir modal
     authButton?.addEventListener('click', () => {
         authModal.style.display = 'block';
         showLoginForm();
     });
 
-    // Fechar modal
     document.getElementById('close-auth-modal')?.addEventListener('click', () => {
         authModal.style.display = 'none';
     });
 
-    // Alternar formulários
     switchToRegister?.addEventListener('click', (e) => {
         e.preventDefault();
         showRegisterForm();
@@ -75,7 +72,6 @@ document.addEventListener('DOMContentLoaded', () => {
         showLoginForm();
     });
 
-    // Login
     loginForm?.addEventListener('submit', async (e) => {
         e.preventDefault();
         const email = document.getElementById('login-email').value;
@@ -85,7 +81,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             currentUser = userCredential.user;
             
-            // Buscar papel do usuário
             const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
             if (userDoc.exists()) {
                 userRole = userDoc.data().role;
@@ -100,7 +95,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Cadastro (CORRIGIDO - removido campo 'contact' inexistente)
     registerForm?.addEventListener('submit', async (e) => {
         e.preventDefault();
         
@@ -108,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const email = document.getElementById('register-email').value;
         const password = document.getElementById('register-password').value;
         const confirmPassword = document.getElementById('register-password-confirm').value;
-        const location = document.getElementById('register-location').value; // CORRIGIDO
+        const location = document.getElementById('register-location').value;
         const skills = document.getElementById('register-skills').value.split(',').map(s => s.trim()).filter(s => s.length > 0);
         const availability = document.getElementById('register-availability').value;
 
@@ -122,11 +116,10 @@ document.addEventListener('DOMContentLoaded', () => {
             currentUser = userCredential.user;
             userRole = 'voluntario';
             
-            // Salvar dados do usuário no Firestore
             await setDoc(doc(db, 'users', currentUser.uid), {
                 name: name,
                 email: email,
-                location: location, // CORRIGIDO
+                location: location,
                 skills: skills,
                 availability: availability,
                 role: userRole,
@@ -142,7 +135,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Logout
     async function handleLogout() {
         await signOut(auth);
         currentUser = null;
@@ -155,25 +147,33 @@ document.addEventListener('DOMContentLoaded', () => {
     menuLogout?.addEventListener('click', handleLogout);
     fixedLogoutButton?.addEventListener('click', handleLogout);
 
-    // Atualizar UI
     function updateUI() {
         if (currentUser) {
             if (authButton) authButton.style.display = 'none';
             if (userDropdown) userDropdown.style.display = 'block';
             if (fixedLogoutButton) fixedLogoutButton.style.display = 'block';
             
-            if (userRole === 'ong') {
-                const adminPanel = document.getElementById('menu-admin-panel');
-                if (adminPanel) adminPanel.style.display = 'block';
+            const adminPanel = document.getElementById('menu-admin-panel');
+            if (adminPanel) {
+                if (userRole === 'ong') {
+                    adminPanel.style.display = 'block';
+                    adminPanel.href = 'painel-ong.html';
+                } else {
+                    adminPanel.style.display = 'none';
+                }
             }
         } else {
             if (authButton) authButton.style.display = 'block';
             if (userDropdown) userDropdown.style.display = 'none';
             if (fixedLogoutButton) fixedLogoutButton.style.display = 'none';
+            
+            const adminPanel = document.getElementById('menu-admin-panel');
+            const superAdminPanel = document.getElementById('menu-super-admin');
+            if (adminPanel) adminPanel.style.display = 'none';
+            if (superAdminPanel) superAdminPanel.style.display = 'none';
         }
     }
 
-    // Ouvinte de mudanças de estado de autenticação
     onAuthStateChanged(auth, async (user) => {
         currentUser = user;
         if (user) {
@@ -184,6 +184,25 @@ document.addEventListener('DOMContentLoaded', () => {
                     userNameDisplay.textContent = userDoc.data().name || user.email;
                 }
             }
+
+            try {
+                const superAdminDoc = await getDoc(doc(db, 'superAdmins', user.uid));
+                if (superAdminDoc.exists()) {
+                    const superAdminLink = document.getElementById('menu-super-admin');
+                    if (superAdminLink) {
+                        superAdminLink.style.display = 'block';
+                    }
+                    console.log('✅ Super-Admin detectado!');
+                } else {
+                    const superAdminLink = document.getElementById('menu-super-admin');
+                    if (superAdminLink) {
+                        superAdminLink.style.display = 'none';
+                    }
+                }
+            } catch (error) {
+                console.log('Não é super-admin ou erro ao verificar:', error);
+            }
+            
             console.log('Estado autenticado:', currentUser.uid, 'Role:', userRole);
             updateUI();
             refreshPanelIfOpen();
@@ -194,8 +213,6 @@ document.addEventListener('DOMContentLoaded', () => {
             refreshPanelIfOpen();
         }
     });
-
-    // ========== SISTEMA DE TEMA ==========
 
     const themeToggle = document.getElementById('theme-toggle');
     const body = document.body;
@@ -225,7 +242,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     themeToggle.addEventListener('click', toggleTheme);
 
-    // ========== MAPA E GEOLOCALIZAÇÃO ==========
 
     const gravataiCoords = [-29.9402, -50.9944];
     const initialZoom = 13;
@@ -250,6 +266,109 @@ document.addEventListener('DOMContentLoaded', () => {
     let userLocation = null;
     let userMarker = null;
     const markers = new Map();
+    let ongsData = [];
+
+    async function loadOngsFromFirestore() {
+        try {
+            console.log(' Carregando ONGs do Firestore...');
+            const ongsRef = collection(db, 'ongs');
+            const q = query(ongsRef, where('status', '==', 'approved'));
+            const snapshot = await getDocs(q);
+
+            console.log(` ${snapshot.size} ONGs aprovadas encontradas`);
+
+            ongsData = [];
+            snapshot.forEach(docSnap => {
+                const data = docSnap.data();
+                console.log(' ONG encontrada:', data.basicInfo.name, 'ID:', docSnap.id);
+                
+                if (!data.coordinates || !data.coordinates.lat || !data.coordinates.lon) {
+                    console.warn(' ONG sem coordenadas:', data.basicInfo.name);
+                    return;
+                }
+
+                const ongFormatted = {
+                    id: String(docSnap.id),
+                    nome: data.basicInfo.name,
+                    lat: parseFloat(data.coordinates.lat),
+                    lon: parseFloat(data.coordinates.lon),
+                    servicos: data.services,
+                    publico: data.targetAudience,
+                    endereco: `${data.address.street}, ${data.address.neighborhood} - ${data.address.city}/${data.address.state} - CEP: ${data.address.zip}`,
+                    contato: data.basicInfo.phone,
+                    horario: data.schedule,
+                    email: data.basicInfo.email,
+                    cnpj: data.basicInfo.cnpj,
+                    descricao: data.description,
+                    capacidade: data.capacity
+                };
+
+                console.log('✅ ONG formatada:', ongFormatted);
+                ongsData.push(ongFormatted);
+            });
+
+            console.log(`✅ ${ongsData.length} ONGs carregadas e formatadas`);
+
+            if (typeof ONGS_DATA !== 'undefined' && ONGS_DATA.length > 0) {
+                console.log(' Adicionando ONGs estáticas do data.js...');
+                ONGS_DATA.forEach(ong => {
+                    if (!ongsData.find(o => o.nome === ong.nome)) {
+                        ongsData.push({
+                            ...ong,
+                            id: String(ong.id)
+                        });
+                    }
+                });
+                console.log(` Total de ONGs: ${ongsData.length}`);
+            }
+
+            addOngsToMap();
+
+        } catch (error) {
+            console.error('❌ Erro ao carregar ONGs:', error);
+            if (typeof ONGS_DATA !== 'undefined') {
+                console.log('⚠️ Usando fallback (data.js)');
+                ongsData = ONGS_DATA.map(ong => ({
+                    ...ong,
+                    id: String(ong.id)
+                }));
+                addOngsToMap();
+            }
+        }
+    }
+
+    function addOngsToMap() {
+        console.log(` Adicionando ${ongsData.length} ONGs ao mapa...`);
+        
+        markers.forEach(marker => marker.remove());
+        markers.clear();
+
+        ongsData.forEach(ong => {
+            console.log(` Adicionando marcador: ${ong.nome} (ID: ${ong.id})`);
+            
+            const marker = L.marker([ong.lat, ong.lon]).addTo(map);
+            markers.set(String(ong.id), marker);
+
+            const popupContent = `
+                <div style="text-align: center; min-width: 150px;">
+                    <strong style="font-size: 1.1em; color: #D9534F;">${ong.nome}</strong><br>
+                    <span style="color: #666; font-size: 0.9em;">${ong.servicos.split(',')[0]}</span><br>
+                    <button onclick="window.showDetails('${ong.id}')" 
+                            style="margin-top: 8px; padding: 6px 12px; background: #D9534F; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">
+                        <i class="fas fa-info-circle"></i> Ver Detalhes
+                    </button>
+                </div>
+            `;
+
+            marker.bindPopup(popupContent);
+            marker.on('click', () => {
+                console.log('🖱️ Marcador clicado:', ong.nome, 'ID:', ong.id);
+                showDetails(ong.id);
+            });
+        });
+
+        console.log(`✅ ${markers.size} marcadores adicionados`);
+    }
 
     function locateUser() {
         if (navigator.geolocation) {
@@ -283,8 +402,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     locateUser();
 
-    // ========== PAINEL LATERAL ==========
-
     const detailsPanel = document.getElementById('details-panel');
     const panelContent = detailsPanel.querySelector('.panel-content');
     const closeButton = document.getElementById('close-panel');
@@ -297,9 +414,18 @@ document.addEventListener('DOMContentLoaded', () => {
     
     closeButton.addEventListener('click', closeDetailsPanel);
 
-    function showDetails(ongId) {
-        const ong = ONGS_DATA.find(o => o.id === ongId);
-        if (!ong) return;
+    async function showDetails(ongId) {
+        console.log(' Buscando detalhes da ONG ID:', ongId);
+        
+        const ong = ongsData.find(o => String(o.id) === String(ongId));
+        
+        if (!ong) {
+            console.error('❌ ONG não encontrada para ID:', ongId);
+            alert('ONG não encontrada. Tente recarregar a página.');
+            return;
+        }
+        
+        console.log('✅ ONG encontrada:', ong.nome);
         
         map.setView([ong.lat, ong.lon], 15, { animate: true });
 
@@ -310,68 +436,152 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="info-block distance-info">
                     <h3><i class="fas fa-route"></i> Distância Estimada</h3>
                     <p style="font-weight: bold; font-size: 1.1em;">${distance} km de você</p>
-                    <p style="font-size: 0.8em;">Cálculo em linha reta. A rota pode ser maior.</p>
+                    <p style="font-size: 0.8em; color: var(--text-secondary);">Cálculo em linha reta.</p>
                 </div>
             `;
         }
 
-        console.log('showDetails chamado. currentUser:', currentUser ? currentUser.uid : 'null', 'userRole:', userRole);
-
         let applyButtonHtml = '';
+        let existingApplicationId = null;
+        
         if (currentUser && userRole === 'voluntario') {
-            applyButtonHtml = '<button id="apply-button" class="submit-button">Inscrever-se como Voluntário</button>';
-            console.log('Botão de inscrição adicionado');
-        } else {
-            console.log('Botão de inscrição NÃO adicionado');
+            const q = query(
+                collection(db, 'applications'),
+                where('userId', '==', currentUser.uid),
+                where('ongId', '==', String(ong.id))
+            );
+            
+            try {
+                const snapshot = await getDocs(q);
+                
+                if (!snapshot.empty) {
+                    const inscricaoDoc = snapshot.docs[0];
+                    const inscricao = inscricaoDoc.data();
+                    existingApplicationId = inscricaoDoc.id;
+                    
+                    const statusText = inscricao.status === 'approved' ? 'Aprovado' : 
+                                      inscricao.status === 'rejected' ? 'Rejeitado' : 'Pendente';
+                    const statusColor = inscricao.status === 'approved' ? '#2ECC71' : 
+                                       inscricao.status === 'rejected' ? '#E74C3C' : '#F1C40F';
+                    
+                    applyButtonHtml = `
+                        <div style="text-align: center; padding: 15px; background: rgba(217, 83, 79, 0.1); border-radius: 8px; margin-top: 20px;">
+                            <i class="fas fa-info-circle"></i> 
+                            <strong>Status: <span style="color: ${statusColor};">${statusText}</span></strong>
+                            ${inscricao.status === 'pending' ? `
+                                <button id="cancel-button" class="submit-button" style="margin-top: 15px; background: #E74C3C;">
+                                    <i class="fas fa-times"></i> Cancelar Inscrição
+                                </button>
+                            ` : ''}
+                        </div>
+                    `;
+                } else {
+                    applyButtonHtml = `
+                        <button id="apply-button" class="submit-button" style="margin-top: 20px;">
+                            <i class="fas fa-hand-holding-heart"></i> Inscrever-se como Voluntário
+                        </button>
+                    `;
+                }
+            } catch (error) {
+                console.error('Erro ao verificar inscrição:', error);
+                applyButtonHtml = `
+                    <button id="apply-button" class="submit-button" style="margin-top: 20px;">
+                        <i class="fas fa-hand-holding-heart"></i> Inscrever-se como Voluntário
+                    </button>
+                `;
+            }
+        } else if (!currentUser) {
+            applyButtonHtml = `
+                <p style="text-align: center; padding: 15px; background: rgba(217, 83, 79, 0.1); border-radius: 8px; margin-top: 20px;">
+                    <i class="fas fa-info-circle"></i> 
+                    <strong>Faça login como voluntário para se inscrever</strong>
+                </p>
+            `;
         }
 
         panelContent.innerHTML = `
             <h2 class="panel-title">${ong.nome}</h2>
+            
             ${distanceHtml}
+            
             <div class="info-block">
                 <h3><i class="fas fa-handshake"></i> Serviços Oferecidos</h3>
                 <p>${ong.servicos}</p>
             </div>
-            <div class="info-block">
-                <h3><i class="fas fa-users"></i> Público Alvo</h3>
-                <p>${ong.publico}</p>
-            </div>
+            
             <div class="info-block">
                 <h3><i class="fas fa-map-marker-alt"></i> Endereço</h3>
                 <p>${ong.endereco}</p>
                 <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(ong.endereco)}" 
                    target="_blank" 
-                   class="open-map-button">
-                    Abrir no Mapa <i class="fas fa-external-link-alt"></i>
+                   class="open-map-button"
+                   style="margin-top: 10px;">
+                    <i class="fas fa-external-link-alt"></i> Abrir no Google Maps
                 </a>
             </div>
+            
             <div class="info-block">
-                <h3><i class="fas fa-clock"></i> Horário de Atendimento</h3>
+                <h3><i class="fas fa-clock"></i> Horário</h3>
                 <p>${ong.horario}</p>
             </div>
+            
             <div class="info-block">
                 <h3><i class="fas fa-phone-alt"></i> Contato</h3>
                 <p>${ong.contato}</p>
             </div>
+            
             ${applyButtonHtml}
         `;
         
         detailsPanel.classList.add('open');
         setTimeout(() => map.invalidateSize(), 500);
 
-        // Event listener para inscrição
-        if (currentUser && userRole === 'voluntario') {
-            document.getElementById('apply-button')?.addEventListener('click', async () => {
+        const cancelButton = document.getElementById('cancel-button');
+        if (cancelButton && existingApplicationId) {
+            cancelButton.addEventListener('click', async () => {
+                if (!confirm(`Cancelar inscrição na ${ong.nome}?`)) return;
+
                 try {
+                    cancelButton.disabled = true;
+                    cancelButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Cancelando...';
+                    
+                    await deleteDoc(doc(db, 'applications', existingApplicationId));
+                    
+                    alert('✅ Inscrição cancelada!');
+                    showDetails(ong.id);
+                } catch (error) {
+                    console.error('❌ Erro ao cancelar:', error);
+                    alert(`Erro: ${error.message}`);
+                    cancelButton.disabled = false;
+                    cancelButton.innerHTML = '<i class="fas fa-times"></i> Cancelar Inscrição';
+                }
+            });
+        }
+
+        const applyButton = document.getElementById('apply-button');
+        if (applyButton && currentUser && userRole === 'voluntario') {
+            applyButton.addEventListener('click', async () => {
+                if (!confirm(`Inscrever-se na ${ong.nome}?`)) return;
+
+                try {
+                    applyButton.disabled = true;
+                    applyButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+                    
                     await addDoc(collection(db, 'applications'), {
-                        ongId: ongId,
+                        ongId: String(ong.id),
+                        ongName: ong.nome,
                         userId: currentUser.uid,
                         status: 'pending',
                         createdAt: serverTimestamp()
                     });
-                    alert('Inscrição enviada com sucesso! Aguarde aprovação da ONG.');
+                    
+                    alert('✅ Inscrição enviada!');
+                    showDetails(ong.id);
                 } catch (error) {
-                    alert(`Erro ao se inscrever: ${error.message}`);
+                    console.error('❌ Erro ao inscrever:', error);
+                    alert(`Erro: ${error.message}`);
+                    applyButton.disabled = false;
+                    applyButton.innerHTML = '<i class="fas fa-hand-holding-heart"></i> Inscrever-se';
                 }
             });
         }
@@ -380,49 +590,38 @@ document.addEventListener('DOMContentLoaded', () => {
     function refreshPanelIfOpen() {
         if (detailsPanel.classList.contains('open')) {
             const ongId = panelContent.querySelector('.panel-title') 
-                ? ONGS_DATA.find(o => o.nome === panelContent.querySelector('.panel-title').textContent)?.id 
+                ? ongsData.find(o => o.nome === panelContent.querySelector('.panel-title').textContent)?.id 
                 : null;
             if (ongId) {
-                console.log('Atualizando painel lateral para ONG ID:', ongId);
                 showDetails(ongId);
             }
         }
     }
 
-    // Adicionar marcadores
-    ONGS_DATA.forEach(ong => {
-        const marker = L.marker([ong.lat, ong.lon]).addTo(map);
-        markers.set(ong.id, marker);
-        
-        const popupContent = `
-            <strong>${ong.nome}</strong><br>
-            <button onclick="window.showDetails(${ong.id})">Ver Detalhes</button>
-        `;
-        
-        marker.bindPopup(popupContent);
-        marker.on('click', () => showDetails(ong.id));
-    });
+    loadOngsFromFirestore();
 
-    // Busca
     const searchButton = document.getElementById('search-button');
     searchButton.addEventListener('click', () => {
         const query = document.getElementById('search-input').value.trim().toLowerCase();
-        const foundOng = ONGS_DATA.find(ong => 
+        const foundOng = ongsData.find(ong => 
             ong.nome.toLowerCase().includes(query) || 
             ong.servicos.toLowerCase().includes(query)
         );
         
         if (foundOng) {
-            const marker = markers.get(foundOng.id);
-            map.setView(marker.getLatLng(), 15, { animate: true });
-            marker.openPopup();
-            showDetails(foundOng.id);
+            const marker = markers.get(String(foundOng.id));
+            if (marker) {
+                map.setView(marker.getLatLng(), 15, { animate: true });
+                marker.openPopup();
+                showDetails(foundOng.id);
+            }
+        } else {
+            alert('Nenhuma ONG encontrada.');
         }
     });
 
     window.showDetails = showDetails;
 
-    // Dropdown do usuário
     document.getElementById('user-menu-button')?.addEventListener('click', () => {
         const menu = document.getElementById('user-dropdown-menu');
         menu.classList.toggle('show');
@@ -435,176 +634,26 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // ========== NAVEGAÇÃO PARA PÁGINAS (com fallback para modais) ==========
 
-    // Função para tentar navegar para página ou abrir modal
-    async function navigateOrModal(pageName) {
-        // Tenta carregar a página
-        try {
-            const response = await fetch(pageName);
-            if (response.ok) {
-                window.location.href = pageName;
-                return;
-            }
-        } catch (error) {
-            console.log(`Página ${pageName} não encontrada, usando modal`);
-        }
-
-        // Se não conseguiu, abre modal
-        if (pageName.includes('inscricoes')) {
-            openInscricoesModal();
-        } else if (pageName.includes('perfil')) {
-            openPerfilModal();
-        }
-    }
-
-    // Links de navegação
     document.getElementById('nav-inscricoes')?.addEventListener('click', (e) => {
         e.preventDefault();
         if (currentUser) {
-            navigateOrModal('minhas-inscricoes.html');
+            window.location.href = 'minhas_inscricoes.html';
         } else {
             alert('Faça login para ver suas inscrições');
             authModal.style.display = 'block';
+            showLoginForm();
         }
     });
 
     document.getElementById('menu-contacts')?.addEventListener('click', (e) => {
         e.preventDefault();
-        navigateOrModal('minhas-inscricoes.html');
+        window.location.href = 'minhas_inscricoes.html';
     });
 
     document.getElementById('menu-profile')?.addEventListener('click', (e) => {
         e.preventDefault();
-        navigateOrModal('perfil.html');
-    });
-
-    // ========== MODAL DE INSCRIÇÕES (FALLBACK) ==========
-
-    const inscricoesModal = document.getElementById('inscricoes-modal');
-    const closeInscricoesModal = document.getElementById('close-inscricoes-modal');
-
-    async function openInscricoesModal() {
-        if (!currentUser) {
-            alert('Faça login para ver suas inscrições');
-            return;
-        }
-
-        inscricoesModal.classList.add('open');
-        const listContainer = document.getElementById('modal-inscricoes-list');
-        listContainer.innerHTML = '<p style="text-align: center;">Carregando...</p>';
-
-        try {
-            const q = query(collection(db, 'applications'), where('userId', '==', currentUser.uid));
-            const snapshot = await getDocs(q);
-
-            if (snapshot.empty) {
-                listContainer.innerHTML = '<p style="text-align: center; color: var(--text-secondary);">Você ainda não tem inscrições.</p>';
-                return;
-            }
-
-            let html = '';
-            snapshot.forEach((doc) => {
-                const data = doc.data();
-                const ong = ONGS_DATA.find(o => o.id === data.ongId);
-                const ongNome = ong ? ong.nome : 'ONG não encontrada';
-                const statusClass = data.status === 'approved' ? 'status-approved' : 
-                                   data.status === 'rejected' ? 'status-rejected' : 'status-pending';
-                const statusText = data.status === 'approved' ? 'Aprovado' : 
-                                  data.status === 'rejected' ? 'Rejeitado' : 'Pendente';
-                const dataInscricao = data.createdAt?.toDate 
-                    ? data.createdAt.toDate().toLocaleDateString('pt-BR')
-                    : 'Data não disponível';
-
-                html += `
-                    <div class="inscricao-item">
-                        <h3>${ongNome}</h3>
-                        <p><strong>Status:</strong> <span class="status-badge ${statusClass}">${statusText}</span></p>
-                        <p><strong>Data:</strong> ${dataInscricao}</p>
-                    </div>
-                `;
-            });
-
-            listContainer.innerHTML = html;
-        } catch (error) {
-            listContainer.innerHTML = `<p style="color: var(--color-error);">Erro: ${error.message}</p>`;
-        }
-    }
-
-    closeInscricoesModal?.addEventListener('click', () => {
-        inscricoesModal.classList.remove('open');
-    });
-
-    // ========== MODAL DE PERFIL (FALLBACK) ==========
-
-    const perfilModal = document.getElementById('perfil-modal');
-    const closePerfilModal = document.getElementById('close-perfil-modal');
-
-    async function openPerfilModal() {
-        if (!currentUser) {
-            alert('Faça login para ver seu perfil');
-            return;
-        }
-
-        perfilModal.classList.add('open');
-        const contentContainer = document.getElementById('modal-perfil-content');
-        contentContainer.innerHTML = '<p style="text-align: center;">Carregando...</p>';
-
-        try {
-            const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
-            if (!userDoc.exists()) {
-                throw new Error('Perfil não encontrado');
-            }
-
-            const userData = userDoc.data();
-            const memberSince = userData.createdAt?.toDate 
-                ? userData.createdAt.toDate().toLocaleDateString('pt-BR')
-                : 'Não disponível';
-
-            let skillsHtml = '';
-            if (userData.skills && userData.skills.length > 0) {
-                skillsHtml = userData.skills.map(skill => 
-                    `<span class="skill-tag">${skill}</span>`
-                ).join('');
-            } else {
-                skillsHtml = '<p style="color: var(--text-secondary);">Nenhuma habilidade cadastrada</p>';
-            }
-
-            contentContainer.innerHTML = `
-                <div class="perfil-info-grid">
-                    <div class="perfil-info-card">
-                        <h4><i class="fas fa-user"></i> Nome</h4>
-                        <p>${userData.name || 'Não informado'}</p>
-                    </div>
-                    <div class="perfil-info-card">
-                        <h4><i class="fas fa-envelope"></i> E-mail</h4>
-                        <p>${userData.email || currentUser.email}</p>
-                    </div>
-                    <div class="perfil-info-card">
-                        <h4><i class="fas fa-map-marker-alt"></i> Localização</h4>
-                        <p>${userData.location || 'Não informado'}</p>
-                    </div>
-                    <div class="perfil-info-card">
-                        <h4><i class="fas fa-calendar-alt"></i> Membro desde</h4>
-                        <p>${memberSince}</p>
-                    </div>
-                    <div class="perfil-info-card">
-                        <h4><i class="fas fa-tools"></i> Habilidades</h4>
-                        <div>${skillsHtml}</div>
-                    </div>
-                    <div class="perfil-info-card">
-                        <h4><i class="fas fa-clock"></i> Disponibilidade</h4>
-                        <p>${userData.availability || 'Não informado'}</p>
-                    </div>
-                </div>
-            `;
-        } catch (error) {
-            contentContainer.innerHTML = `<p style="color: var(--color-error);">Erro: ${error.message}</p>`;
-        }
-    }
-
-    closePerfilModal?.addEventListener('click', () => {
-        perfilModal.classList.remove('open');
+        window.location.href = 'perfil.html';
     });
 
     setTimeout(() => map.invalidateSize(), 200);
