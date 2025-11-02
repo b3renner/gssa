@@ -1,49 +1,38 @@
-/* ----------------------------------------------------------------------
-    GSSA - Stylesheet
-    Correção: Aplicação consistente de variáveis CSS para Dark/Light Mode.
-    ---------------------------------------------------------------------- */
 
-/* 1. Variáveis CSS - TEMA CLARO (Padrão) */
 :root {
-    /* Cores de Fundo (Dominantes Claras) */
-    --bg-primary: #FFFFFF;      /* Fundo Principal (Body, Fundo Card) */
-    --bg-secondary: #F0F0F0;    /* Fundo Secundário/Card/Fundo Painel */
-    --bg-header: #FFFFFF;       /* Header no Claro */
-    --bg-map-border: #BBBBBB;   /* Borda no Claro */
-    --bg-input: #FFFFFF;        /* Fundo do Input */
-    --bg-modal: rgba(0, 0, 0, 0.7); /* Fundo do Modal (Overlay) */
+    --bg-primary: #FFFFFF;      
+    --bg-secondary: #F0F0F0;    
+    --bg-header: #FFFFFF;       
+    --bg-map-border: #BBBBBB;   
+    --bg-input: #FFFFFF;       
+    --bg-modal: rgba(0, 0, 0, 0.7); 
     
-    /* Cores de Texto/Elementos (Dominantes Escuras) */
-    --text-primary: #121212;    /* Texto Principal (Body, Input) */
-    --text-secondary: #333333;  /* Texto Secundário (Links/Menu/Header Text) */
-    --color-highlight: #D9534F; /* Vermelho Suave (Destaque) */
-    --color-tint: #992925;      /* Vermelho Tinto (Ação/Hover) */
-    --color-shadow: rgba(0, 0, 0, 0.15); /* Sombra escura no claro */
+    --text-primary: #121212;   
+    --text-secondary: #333333;  
+    --color-highlight: #D9534F; 
+    --color-tint: #992925;      
+    --color-shadow: rgba(0, 0, 0, 0.15); 
     --color-success: #4CAF50;
     --color-error: #F44336;
 }
 
-/* 2. Variáveis CSS - TEMA ESCURO (Classe .dark-mode) */
 .dark-mode {
-    /* Cores de Fundo (Dominantes Escuras) */
-    --bg-primary: #121212;      /* Fundo Principal (Body) */
-    --bg-secondary: #1E1E1E;    /* Fundo Secundário/Card/Fundo Painel */
-    --bg-header: #1E1E1E;       /* Header no Escuro */
-    --bg-map-border: #444444;   /* Borda no Escuro */
-    --bg-input: #333333;        /* Fundo do Input Escuro */
-    --bg-modal: rgba(0, 0, 0, 0.85); /* Fundo do Modal (Overlay) */
+    --bg-primary: #121212;      
+    --bg-secondary: #1E1E1E;    
+    --bg-header: #1E1E1E;       
+    --bg-map-border: #444444;   
+    --bg-input: #333333;        
+    --bg-modal: rgba(0, 0, 0, 0.85); 
 
-    /* Cores de Texto/Elementos (Dominantes Claras) */
-    --text-primary: #E0E0E0;    /* Texto Principal (Body, Input) */
-    --text-secondary: #F0F0F0;  /* Texto Secundário (Links/Menu/Header Text) */
-    --color-highlight: #FF7F7F; /* Vermelho mais claro (Destaque) */
-    --color-tint: #C0392B;      /* Tinto adaptado (Ação/Hover) */
-    --color-shadow: rgba(255, 255, 255, 0.05); /* Sombra clara no escuro */
+    --text-primary: #E0E0E0;   
+    --text-secondary: #F0F0F0;  
+    --color-highlight: #FF7F7F; 
+    --color-tint: #C0392B;      
+    --color-shadow: rgba(255, 255, 255, 0.05); 
     --color-success: #66BB6A;
     --color-error: #EF5350;
 }
 
-/* 3. Estilos Gerais Aplicando as Variáveis */
 * {
     margin: 0;
     padding: 0;
@@ -52,31 +41,27 @@
 
 body {
     font-family: Arial, sans-serif;
-    /* Aplica a cor do tema */
     background-color: var(--bg-primary); 
     color: var(--text-primary); 
     
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    transition: background-color 0.5s, color 0.5s; /* Transição suave */
+    transition: background-color 0.5s, color 0.5s; 
 }
 
-/* Header Reestruturado (Três Colunas) */
 .main-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 10px 30px;
     
-    /* Aplica as variáveis do tema */
     background-color: var(--bg-header); 
     color: var(--text-secondary); 
     box-shadow: 0 2px 4px var(--color-shadow);
     transition: background-color 0.5s, color 0.5s, box-shadow 0.5s;
 }
 
-/* --- Bloco Esquerdo: Logo e Títulos --- */
 .header-left {
     display: flex;
     align-items: center;
@@ -92,9 +77,7 @@ body {
     line-height: 1.1;
 }
 
-/* Aplicação do Degradê */
 .logo-main-title, .logo-subtitle {
-    /* Usa variáveis para o Degradê */
     background: linear-gradient(to right, var(--color-highlight), var(--color-tint)); 
     -webkit-background-clip: text; 
     background-clip: text;
@@ -113,7 +96,6 @@ body {
     text-transform: uppercase;
 }
 
-/* --- Bloco Central: Barra de Busca (Centralizada) --- */
 .header-center {
     flex-grow: 1;
     display: flex;
@@ -126,7 +108,6 @@ body {
     width: 100%;
     max-width: 500px;
     
-    /* Aplica variáveis */
     border: 1px solid var(--color-tint);
     background-color: var(--bg-input); 
     
@@ -141,16 +122,14 @@ body {
     outline: none;
     font-size: 14px;
     
-    /* Aplica variáveis */
     background-color: transparent; 
     color: var(--text-primary); 
 }
 
 #search-button {
-    /* Aplica variáveis */
     padding: 8px 15px;
     background-color: var(--color-highlight); 
-    color: var(--bg-primary); /* Cor do ícone */
+    color: var(--bg-primary); 
     border: none;
     cursor: pointer;
     transition: background-color 0.3s;
@@ -160,7 +139,6 @@ body {
     background-color: var(--color-tint); 
 }
 
-/* --- Bloco Direito: Navegação --- */
 .header-right {
     display: flex;
     flex-shrink: 0;
@@ -168,7 +146,6 @@ body {
 
 .nav-button {
     text-decoration: none;
-    /* Aplica a cor do texto do header */
     color: var(--text-secondary); 
     
     padding: 8px 15px;
@@ -188,13 +165,11 @@ body {
     font-size: 1.2em;
     padding: 0;
     margin-left: 10px;
-    /* Usa a mesma cor dos nav-buttons */
     color: var(--text-secondary); 
 }
 
-/* NOVO: Estilo para o Botão Voluntariar-se */
 .volunteer-button {
-    background-color: var(--color-success); /* Cor verde ou de ação primária */
+    background-color: var(--color-success); 
     color: white;
     font-weight: bold;
     border: none;
@@ -206,7 +181,7 @@ body {
     transition: background-color 0.3s, transform 0.1s, opacity 0.3s;
 }
 .volunteer-button:hover {
-    background-color: #388E3C; /* Tom mais escuro de verde */
+    background-color: #388E3C; 
     transform: translateY(-1px);
 }
 .volunteer-button i {
@@ -217,7 +192,6 @@ body {
     cursor: not-allowed;
 }
 
-/* NOVO: Dropdown do Usuário (Meu Perfil, Minhas Inscrições, Sair) */
 .user-dropdown {
     position: relative;
     margin-left: 10px;
@@ -283,7 +257,6 @@ body {
     border-top: 1px solid var(--bg-map-border);
 }
 
-/* 4. Conteúdo Principal, Mapa e Painel Lateral (Layout Flex) */
 .main-content {
     flex-grow: 1; 
     display: flex;
@@ -293,23 +266,21 @@ body {
     width: 100%;
 }
 
-/* Wrapper para Mapa e Painel Lateral (Desktop: Side-by-Side) */
 .map-container-wrapper {
     display: flex;
     position: relative; 
     width: 100%;
-    max-width: 1200px; /* Aumenta a largura máxima para acomodar o painel */
+    max-width: 1200px; 
     height: 80vh;
     border-radius: 8px;
     overflow: hidden; 
     box-shadow: 0 4px 8px var(--color-shadow); 
-    border: 1px solid var(--bg-map-border); /* Borda movida para o wrapper */
+    border: 1px solid var(--bg-map-border); 
     margin: 10px 0 0 0;
     transition: box-shadow 0.5s, border-color 0.5s;
-    align-items: stretch; /* Garante alinhamento vertical */
+    align-items: stretch; 
 }
 
-/* NOVO: Centraliza o painel em mobile para evitar "pendência" */
 @media (max-width: 900px) {
     .map-container-wrapper {
         align-items: center;
@@ -318,14 +289,14 @@ body {
 
 #map {
     flex-grow: 1; 
-    width: 100%; /* Largura inicial, será ajustada pelo JS/CSS */
+    width: 100%; 
     height: 100%; 
     transition: width 0.5s ease-in-out;
 }
 
-/* Estilos do Painel Lateral */
+
 .details-panel {
-    width: 0; /* Começa fechado */
+    width: 0; 
     height: 100%;
     background-color: var(--bg-secondary); 
     color: var(--text-primary);
@@ -333,25 +304,23 @@ body {
     transition: width 0.5s ease-in-out, height 0.5s ease-in-out, background-color 0.5s;
     flex-shrink: 0;
     padding: 0; 
-    position: relative; /* Para posicionar o botão de fechar */
+    position: relative; 
 }
 
 .details-panel.open {
-    width: 35%; /* Largura quando aberto no desktop */
+    width: 35%; 
     min-width: 300px; 
     padding: 20px;
 }
 
-/* Ajusta o mapa quando o painel está aberto no desktop */
 .details-panel.open ~ #map {
-    width: 65%; /* Mapa ocupa o restante */
+    width: 65%; 
 }
 
-/* NOVO: Botão "Inscrever-se" no Painel Lateral */
 #apply-button {
     width: 100%;
     padding: 12px;
-    background-color: var(--color-success); /* Verde para ação positiva */
+    background-color: var(--color-success); 
     color: white;
     font-weight: bold;
     border: none;
@@ -363,7 +332,7 @@ body {
 }
 
 #apply-button:hover {
-    background-color: #388E3C; /* Verde mais escuro */
+    background-color: #388E3C; 
     transform: translateY(-1px);
 }
 
@@ -373,7 +342,6 @@ body {
     opacity: 0.8;
 }
 
-/* Estilos do Conteúdo do Painel */
 .panel-content {
     opacity: 0;
     transition: opacity 0.3s 0.2s; 
@@ -415,9 +383,8 @@ body {
 
 .info-block p {
     font-size: 0.9em;
-    /* Ajusta para evitar o espaço quando não há ícone */
     margin-left: 0; 
-    padding-left: 28px; /* Espaço para alinhar com o texto após o ícone */
+    padding-left: 28px; 
 }
 
 .close-button {
@@ -439,17 +406,15 @@ body {
     opacity: 1;
 }
 
-/* 6. Estilos do Modal (Pop-up de Cadastro) */
-
 .modal {
-    display: none; /* Escondido por padrão */
+    display: none; 
     position: fixed;
     z-index: 1000; 
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: var(--bg-modal); /* Overlay escuro semi-transparente */
+    background-color: var(--bg-modal); 
     justify-content: center;
     align-items: center;
     overflow: auto;
@@ -553,23 +518,20 @@ body {
     font-weight: bold;
 }
 .form-message.success {
-    background-color: #e8f5e9; /* Light Green */
+    background-color: #e8f5e9; 
     color: var(--color-success);
 }
 .dark-mode .form-message.success {
-    background-color: #1b5e20; /* Darker Green */
+    background-color: #1b5e20; 
 }
 .form-message.error {
-    background-color: #ffebee; /* Light Red */
+    background-color: #ffebee;
     color: var(--color-error);
 }
 .dark-mode .form-message.error {
-    background-color: #b71c1c; /* Darker Red */
+    background-color: #b71c1c; 
 }
 
-/* ================================
-   BOTÃO DE SAIR FIXO (CANTO INFERIOR DIREITO)
-   ================================ */
    .fixed-logout-button {
     position: fixed;
     bottom: 25px;
@@ -609,9 +571,6 @@ body {
     }
 }
 
-/* ================================
-   BOTÃO "ABRIR NO MAPA" (DENTRO DO PAINEL)
-   ================================ */
 .open-map-button {
     display: inline-flex;
     align-items: center;
@@ -639,9 +598,6 @@ body {
     font-size: 14px;
 }
 
-/* ================================
-   LINKS DO LOGIN/CADASTRO
-   ================================ */
 .auth-link a {
     color: var(--color-tint);
     font-weight: bold;
@@ -656,9 +612,6 @@ body {
     opacity: 0.85;
 }
 
-/* ================================
-   FORMULÁRIOS DE LOGIN E CADASTRO
-   ================================ */
 .auth-modal-content {
     display: flex;
     flex-direction: column;
@@ -712,8 +665,6 @@ body {
   .status-rejected { color: #e74c3c; }
   .status-pending { color: #f1c40f; }
   
-
-/* Ajuste de centralização em todas as telas */
 @media (max-height: 700px) {
     .modal.open .auth-modal-content {
         justify-content: flex-start;
@@ -721,9 +672,6 @@ body {
     }
 }
 
-/* ================================
-   PAINEL DE USUÁRIO (MENU SUPERIOR)
-   ================================ */
 .user-menu-button {
     background-color: var(--bg-secondary);
     border: 1px solid var(--bg-map-border);
@@ -748,7 +696,6 @@ body {
     color: var(--text-secondary);
 }
 
-/* Menu suspenso mais elegante */
 .user-dropdown-menu {
     border-radius: 10px;
     min-width: 180px;
@@ -757,10 +704,8 @@ body {
     box-shadow: 0 5px 10px var(--color-shadow);
 }
 
-
-/* 7. Responsividade */
 @media (max-width: 900px) {
-    /* Reorganiza o Header em mobile/tablet */
+   
     .main-header {
         flex-wrap: wrap; 
         padding: 10px 15px;
@@ -780,7 +725,6 @@ body {
 
     .header-right {
         order: 2; 
-        /* Alinha os botões de navegação, voluntário e tema */
         width: 100%;
         justify-content: center;
         margin-bottom: 10px;
@@ -790,7 +734,6 @@ body {
         max-width: 100%;
     }
     
-    /* Mobile: Mapa e Painel verticais */
     .map-container-wrapper {
         flex-direction: column;
         height: auto; 
@@ -799,7 +742,6 @@ body {
         border: none;
     }
     
-    /* O mapa tem uma altura fixa no mobile */
     #map {
         width: 100%;
         height: 50vh; 
@@ -810,25 +752,22 @@ body {
 
     .details-panel {
         width: 100%;
-        height: 0; /* Começa fechado */
+        height: 0; 
         border-radius: 8px;
         margin-top: 10px;
         order: 2;
     }
 
     .details-panel.open {
-        height: 40vh; /* Ocupa a parte inferior da tela */
+        height: 40vh; 
         min-height: 250px;
-        /* Garante que o padding apareça ao abrir */
         padding: 20px; 
     }
     
-    /* Ajustes para o mapa quando o painel está aberto em mobile */
     .details-panel.open ~ #map {
-        width: 100%; /* Garante largura total */
+        width: 100%; 
     }
 
-    /* Modal em Mobile */
     .modal-content {
         margin: 20px;
         max-height: 90vh;
