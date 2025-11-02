@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Estilos específicos para a página de inscrições */
+       
         .inscricoes-container {
             max-width: 1000px;
             margin: 40px auto;
@@ -244,7 +244,7 @@
 
         <nav class="header-right">
             <a href="index.html" class="nav-button">Início</a>
-            <a href="minhas-inscricoes.html" class="nav-button" style="border-color: var(--color-highlight);">Contatos</a>
+            <a href="minhas_inscricoes.html" class="nav-button" style="border-color: var(--color-highlight);">Contatos</a>
             
             <div id="user-dropdown" class="user-dropdown" style="display: none;">
                 <button id="user-menu-button" class="user-menu-button">
@@ -254,7 +254,7 @@
                 </button>
                 <div id="user-dropdown-menu" class="user-dropdown-menu">
                     <a href="perfil.html"><i class="fas fa-user"></i> Meu Perfil</a>
-                    <a href="minhas-inscricoes.html"><i class="fas fa-address-book"></i> Minhas Inscrições</a>
+                    <a href="minhas_inscricoes.html"><i class="fas fa-address-book"></i> Minhas Inscrições</a>
                     <hr>
                     <a href="#" id="menu-logout"><i class="fas fa-sign-out-alt"></i> Sair</a>
                 </div>
@@ -279,7 +279,7 @@
 
         <div id="inscricoes-content" style="display: none;">
             <div id="inscricoes-list" class="inscricoes-grid">
-                <!-- Inscrições serão inseridas aqui pelo JavaScript -->
+   
             </div>
         </div>
 
@@ -298,7 +298,6 @@
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, query, where, getDocs, doc, deleteDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Configuração Firebase (mesma do app.js)
         const firebaseConfig = {
             apiKey: "AIzaSyDhQs9Kz4LLGaKIhWV9nUiTjlst5YEWhjg",
             authDomain: "gssa-gravatai.firebaseapp.com",
@@ -312,7 +311,6 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // Dados das ONGs (temporário - depois migrar para Firestore)
         const ONGS_DATA = [
             {
                 id: 1,
@@ -331,7 +329,6 @@
             }
         ];
 
-        // Elementos DOM
         const loadingState = document.getElementById('loading-state');
         const inscricoesContent = document.getElementById('inscricoes-content');
         const emptyState = document.getElementById('empty-state');
@@ -341,7 +338,6 @@
         const menuLogout = document.getElementById('menu-logout');
         const themeToggle = document.getElementById('theme-toggle');
 
-        // Sistema de tema
         function initTheme() {
             const savedTheme = localStorage.getItem('theme');
             if (savedTheme === 'dark') {
@@ -364,7 +360,6 @@
             }
         });
 
-        // Tradução de status
         function getStatusInfo(status) {
             const statusMap = {
                 'pending': { 
@@ -386,7 +381,6 @@
             return statusMap[status] || statusMap['pending'];
         }
 
-        // Carregar inscrições do usuário
         async function loadInscricoes(userId) {
             try {
                 const q = query(
@@ -409,7 +403,6 @@
                     });
                 });
 
-                // Ordena por data (mais recente primeiro)
                 inscricoes.sort((a, b) => {
                     const dateA = a.createdAt?.toDate() || new Date(0);
                     const dateB = b.createdAt?.toDate() || new Date(0);
@@ -430,7 +423,6 @@
             }
         }
 
-        // Renderizar inscrições na tela
         function renderInscricoes(inscricoes) {
             inscricoesList.innerHTML = '';
 
@@ -490,7 +482,6 @@
                 inscricoesList.appendChild(card);
             });
 
-            // Event listeners para cancelar inscrição
             document.querySelectorAll('.btn-cancel').forEach(btn => {
                 btn.addEventListener('click', async (e) => {
                     const inscricaoId = e.currentTarget.dataset.id;
@@ -507,46 +498,38 @@
             });
         }
 
-        // Autenticação
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // Carrega perfil do usuário
                 const userDoc = await getDoc(doc(db, 'users', user.uid));
                 if (userDoc.exists()) {
                     const userData = userDoc.data();
                     userNameDisplay.textContent = userData.name || user.email;
                     userDropdown.style.display = 'block';
                     
-                    // Carrega inscrições
                     loadInscricoes(user.uid);
                 }
             } else {
-                // Redireciona para login se não estiver autenticado
                 window.location.href = 'index.html';
             }
         });
 
-        // Logout
         menuLogout.addEventListener('click', async (e) => {
             e.preventDefault();
             await signOut(auth);
             window.location.href = 'index.html';
         });
 
-        // Dropdown do usuário
         document.getElementById('user-menu-button')?.addEventListener('click', () => {
             const menu = document.getElementById('user-dropdown-menu');
             menu.classList.toggle('show');
         });
 
-        // Fecha dropdown ao clicar fora
         document.addEventListener('click', (e) => {
             if (!userDropdown.contains(e.target)) {
                 document.getElementById('user-dropdown-menu')?.classList.remove('show');
             }
         });
 
-        // Inicializa tema
         initTheme();
     </script>
 </body>
