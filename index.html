@@ -30,12 +30,10 @@
             <a href="index.html" class="nav-button" style="border-color: var(--color-highlight);">Início</a>
             <a href="#" id="nav-inscricoes" class="nav-button">Contatos</a>
             
-            <!-- Botão de autenticação -->
             <button id="auth-button" class="volunteer-button">
                 <i class="fas fa-sign-in-alt"></i> <span id="auth-button-text">Entrar</span>
             </button>
             
-            <!-- Dropdown do usuário (aparece quando logado) -->
             <div id="user-dropdown" class="user-dropdown" style="display: none;">
                 <button id="user-menu-button" class="user-menu-button">
                     <i class="fas fa-user-circle"></i>
@@ -45,7 +43,8 @@
                 <div id="user-dropdown-menu" class="user-dropdown-menu">
                     <a href="#" id="menu-profile"><i class="fas fa-user"></i> Meu Perfil</a>
                     <a href="#" id="menu-contacts"><i class="fas fa-address-book"></i> Minhas Inscrições</a>
-                    <a href="#" id="menu-admin-panel" style="display: none;"><i class="fas fa-cog"></i> Painel Admin</a>
+                    <a href="#" id="menu-admin-panel" style="display: none;"><i class="fas fa-cog"></i> Painel Admin ONG</a>
+                    <a href="super-admin.html" id="menu-super-admin" style="display: none;"><i class="fas fa-shield-alt"></i> Painel Super-Admin</a>
                     <hr>
                     <a href="#" id="menu-logout"><i class="fas fa-sign-out-alt"></i> Sair</a>
                 </div>
@@ -57,12 +56,10 @@
         </nav>
     </header>
 
-    <!-- MODAL DE AUTENTICAÇÃO -->
     <div id="auth-modal" class="modal">
         <div class="modal-content auth-modal-content">
             <button id="close-auth-modal" class="modal-close-button" aria-label="Fechar"><i class="fas fa-times"></i></button>
             
-            <!-- FORMULÁRIO DE LOGIN -->
             <div id="login-form-container" class="auth-form-container active">
                 <h2 class="modal-title"><i class="fas fa-sign-in-alt"></i> Acesse sua Conta</h2>
                 <p class="modal-subtitle">Entre para gerenciar suas inscrições ou sua ONG</p>
@@ -82,15 +79,21 @@
                         <i class="fas fa-sign-in-alt"></i> Entrar
                     </button>
                     
-                    <p class="auth-link">
-                        <a href="#" id="switch-to-register">Não tem conta? Cadastrar-se como voluntário</a>
-                    </p>
+                    <div style="margin-top: 20px; text-align: center; display: flex; flex-direction: column; gap: 10px;">
+                        <p class="auth-link" style="margin: 0;">
+                            <a href="#" id="switch-to-register">Não tem conta? <strong>Cadastrar como Voluntário</strong></a>
+                        </p>
+                        <p class="auth-link" style="margin: 0; padding-top: 10px; border-top: 1px solid var(--bg-map-border);">
+                            <a href="cadastro-ong.html" style="color: var(--color-highlight);">
+                                <i class="fas fa-building"></i> <strong>Cadastrar minha ONG</strong>
+                            </a>
+                        </p>
+                    </div>
                     
                     <div id="login-message" class="form-message"></div>
                 </form>
             </div>
 
-            <!-- FORMULÁRIO DE CADASTRO -->
             <div id="register-form-container" class="auth-form-container">
                 <h2 class="modal-title"><i class="fas fa-hand-holding-heart"></i> Cadastro de Voluntário</h2>
                 <p class="modal-subtitle">Seu apoio é fundamental. Preencha seus dados para ajudar as ONGs de Gravataí.</p>
@@ -135,9 +138,16 @@
                         <i class="fas fa-user-plus"></i> Criar Conta
                     </button>
                     
-                    <p class="auth-link">
-                        <a href="#" id="switch-to-login">Já tem conta? Entrar</a>
-                    </p>
+                    <div style="margin-top: 20px; text-align: center;">
+                        <p class="auth-link" style="margin: 0;">
+                            <a href="#" id="switch-to-login">Já tem conta? Entrar</a>
+                        </p>
+                        <p class="auth-link" style="margin: 10px 0 0 0; padding-top: 10px; border-top: 1px solid var(--bg-map-border);">
+                            <a href="cadastro-ong.html" style="color: var(--color-highlight);">
+                                <i class="fas fa-building"></i> <strong>Cadastrar minha ONG</strong>
+                            </a>
+                        </p>
+                    </div>
                     
                     <div id="register-message" class="form-message"></div>
                 </form>
@@ -145,7 +155,6 @@
         </div>
     </div>
 
-    <!-- MODAL DE INSCRIÇÕES (para quando não houver arquivo separado) -->
     <div id="inscricoes-modal" class="modal">
         <div class="modal-content" style="max-width: 800px; max-height: 90vh; overflow-y: auto;">
             <button id="close-inscricoes-modal" class="modal-close-button" aria-label="Fechar"><i class="fas fa-times"></i></button>
@@ -158,7 +167,6 @@
         </div>
     </div>
 
-    <!-- MODAL DE PERFIL (para quando não houver arquivo separado) -->
     <div id="perfil-modal" class="modal">
         <div class="modal-content" style="max-width: 700px; max-height: 90vh; overflow-y: auto;">
             <button id="close-perfil-modal" class="modal-close-button" aria-label="Fechar"><i class="fas fa-times"></i></button>
@@ -173,7 +181,6 @@
         <div class="map-container-wrapper">
             <div id="map"></div>
             
-            <!-- Painel Lateral de Detalhes -->
             <aside id="details-panel" class="details-panel">
                 <button id="close-panel" class="close-button" aria-label="Fechar Painel"><i class="fas fa-times"></i></button>
                 <div class="panel-content"></div>
@@ -181,7 +188,6 @@
         </div>
     </div>
 
-    <!-- Botão fixo de logout -->
     <button id="fixed-logout-button" class="fixed-logout-button" style="display: none;">
         <i class="fas fa-sign-out-alt"></i> Sair
     </button>
