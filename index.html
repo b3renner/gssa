@@ -7,7 +7,34 @@
     <link rel="icon" href="gssa_logo_transp.png">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="style.css"> 
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* ── Botão de idioma ── */
+        #lang-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 13px;
+            background: transparent;
+            border: 1.5px solid var(--color-highlight);
+            color: var(--color-highlight);
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.82em;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+            white-space: nowrap;
+        }
+        #lang-toggle:hover {
+            background: var(--color-highlight);
+            color: #fff;
+        }
+        #lang-toggle .lang-flag {
+            font-size: 1.1em;
+            line-height: 1;
+        }
+    </style>
 </head>
 <body>
     <header class="main-header">
@@ -15,25 +42,30 @@
             <img src="gssa_logo.png" alt="Logo GSSA" class="gssa-logo-img">
             <div class="logo-titles">
                 <h1 class="logo-main-title">GSSA</h1>
-                <p class="logo-subtitle">Gravataí Support & Shelter Assist</p>
+                <p class="logo-subtitle" data-i18n="logo-subtitle">Gravataí Support & Shelter Assist</p>
             </div>
         </div>
 
         <div class="header-center">
             <div class="search-container-header">
-                <input type="text" id="search-input" placeholder="Buscar ONGs por nome, serviço ou bairro...">
+                <input type="text" id="search-input"
+                       data-i18n-ph="search-placeholder"
+                       placeholder="Buscar ONGs por nome, serviço ou bairro...">
                 <button id="search-button" aria-label="Buscar"><i class="fas fa-search"></i></button>
             </div>
         </div>
 
         <nav class="header-right">
-            <a href="index.html" class="nav-button" style="border-color: var(--color-highlight);">Início</a>
-            <a href="#" id="nav-inscricoes" class="nav-button">Contatos</a>
-            
+            <a href="index.html" class="nav-button" style="border-color: var(--color-highlight);"
+               data-i18n="nav-inicio">Início</a>
+            <a href="#" id="nav-inscricoes" class="nav-button"
+               data-i18n="nav-contatos">Contatos</a>
+
             <button id="auth-button" class="volunteer-button">
-                <i class="fas fa-sign-in-alt"></i> <span id="auth-button-text">Entrar</span>
+                <i class="fas fa-sign-in-alt"></i>
+                <span id="auth-button-text" data-i18n="auth-button-text">Entrar</span>
             </button>
-            
+
             <div id="user-dropdown" class="user-dropdown" style="display: none;">
                 <button id="user-menu-button" class="user-menu-button">
                     <i class="fas fa-user-circle"></i>
@@ -41,126 +73,161 @@
                     <i class="fas fa-chevron-down"></i>
                 </button>
                 <div id="user-dropdown-menu" class="user-dropdown-menu">
-                    <a href="#" id="menu-profile"><i class="fas fa-user"></i> Meu Perfil</a>
-                    <a href="#" id="menu-contacts"><i class="fas fa-address-book"></i> Minhas Inscrições</a>
-                    <a href="#" id="menu-admin-panel" style="display: none;"><i class="fas fa-cog"></i> Painel Admin ONG</a>
-                    <a href="super-admin.html" id="menu-super-admin" style="display: none;"><i class="fas fa-shield-alt"></i> Painel Super-Admin</a>
+                    <a href="#" id="menu-profile">
+                        <i class="fas fa-user"></i>
+                        <span data-i18n="menu-profile-text">Meu Perfil</span>
+                    </a>
+                    <a href="#" id="menu-contacts">
+                        <i class="fas fa-address-book"></i>
+                        <span data-i18n="menu-contacts-text">Minhas Inscrições</span>
+                    </a>
+                    <a href="#" id="menu-admin-panel" style="display: none;">
+                        <i class="fas fa-cog"></i>
+                        <span data-i18n="menu-admin-text">Painel Admin ONG</span>
+                    </a>
+                    <a href="super-admin.html" id="menu-super-admin" style="display: none;">
+                        <i class="fas fa-shield-alt"></i>
+                        <span data-i18n="menu-super-text">Painel Super-Admin</span>
+                    </a>
                     <hr>
-                    <a href="#" id="menu-logout"><i class="fas fa-sign-out-alt"></i> Sair</a>
+                    <a href="#" id="menu-logout">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span data-i18n="menu-logout-text">Sair</span>
+                    </a>
                 </div>
             </div>
-            
+
+            <!-- Botão de idioma -->
+            <button id="lang-toggle" title="Switch to English">
+                <span class="lang-flag">🌐</span>
+                <span class="lang-label">EN</span>
+            </button>
+
             <button id="theme-toggle" class="toggle-button" aria-label="Alternar Tema">
-                <i class="fas fa-sun"></i> 
+                <i class="fas fa-sun"></i>
             </button>
         </nav>
     </header>
 
+    <!-- ── Modal Auth ── -->
     <div id="auth-modal" class="modal">
         <div class="modal-content auth-modal-content">
-            <button id="close-auth-modal" class="modal-close-button" aria-label="Fechar"><i class="fas fa-times"></i></button>
-            
+            <button id="close-auth-modal" class="modal-close-button" aria-label="Fechar">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <!-- Login -->
             <div id="login-form-container" class="auth-form-container active">
-                <h2 class="modal-title"><i class="fas fa-sign-in-alt"></i> Acesse sua Conta</h2>
-                <p class="modal-subtitle">Entre para gerenciar suas inscrições ou sua ONG</p>
-                
+                <h2 class="modal-title">
+                    <i class="fas fa-sign-in-alt"></i>
+                    <span data-i18n="login-title">Acesse sua Conta</span>
+                </h2>
+                <p class="modal-subtitle" data-i18n="login-subtitle">
+                    Entre para gerenciar suas inscrições ou sua ONG
+                </p>
+
                 <form id="login-form">
                     <div class="form-group">
-                        <label for="login-email">E-mail</label>
+                        <label for="login-email" data-i18n="login-email-label">E-mail</label>
                         <input type="email" id="login-email" required placeholder="seu@email.com">
                     </div>
-
                     <div class="form-group">
-                        <label for="login-password">Senha</label>
+                        <label for="login-password" data-i18n="login-pass-label">Senha</label>
                         <input type="password" id="login-password" required placeholder="••••••••">
                     </div>
+                    <button type="submit" class="submit-button" data-i18n="login-submit">Entrar</button>
 
-                    <button type="submit" class="submit-button">
-                        <i class="fas fa-sign-in-alt"></i> Entrar
-                    </button>
-                    
                     <div style="margin-top: 20px; text-align: center; display: flex; flex-direction: column; gap: 10px;">
                         <p class="auth-link" style="margin: 0;">
-                            <a href="#" id="switch-to-register">Não tem conta? <strong>Cadastrar como Voluntário</strong></a>
+                            <a href="#" id="switch-to-register" data-i18n="login-switch">
+                                Não tem conta? <strong>Cadastrar como Voluntário</strong>
+                            </a>
                         </p>
                         <p class="auth-link" style="margin: 0; padding-top: 10px; border-top: 1px solid var(--bg-map-border);">
-                            <a href="cadastro-ong.html" style="color: var(--color-highlight);">
+                            <a href="cadastro-ong.html" style="color: var(--color-highlight);"
+                               data-i18n="login-ong-link">
                                 <i class="fas fa-building"></i> <strong>Cadastrar minha ONG</strong>
                             </a>
                         </p>
                     </div>
-                    
                     <div id="login-message" class="form-message"></div>
                 </form>
             </div>
 
+            <!-- Cadastro -->
             <div id="register-form-container" class="auth-form-container">
-                <h2 class="modal-title"><i class="fas fa-hand-holding-heart"></i> Cadastro de Voluntário</h2>
-                <p class="modal-subtitle">Seu apoio é fundamental. Preencha seus dados para ajudar as ONGs de Gravataí.</p>
-                
+                <h2 class="modal-title">
+                    <i class="fas fa-hand-holding-heart"></i>
+                    <span data-i18n="reg-title">Cadastro de Voluntário</span>
+                </h2>
+                <p class="modal-subtitle" data-i18n="reg-subtitle">
+                    Seu apoio é fundamental. Preencha seus dados para ajudar as ONGs de Gravataí.
+                </p>
+
                 <form id="register-form">
                     <div class="form-group">
-                        <label for="register-name">Nome Completo</label>
-                        <input type="text" id="register-name" required placeholder="Seu nome">
+                        <label for="register-name" data-i18n="reg-name-label">Nome Completo</label>
+                        <input type="text" id="register-name" required
+                               data-i18n-ph="reg-name-ph" placeholder="Seu nome">
                     </div>
-
                     <div class="form-group">
-                        <label for="register-email">E-mail</label>
+                        <label for="register-email" data-i18n="reg-email-label">E-mail</label>
                         <input type="email" id="register-email" required placeholder="seu@email.com">
                     </div>
-
                     <div class="form-group">
-                        <label for="register-password">Senha</label>
-                        <input type="password" id="register-password" required placeholder="Mínimo 6 caracteres">
+                        <label for="register-password" data-i18n="reg-pass-label">Senha</label>
+                        <input type="password" id="register-password" required
+                               data-i18n-ph="reg-pass-ph" placeholder="Mínimo 6 caracteres">
+                    </div>
+                    <div class="form-group">
+                        <label for="register-password-confirm" data-i18n="reg-passconf-label">Confirme a Senha</label>
+                        <input type="password" id="register-password-confirm" required
+                               data-i18n-ph="reg-passconf-ph" placeholder="Digite a senha novamente">
+                    </div>
+                    <div class="form-group">
+                        <label for="register-location" data-i18n="reg-location-label">Localização</label>
+                        <input type="text" id="register-location" required
+                               data-i18n-ph="reg-location-ph" placeholder="Ex: Centro, Rincão da Madalena">
+                    </div>
+                    <div class="form-group">
+                        <label for="register-skills" data-i18n="reg-skills-label">Habilidades</label>
+                        <input type="text" id="register-skills" required
+                               data-i18n-ph="reg-skills-ph" placeholder="Ex: Médico, Motorista, Ajuda Geral">
+                    </div>
+                    <div class="form-group">
+                        <label for="register-availability" data-i18n="reg-avail-label">Disponibilidade</label>
+                        <textarea id="register-availability" rows="2" required
+                                  data-i18n-ph="reg-avail-ph"
+                                  placeholder="Ex: Diária após 18h, Finais de Semana, Integral."></textarea>
                     </div>
 
-                    <div class="form-group">
-                        <label for="register-password-confirm">Confirme a Senha</label>
-                        <input type="password" id="register-password-confirm" required placeholder="Digite a senha novamente">
-                    </div>
+                    <button type="submit" class="submit-button" data-i18n="reg-submit">Criar Conta</button>
 
-                    <div class="form-group">
-                        <label for="register-location">Localização (Bairro/Ponto de Partida)</label>
-                        <input type="text" id="register-location" required placeholder="Ex: Centro, Rincão da Madalena">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="register-skills">Habilidades/Serviços que Oferece (Separar por vírgula)</label>
-                        <input type="text" id="register-skills" required placeholder="Ex: Médico, Motorista, Ajuda Geral, Eletricista">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="register-availability">Disponibilidade</label>
-                        <textarea id="register-availability" rows="2" required placeholder="Ex: Diária após 18h, Finais de Semana, Integral."></textarea>
-                    </div>
-
-                    <button type="submit" class="submit-button">
-                        <i class="fas fa-user-plus"></i> Criar Conta
-                    </button>
-                    
                     <div style="margin-top: 20px; text-align: center;">
                         <p class="auth-link" style="margin: 0;">
-                            <a href="#" id="switch-to-login">Já tem conta? Entrar</a>
+                            <a href="#" id="switch-to-login" data-i18n="reg-switch">Já tem conta? Entrar</a>
                         </p>
                         <p class="auth-link" style="margin: 10px 0 0 0; padding-top: 10px; border-top: 1px solid var(--bg-map-border);">
-                            <a href="cadastro-ong.html" style="color: var(--color-highlight);">
+                            <a href="cadastro-ong.html" style="color: var(--color-highlight);"
+                               data-i18n="reg-ong-link">
                                 <i class="fas fa-building"></i> <strong>Cadastrar minha ONG</strong>
                             </a>
                         </p>
                     </div>
-                    
                     <div id="register-message" class="form-message"></div>
                 </form>
             </div>
         </div>
     </div>
 
+    <!-- ── Modais secundários (inscrições, perfil) — inalterados ── -->
     <div id="inscricoes-modal" class="modal">
         <div class="modal-content" style="max-width: 800px; max-height: 90vh; overflow-y: auto;">
-            <button id="close-inscricoes-modal" class="modal-close-button" aria-label="Fechar"><i class="fas fa-times"></i></button>
+            <button id="close-inscricoes-modal" class="modal-close-button" aria-label="Fechar">
+                <i class="fas fa-times"></i>
+            </button>
             <h2 class="modal-title"><i class="fas fa-clipboard-list"></i> Minhas Inscrições</h2>
             <p class="modal-subtitle">Acompanhe o status das suas candidaturas</p>
-            
             <div id="modal-inscricoes-list" style="margin-top: 20px;">
                 <p style="text-align: center; color: var(--text-secondary);">Carregando...</p>
             </div>
@@ -169,7 +236,9 @@
 
     <div id="perfil-modal" class="modal">
         <div class="modal-content" style="max-width: 700px; max-height: 90vh; overflow-y: auto;">
-            <button id="close-perfil-modal" class="modal-close-button" aria-label="Fechar"><i class="fas fa-times"></i></button>
+            <button id="close-perfil-modal" class="modal-close-button" aria-label="Fechar">
+                <i class="fas fa-times"></i>
+            </button>
             <h2 class="modal-title"><i class="fas fa-user-circle"></i> Meu Perfil</h2>
             <div id="modal-perfil-content" style="margin-top: 20px;">
                 <p style="text-align: center; color: var(--text-secondary);">Carregando...</p>
@@ -177,23 +246,29 @@
         </div>
     </div>
 
+    <!-- ── Mapa ── -->
     <div class="main-content">
         <div class="map-container-wrapper">
             <div id="map"></div>
-            
+
             <aside id="details-panel" class="details-panel">
-                <button id="close-panel" class="close-button" aria-label="Fechar Painel"><i class="fas fa-times"></i></button>
+                <button id="close-panel" class="close-button" aria-label="Fechar Painel">
+                    <i class="fas fa-times"></i>
+                </button>
                 <div class="panel-content"></div>
             </aside>
         </div>
     </div>
 
     <button id="fixed-logout-button" class="fixed-logout-button" style="display: none;">
-        <i class="fas fa-sign-out-alt"></i> Sair
+        <i class="fas fa-sign-out-alt"></i>
+        <span data-i18n="menu-logout-text">Sair</span>
     </button>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="data.js"></script>
+    <!-- translations.js deve vir ANTES de app.js -->
+    <script src="translations.js"></script>
     <script type="module" src="app.js"></script>
 </body>
 </html>
