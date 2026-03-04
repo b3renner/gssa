@@ -357,15 +357,14 @@ document.addEventListener('DOMContentLoaded', () => {
             markers.set(String(ong.id), marker);
 
             const popupContent = `
-                <div style="text-align: center; min-width: 150px;">
-                    <strong style="font-size: 1.1em; color: #D9534F;">${ong.nome}</strong><br>
-                    <span style="color: #666; font-size: 0.9em;">${ong.servicos.split(',')[0]}</span><br>
-                    <button onclick="window.showDetails('${ong.id}')" 
-                            style="margin-top: 8px; padding: 6px 12px; background: #D9534F; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">
-                        <i class="fas fa-info-circle"></i> Ver Detalhes
-                    </button>
-                </div>
-            `;
+    <div style="text-align: center; min-width: 150px;">
+        <strong style="font-size: 1.1em; color: #D9534F;">${ong.nome}</strong><br>
+        <button onclick="window.showDetails('${ong.id}')" 
+                style="margin-top: 8px; padding: 6px 12px; background: #D9534F; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">
+            <i class="fas fa-info-circle"></i> ${window.gssaI18n ? window.gssaI18n.t('popup-see-details') : 'Ver Detalhes'}
+        </button>
+    </div>
+`;
 
             marker.bindPopup(popupContent);
             marker.on('click', () => {
@@ -397,7 +396,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     userMarker = L.marker([lat, lon], { icon: userIcon })
                         .addTo(map)
-                        .bindPopup(`Você está aqui! (Precisão ± ${accuracy.toFixed(0)}m)`)
+                        .bindPopup(`${window.gssaI18n ? window.gssaI18n.t('popup-you-are-here') : 'Você está aqui!'} (${window.gssaI18n ? window.gssaI18n.t('popup-accuracy') : 'Precisão ±'} ${accuracy.toFixed(0)}m)`)
                         .openPopup();
                     
                     map.setView([lat, lon], 14, { animate: true });
@@ -674,4 +673,5 @@ document.addEventListener('DOMContentLoaded', () => {
         refreshPanelIfOpen();
     });
 });
+
 
