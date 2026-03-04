@@ -399,55 +399,75 @@
         }
 
         async function renderInscricoes(inscricoes) {
-            inscricoesList.innerHTML = '';
+    inscricoesList.innerHTML = '';
 
-            for (const inscricao of inscricoes) {
-                const { nome: ongNome, servicos: ongServicos } = await resolveOngName(inscricao);
-                const statusInfo   = getStatusInfo(inscricao.status);
-                const _t = (k) => window.gssaI18n ? window.gssaI18n.t(k) : k;
-const lang = window.gssaI18n ? window.gssaI18n.currentLang() : 'pt';
+    for (const inscricao of inscricoes) {
+        const { nome: ongNome, servicos: ongServicos } = await resolveOngName(inscricao);
+        const statusInfo = getStatusInfo(inscricao.status);
+        const _t = (k) => window.gssaI18n ? window.gssaI18n.t(k) : k;
+        const lang = window.gssaI18n ? window.gssaI18n.currentLang() : 'pt';
 
-const dataInscricao = inscricao.createdAt?.toDate()
-    ? inscricao.createdAt.toDate().toLocaleDateString(
-        lang === 'en' ? 'en-US' : 'pt-BR',
-        { day: '2-digit', month: 'long', year: 'numeric' }
-      )
-    : _t('inscricoes-loading');
+        const dataInscricao = inscricao.createdAt?.toDate()
+            ? inscricao.createdAt.toDate().toLocaleDateString(
+                lang === 'en' ? 'en-US' : 'pt-BR',
+                { day: '2-digit', month: 'long', year: 'numeric' }
+              )
+            : _t('inscricoes-loading');
 
-const card = document.createElement('div');
-card.className = 'inscricao-card';
-card.innerHTML = `
-    <div class="ong-name">
-        <i class="fas fa-hands-helping"></i>
-        ${ongNome}
-    </div>
-    <div class="inscricao-info">
-        ${ongServicos ? `
-        <div class="info-row">
-            <i class="fas fa-info-circle"></i>
-            <span class="info-value">${ongServicos}</span>
-        </div>` : ''}
-        <div class="info-row">
-            <i class="fas fa-calendar-alt"></i>
-            <span class="info-label">${_t('inscricoes-date-label')}</span>
-            <span class="info-value">${dataInscricao}</span>
-        </div>
-        <div class="info-row">
-            <i class="fas fa-flag"></i>
-            <span class="info-label">${_t('status-label')}</span>
-            <span class="status-badge ${statusInfo.cls}">
-                <i class="fas ${statusInfo.icon}"></i>
-                ${statusInfo.text}
-            </span>
-        </div>
-    </div>
-    ${inscricao.status === 'pending' ? `
-        <div class="action-buttons">
-            <button class="btn-cancel" data-id="${inscricao.id}">
-                <i class="fas fa-times"></i> ${_t('inscricoes-cancel')}
-            </button>
-        </div>` : ''}
-`;
+        const card = document.createElement('div');
+        card.className = 'inscricao-card';
+        card.innerHTML = `
+            <div class="ong-name">
+                <i class="fas fa-hands-helping"></i>
+                ${ongNome}
+            </div>
+            <div class="inscricao-info">
+                ${ongServicos ? `
+                <div class="info-row">
+                    <i class="fas fa-info-circle"></i>
+                    <span class="info-value">${ongServicos}</span>
+                </div>` : ''}
+                <div class="info-row">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span class="info-label">${_t('inscricoes-date-label')}</span>
+                    <span class="info-value">${dataInscricao}</span>
+                </div>
+                <div class="info-row">
+                    <i class="fas fa-flag"></i>
+                    <span class="info-label">${_t('status-label')}</span>
+                    <span class="status-badge ${statusInfo.cls}">
+                        <i class="fas ${statusInfo.icon}"></i>
+                        ${statusInfo.text}
+                    </span>
+                </div>
+            </div>
+            ${inscricao.status === 'pending' ? `
+                <div class="action-buttons">
+                    <button class="btn-cancel" data-id="${inscricao.id}">
+                        <i class="fas fa-times"></i> ${_t('inscricoes-cancel')}
+                    </button>
+                </div>` : ''}
+        `;
+
+        // ✅ Adiciona o card ao DOM
+        inscricoesList.appendChild(card);
+
+        // ✅ Listener no card específico, não em todos os botões do documento
+        const cancelBtn = card.querySelector('.btn-cancel');
+        if (cancelBtn) {
+            cancelBtn.addEventListener('click', async (e) => {
+                const id = e.currentTarget.dataset.id;
+                if (!confirm(_t('inscricoes-cancel') + '?')) return;
+                try {
+                    await deleteDoc(doc(db, 'applications', id));
+                    location.reload();
+                } catch (err) {
+                    alert('Erro ao cancelar inscrição: ' + err.message);
+                }
+            });
+        }
+    }
+}
 
             document.querySelectorAll('.btn-cancel').forEach(btn => {
                 btn.addEventListener('click', async (e) => {
@@ -502,4 +522,5 @@ card.innerHTML = `
     </script>
 </body>
 </html>
+
 
