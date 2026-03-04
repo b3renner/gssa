@@ -434,7 +434,7 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 await addDoc(collection(db, 'applications'), {
                     ongId:      String(ong.id),
-                    ongName:    ong.nome,       // ✅ salva nome para resolver no minhas-inscricoes
+                    ongName:    ong.nome,       // ✅ salva nome para resolver no minhas_inscricoes
                     ongServicos: ong.servicos,
                     userId:     currentUser.uid,
                     status:     'pending',
@@ -491,11 +491,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // ── Navegação ───────────────────────────────────────────────────────────
     document.getElementById('nav-inscricoes')?.addEventListener('click', (e) => {
         e.preventDefault();
-        if (currentUser) { window.location.href = 'minhas-inscricoes.html'; }
+        if (currentUser) { window.location.href = 'minhas_inscricoes.html'; }
         else { authModal.style.display = 'block'; showLoginForm(); }
     });
     document.getElementById('menu-contacts')?.addEventListener('click', (e) => {
-        e.preventDefault(); window.location.href = 'minhas-inscricoes.html';
+        e.preventDefault(); window.location.href = 'minhas_inscricoes.html';
     });
     document.getElementById('menu-profile')?.addEventListener('click', (e) => {
         e.preventDefault(); window.location.href = 'perfil.html';
@@ -503,3 +503,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
     setTimeout(() => map.invalidateSize(), 200);
 });
+
