@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="style.css">
     <style>
-       
         .inscricoes-container {
             max-width: 1000px;
             margin: 40px auto;
@@ -126,20 +125,9 @@
             text-transform: uppercase;
         }
 
-        .status-pending {
-            background-color: rgba(241, 196, 15, 0.2);
-            color: #F1C40F;
-        }
-
-        .status-approved {
-            background-color: rgba(46, 204, 113, 0.2);
-            color: #2ECC71;
-        }
-
-        .status-rejected {
-            background-color: rgba(231, 76, 60, 0.2);
-            color: #E74C3C;
-        }
+        .status-pending  { background-color: rgba(241,196,15,0.2);  color: #F1C40F; }
+        .status-approved { background-color: rgba(46,204,113,0.2);  color: #2ECC71; }
+        .status-rejected { background-color: rgba(231,76,60,0.2);   color: #E74C3C; }
 
         .empty-state {
             text-align: center;
@@ -194,7 +182,7 @@
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
+            0%   { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
 
@@ -222,13 +210,8 @@
         }
 
         @media (max-width: 768px) {
-            .inscricoes-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .page-header h1 {
-                font-size: 2em;
-            }
+            .inscricoes-grid  { grid-template-columns: 1fr; }
+            .page-header h1   { font-size: 2em; }
         }
     </style>
 </head>
@@ -244,8 +227,9 @@
 
         <nav class="header-right">
             <a href="index.html" class="nav-button">Início</a>
+            <!-- ✅ FIX 1: link consistente com hífen em todos os lugares -->
             <a href="minhas_inscricoes.html" class="nav-button" style="border-color: var(--color-highlight);">Contatos</a>
-            
+
             <div id="user-dropdown" class="user-dropdown" style="display: none;">
                 <button id="user-menu-button" class="user-menu-button">
                     <i class="fas fa-user-circle"></i>
@@ -259,9 +243,9 @@
                     <a href="#" id="menu-logout"><i class="fas fa-sign-out-alt"></i> Sair</a>
                 </div>
             </div>
-            
+
             <button id="theme-toggle" class="toggle-button" aria-label="Alternar Tema">
-                <i class="fas fa-sun"></i> 
+                <i class="fas fa-sun"></i>
             </button>
         </nav>
     </header>
@@ -278,9 +262,7 @@
         </div>
 
         <div id="inscricoes-content" style="display: none;">
-            <div id="inscricoes-list" class="inscricoes-grid">
-   
-            </div>
+            <div id="inscricoes-list" class="inscricoes-grid"></div>
         </div>
 
         <div id="empty-state" class="empty-state" style="display: none;">
@@ -294,9 +276,10 @@
     </div>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { initializeApp }          from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, query, where, getDocs, doc, deleteDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, query, where, getDocs, doc, deleteDoc, getDoc }
+            from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDhQs9Kz4LLGaKIhWV9nUiTjlst5YEWhjg",
@@ -307,137 +290,106 @@
             appId: "1:650753472587:web:65b706993648dc602975ce"
         };
 
-        const app = initializeApp(firebaseConfig);
+        const app  = initializeApp(firebaseConfig);
         const auth = getAuth(app);
-        const db = getFirestore(app);
+        const db   = getFirestore(app);
 
-        const ONGS_DATA = [
-            {
-                id: 1,
-                nome: "AICA - Associação Irmãos do Caminho",
-                servicos: "Alimentação, Roupa, Suporte Psicossocial"
-            },
-            {
-                id: 2,
-                nome: "Fundação Casa dos Sonhos",
-                servicos: "Serviço de Convivência e Fortalecimento de Vínculos"
-            },
-            {
-                id: 3,
-                nome: "Sopa Solidária Gravataí",
-                servicos: "Distribuição de Alimentos, Kits de Higiene"
-            }
-        ];
-
-        const loadingState = document.getElementById('loading-state');
+        const loadingState      = document.getElementById('loading-state');
         const inscricoesContent = document.getElementById('inscricoes-content');
-        const emptyState = document.getElementById('empty-state');
-        const inscricoesList = document.getElementById('inscricoes-list');
-        const userDropdown = document.getElementById('user-dropdown');
-        const userNameDisplay = document.getElementById('user-name-display');
-        const menuLogout = document.getElementById('menu-logout');
-        const themeToggle = document.getElementById('theme-toggle');
+        const emptyState        = document.getElementById('empty-state');
+        const inscricoesList    = document.getElementById('inscricoes-list');
+        const userDropdown      = document.getElementById('user-dropdown');
+        const userNameDisplay   = document.getElementById('user-name-display');
+        const menuLogout        = document.getElementById('menu-logout');
+        const themeToggle       = document.getElementById('theme-toggle');
 
+        /* ── tema ── */
         function initTheme() {
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme === 'dark') {
+            if (localStorage.getItem('theme') === 'dark') {
                 document.body.classList.add('dark-mode');
                 themeToggle.querySelector('i').classList.replace('fa-sun', 'fa-moon');
             }
         }
-
         themeToggle.addEventListener('click', () => {
             document.body.classList.toggle('dark-mode');
             const isDark = document.body.classList.contains('dark-mode');
-            const icon = themeToggle.querySelector('i');
-            
-            if (isDark) {
-                icon.classList.replace('fa-sun', 'fa-moon');
-                localStorage.setItem('theme', 'dark');
-            } else {
-                icon.classList.replace('fa-moon', 'fa-sun');
-                localStorage.setItem('theme', 'light');
-            }
+            themeToggle.querySelector('i').classList.replace(isDark ? 'fa-sun' : 'fa-moon', isDark ? 'fa-moon' : 'fa-sun');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
         });
 
+        /* ── helpers ── */
         function getStatusInfo(status) {
-            const statusMap = {
-                'pending': { 
-                    text: 'Pendente', 
-                    class: 'status-pending', 
-                    icon: 'fa-clock' 
-                },
-                'approved': { 
-                    text: 'Aprovado', 
-                    class: 'status-approved', 
-                    icon: 'fa-check-circle' 
-                },
-                'rejected': { 
-                    text: 'Rejeitado', 
-                    class: 'status-rejected', 
-                    icon: 'fa-times-circle' 
-                }
-            };
-            return statusMap[status] || statusMap['pending'];
+            return {
+                pending:  { text: 'Pendente',  cls: 'status-pending',  icon: 'fa-clock'        },
+                approved: { text: 'Aprovado',  cls: 'status-approved', icon: 'fa-check-circle' },
+                rejected: { text: 'Rejeitado', cls: 'status-rejected', icon: 'fa-times-circle' }
+            }[status] ?? { text: 'Pendente', cls: 'status-pending', icon: 'fa-clock' };
         }
 
+        /* ── ✅ FIX 2: busca nome da ONG direto no Firestore quando não vier no doc ── */
+        async function resolveOngName(inscricao) {
+            // O campo ongName é salvo em app.js quando o voluntário se inscreve.
+            // Se existir, usa direto. Se não, busca no Firestore (ONGs dinâmicas antigas).
+            if (inscricao.ongName && inscricao.ongName.trim() !== '') {
+                return { nome: inscricao.ongName, servicos: inscricao.ongServicos || '' };
+            }
+
+            // Tenta buscar na coleção 'ongs' pelo ID
+            try {
+                const ongDoc = await getDoc(doc(db, 'ongs', String(inscricao.ongId)));
+                if (ongDoc.exists()) {
+                    const d = ongDoc.data();
+                    return {
+                        nome: d.basicInfo?.name || 'ONG sem nome',
+                        servicos: d.services || ''
+                    };
+                }
+            } catch (_) { /* ignora */ }
+
+            return { nome: 'ONG não encontrada', servicos: '' };
+        }
+
+        /* ── carrega inscrições ── */
         async function loadInscricoes(userId) {
             try {
-                const q = query(
-                    collection(db, 'applications'), 
-                    where('userId', '==', userId)
-                );
-                const querySnapshot = await getDocs(q);
+                const q = query(collection(db, 'applications'), where('userId', '==', userId));
+                const snap = await getDocs(q);
 
-                if (querySnapshot.empty) {
+                if (snap.empty) {
                     loadingState.style.display = 'none';
-                    emptyState.style.display = 'block';
+                    emptyState.style.display   = 'block';
                     return;
                 }
 
-                const inscricoes = [];
-                querySnapshot.forEach((doc) => {
-                    inscricoes.push({
-                        id: doc.id,
-                        ...doc.data()
-                    });
-                });
-
+                const inscricoes = snap.docs.map(d => ({ id: d.id, ...d.data() }));
                 inscricoes.sort((a, b) => {
-                    const dateA = a.createdAt?.toDate() || new Date(0);
-                    const dateB = b.createdAt?.toDate() || new Date(0);
-                    return dateB - dateA;
+                    const dA = a.createdAt?.toDate() || new Date(0);
+                    const dB = b.createdAt?.toDate() || new Date(0);
+                    return dB - dA;
                 });
 
-                renderInscricoes(inscricoes);
-                
-                loadingState.style.display = 'none';
+                await renderInscricoes(inscricoes);
+
+                loadingState.style.display      = 'none';
                 inscricoesContent.style.display = 'block';
 
-            } catch (error) {
-                console.error('Erro ao carregar inscrições:', error);
+            } catch (err) {
+                console.error('Erro ao carregar inscrições:', err);
                 loadingState.innerHTML = `
-                    <i class="fas fa-exclamation-triangle" style="color: var(--color-error);"></i>
-                    <p>Erro ao carregar inscrições: ${error.message}</p>
+                    <i class="fas fa-exclamation-triangle" style="color:var(--color-error);"></i>
+                    <p>Erro ao carregar inscrições: ${err.message}</p>
                 `;
             }
         }
 
-        function renderInscricoes(inscricoes) {
+        async function renderInscricoes(inscricoes) {
             inscricoesList.innerHTML = '';
 
-            inscricoes.forEach(inscricao => {
-                const ong = ONGS_DATA.find(o => o.id === inscricao.ongId);
-                const ongNome = ong ? ong.nome : 'ONG não encontrada';
-                const ongServicos = ong ? ong.servicos : '';
-                
-                const statusInfo = getStatusInfo(inscricao.status);
-                const dataInscricao = inscricao.createdAt?.toDate() 
-                    ? inscricao.createdAt.toDate().toLocaleDateString('pt-BR', {
-                        day: '2-digit',
-                        month: 'long',
-                        year: 'numeric'
-                    })
+            for (const inscricao of inscricoes) {
+                const { nome: ongNome, servicos: ongServicos } = await resolveOngName(inscricao);
+                const statusInfo   = getStatusInfo(inscricao.status);
+                const dataInscricao = inscricao.createdAt?.toDate()
+                    ? inscricao.createdAt.toDate().toLocaleDateString('pt-BR', { day:'2-digit', month:'long', year:'numeric' })
                     : 'Data não disponível';
 
                 const card = document.createElement('div');
@@ -447,67 +399,60 @@
                         <i class="fas fa-hands-helping"></i>
                         ${ongNome}
                     </div>
-                    
                     <div class="inscricao-info">
+                        ${ongServicos ? `
                         <div class="info-row">
                             <i class="fas fa-info-circle"></i>
                             <span class="info-value">${ongServicos}</span>
-                        </div>
-                        
+                        </div>` : ''}
                         <div class="info-row">
                             <i class="fas fa-calendar-alt"></i>
                             <span class="info-label">Data de Inscrição:</span>
                             <span class="info-value">${dataInscricao}</span>
                         </div>
-                        
                         <div class="info-row">
                             <i class="fas fa-flag"></i>
                             <span class="info-label">Status:</span>
-                            <span class="status-badge ${statusInfo.class}">
+                            <span class="status-badge ${statusInfo.cls}">
                                 <i class="fas ${statusInfo.icon}"></i>
                                 ${statusInfo.text}
                             </span>
                         </div>
                     </div>
-
                     ${inscricao.status === 'pending' ? `
                         <div class="action-buttons">
                             <button class="btn-cancel" data-id="${inscricao.id}">
                                 <i class="fas fa-times"></i> Cancelar Inscrição
                             </button>
-                        </div>
-                    ` : ''}
+                        </div>` : ''}
                 `;
-
                 inscricoesList.appendChild(card);
-            });
+            }
 
             document.querySelectorAll('.btn-cancel').forEach(btn => {
                 btn.addEventListener('click', async (e) => {
-                    const inscricaoId = e.currentTarget.dataset.id;
-                    if (confirm('Tem certeza que deseja cancelar esta inscrição?')) {
-                        try {
-                            await deleteDoc(doc(db, 'applications', inscricaoId));
-                            alert('Inscrição cancelada com sucesso!');
-                            location.reload();
-                        } catch (error) {
-                            alert('Erro ao cancelar inscrição: ' + error.message);
-                        }
+                    const id = e.currentTarget.dataset.id;
+                    if (!confirm('Tem certeza que deseja cancelar esta inscrição?')) return;
+                    try {
+                        await deleteDoc(doc(db, 'applications', id));
+                        alert('Inscrição cancelada com sucesso!');
+                        location.reload();
+                    } catch (err) {
+                        alert('Erro ao cancelar inscrição: ' + err.message);
                     }
                 });
             });
         }
 
+        /* ── auth ── */
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const userDoc = await getDoc(doc(db, 'users', user.uid));
                 if (userDoc.exists()) {
-                    const userData = userDoc.data();
-                    userNameDisplay.textContent = userData.name || user.email;
-                    userDropdown.style.display = 'block';
-                    
-                    loadInscricoes(user.uid);
+                    userNameDisplay.textContent  = userDoc.data().name || user.email;
+                    userDropdown.style.display   = 'block';
                 }
+                loadInscricoes(user.uid);
             } else {
                 window.location.href = 'index.html';
             }
@@ -520,14 +465,11 @@
         });
 
         document.getElementById('user-menu-button')?.addEventListener('click', () => {
-            const menu = document.getElementById('user-dropdown-menu');
-            menu.classList.toggle('show');
+            document.getElementById('user-dropdown-menu').classList.toggle('show');
         });
-
         document.addEventListener('click', (e) => {
-            if (!userDropdown.contains(e.target)) {
+            if (!userDropdown.contains(e.target))
                 document.getElementById('user-dropdown-menu')?.classList.remove('show');
-            }
         });
 
         initTheme();
