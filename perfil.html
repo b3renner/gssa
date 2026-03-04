@@ -35,27 +35,19 @@
             font-size: 3em;
             font-weight: bold;
             margin: 0 auto 20px;
-            border: 5px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            border: 5px solid rgba(255,255,255,0.3);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
             position: absolute;
             bottom: -60px;
             left: 50%;
             transform: translateX(-50%);
         }
 
-        .perfil-name {
-            font-size: 2em;
-            font-weight: bold;
-            margin-bottom: 8px;
-        }
+        .perfil-name { font-size: 2em; font-weight: bold; margin-bottom: 8px; }
 
         .perfil-role {
-            font-size: 1.1em;
-            opacity: 0.9;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
+            font-size: 1.1em; opacity: 0.9;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
         }
 
         .perfil-body {
@@ -71,14 +63,9 @@
             margin: 30px 0 20px;
             padding-bottom: 10px;
             border-bottom: 2px solid var(--bg-map-border);
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            display: flex; align-items: center; gap: 10px;
         }
-
-        .section-title:first-child {
-            margin-top: 0;
-        }
+        .section-title:first-child { margin-top: 0; }
 
         .info-grid {
             display: grid;
@@ -94,144 +81,136 @@
             box-shadow: 0 2px 4px var(--color-shadow);
             transition: transform 0.2s;
         }
-
-        .info-card:hover {
-            transform: translateY(-2px);
-        }
+        .info-card:hover { transform: translateY(-2px); }
 
         .info-label {
-            font-size: 0.85em;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            font-weight: bold;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            font-size: 0.85em; color: var(--text-secondary);
+            text-transform: uppercase; font-weight: bold;
+            margin-bottom: 8px; display: flex; align-items: center; gap: 8px;
         }
+        .info-label i { color: var(--color-highlight); }
+        .info-value { font-size: 1.05em; color: var(--text-primary); word-break: break-word; }
 
-        .info-label i {
-            color: var(--color-highlight);
-        }
-
-        .info-value {
-            font-size: 1.05em;
-            color: var(--text-primary);
-            word-break: break-word;
-        }
-
-        .skills-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
+        .skills-container { display: flex; flex-wrap: wrap; gap: 10px; }
 
         .skill-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
+            display: inline-flex; align-items: center; gap: 6px;
             padding: 8px 14px;
             background: linear-gradient(135deg, var(--color-highlight), var(--color-tint));
-            color: white;
-            border-radius: 20px;
-            font-size: 0.9em;
-            font-weight: 500;
+            color: white; border-radius: 20px; font-size: 0.9em; font-weight: 500;
             box-shadow: 0 2px 4px var(--color-shadow);
         }
 
         .availability-box {
             background: var(--bg-primary);
-            padding: 15px 20px;
-            border-radius: 8px;
+            padding: 15px 20px; border-radius: 8px;
             border-left: 4px solid var(--color-highlight);
             box-shadow: 0 2px 4px var(--color-shadow);
         }
 
         .stats-row {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(150px,1fr));
+            gap: 15px; margin-top: 20px;
         }
 
         .stat-card {
-            background: var(--bg-primary);
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-            box-shadow: 0 2px 4px var(--color-shadow);
+            background: var(--bg-primary); padding: 20px; border-radius: 8px;
+            text-align: center; box-shadow: 0 2px 4px var(--color-shadow);
         }
-
-        .stat-number {
-            font-size: 2.5em;
-            font-weight: bold;
-            color: var(--color-highlight);
-        }
-
-        .stat-label {
-            font-size: 0.9em;
-            color: var(--text-secondary);
-            margin-top: 5px;
-        }
+        .stat-number { font-size: 2.5em; font-weight: bold; color: var(--color-highlight); }
+        .stat-label  { font-size: 0.9em; color: var(--text-secondary); margin-top: 5px; }
 
         .btn-edit {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 24px;
-            background-color: var(--color-highlight);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-top: 20px;
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 12px 24px; background-color: var(--color-highlight);
+            color: white; border: none; border-radius: 8px;
+            font-weight: bold; cursor: pointer; transition: all 0.3s; margin-top: 20px;
+        }
+        .btn-edit:hover { background-color: var(--color-tint); transform: translateY(-2px); }
+
+        .loading { text-align: center; padding: 60px 20px; }
+        .loading i { font-size: 3em; color: var(--color-highlight); animation: spin 1s linear infinite; }
+        @keyframes spin { 0%{transform:rotate(0deg)} 100%{transform:rotate(360deg)} }
+
+        /* ── Modal de Edição ── */
+        .edit-modal-overlay {
+            display: none;
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.55);
+            z-index: 9000;
+            align-items: center; justify-content: center;
+        }
+        .edit-modal-overlay.open { display: flex; }
+
+        .edit-modal {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 36px 32px;
+            width: 100%; max-width: 520px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+            position: relative;
+            max-height: 90vh; overflow-y: auto;
         }
 
-        .btn-edit:hover {
-            background-color: var(--color-tint);
-            transform: translateY(-2px);
-        }
-
-        .loading {
-            text-align: center;
-            padding: 60px 20px;
-        }
-
-        .loading i {
-            font-size: 3em;
+        .edit-modal h2 {
             color: var(--color-highlight);
-            animation: spin 1s linear infinite;
+            margin-bottom: 24px;
+            display: flex; align-items: center; gap: 10px;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .edit-modal .close-modal {
+            position: absolute; top: 16px; right: 16px;
+            background: none; border: none; font-size: 1.4em;
+            cursor: pointer; color: var(--text-secondary);
         }
+        .edit-modal .close-modal:hover { color: var(--color-highlight); }
+
+        .form-group { margin-bottom: 18px; }
+        .form-group label {
+            display: block; margin-bottom: 6px;
+            font-weight: bold; color: var(--text-secondary);
+            font-size: 0.9em; text-transform: uppercase;
+        }
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%; padding: 10px 14px;
+            border: 1px solid var(--bg-map-border);
+            border-radius: 8px; background: var(--bg-primary);
+            color: var(--text-primary); font-size: 1em;
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+        }
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none; border-color: var(--color-highlight);
+        }
+        .form-group textarea { resize: vertical; min-height: 80px; }
+
+        .form-hint { font-size: 0.82em; color: var(--text-secondary); margin-top: 4px; }
+
+        .btn-save {
+            width: 100%; padding: 12px;
+            background: var(--color-highlight); color: white;
+            border: none; border-radius: 8px; font-size: 1em;
+            font-weight: bold; cursor: pointer; transition: background 0.3s;
+            margin-top: 8px;
+        }
+        .btn-save:hover { background: var(--color-tint); }
+        .btn-save:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        .edit-msg { text-align: center; margin-top: 12px; font-size: 0.95em; }
+        .edit-msg.success { color: #2ECC71; }
+        .edit-msg.error   { color: #E74C3C; }
 
         @media (max-width: 768px) {
-            .perfil-header {
-                padding: 30px 20px 70px;
-            }
-
-            .perfil-avatar {
-                width: 100px;
-                height: 100px;
-                font-size: 2.5em;
-            }
-
-            .perfil-name {
-                font-size: 1.5em;
-            }
-
-            .perfil-body {
-                padding: 70px 20px 20px;
-            }
-
-            .info-grid {
-                grid-template-columns: 1fr;
-            }
+            .perfil-header { padding: 30px 20px 70px; }
+            .perfil-avatar { width: 100px; height: 100px; font-size: 2.5em; }
+            .perfil-name   { font-size: 1.5em; }
+            .perfil-body   { padding: 70px 20px 20px; }
+            .info-grid     { grid-template-columns: 1fr; }
+            .edit-modal    { padding: 24px 18px; }
         }
     </style>
 </head>
@@ -247,8 +226,9 @@
 
         <nav class="header-right">
             <a href="index.html" class="nav-button">Início</a>
-            <a href="minhas-inscricoes.html" class="nav-button">Contatos</a>
-            
+            <!-- ✅ FIX: link consistente com underscore -->
+<a href="minhas_inscricoes.html" class="nav-button">Contatos</a>
+
             <div id="user-dropdown" class="user-dropdown" style="display: none;">
                 <button id="user-menu-button" class="user-menu-button">
                     <i class="fas fa-user-circle"></i>
@@ -256,15 +236,17 @@
                     <i class="fas fa-chevron-down"></i>
                 </button>
                 <div id="user-dropdown-menu" class="user-dropdown-menu">
-                    <a href="perfil.html" style="border-left: 3px solid var(--color-highlight);"><i class="fas fa-user"></i> Meu Perfil</a>
-                    <a href="minhas-inscricoes.html"><i class="fas fa-address-book"></i> Minhas Inscrições</a>
+                    <a href="perfil.html" style="border-left: 3px solid var(--color-highlight);">
+                        <i class="fas fa-user"></i> Meu Perfil
+                    </a>
+                    <a href="minhas_inscricoes.html"><i class="fas fa-address-book"></i> Minhas Inscrições</a>
                     <hr>
                     <a href="#" id="menu-logout"><i class="fas fa-sign-out-alt"></i> Sair</a>
                 </div>
             </div>
-            
+
             <button id="theme-toggle" class="toggle-button" aria-label="Alternar Tema">
-                <i class="fas fa-sun"></i> 
+                <i class="fas fa-sun"></i>
             </button>
         </nav>
     </header>
@@ -286,87 +268,93 @@
             </div>
 
             <div class="perfil-body">
-                <h2 class="section-title">
-                    <i class="fas fa-info-circle"></i>
-                    Informações Pessoais
-                </h2>
-                
+                <h2 class="section-title"><i class="fas fa-info-circle"></i> Informações Pessoais</h2>
+
                 <div class="info-grid">
                     <div class="info-card">
-                        <div class="info-label">
-                            <i class="fas fa-envelope"></i>
-                            E-mail
-                        </div>
+                        <div class="info-label"><i class="fas fa-envelope"></i> E-mail</div>
                         <div class="info-value" id="user-email">-</div>
                     </div>
-
                     <div class="info-card">
-                        <div class="info-label">
-                            <i class="fas fa-map-marker-alt"></i>
-                            Localização
-                        </div>
+                        <div class="info-label"><i class="fas fa-map-marker-alt"></i> Localização</div>
                         <div class="info-value" id="user-location">-</div>
                     </div>
-
                     <div class="info-card">
-                        <div class="info-label">
-                            <i class="fas fa-calendar-alt"></i>
-                            Membro desde
-                        </div>
+                        <div class="info-label"><i class="fas fa-calendar-alt"></i> Membro desde</div>
                         <div class="info-value" id="user-member-since">-</div>
                     </div>
                 </div>
 
-                <h2 class="section-title">
-                    <i class="fas fa-tools"></i>
-                    Habilidades e Experiência
-                </h2>
+                <h2 class="section-title"><i class="fas fa-tools"></i> Habilidades e Experiência</h2>
+                <div class="skills-container" id="user-skills"></div>
 
-                <div class="skills-container" id="user-skills">
-                </div>
+                <h2 class="section-title"><i class="fas fa-clock"></i> Disponibilidade</h2>
+                <div class="availability-box" id="user-availability"></div>
 
-                <h2 class="section-title">
-                    <i class="fas fa-clock"></i>
-                    Disponibilidade
-                </h2>
-
-                <div class="availability-box" id="user-availability">
-                </div>
-
-                <h2 class="section-title">
-                    <i class="fas fa-chart-line"></i>
-                    Estatísticas
-                </h2>
-
+                <h2 class="section-title"><i class="fas fa-chart-line"></i> Estatísticas</h2>
                 <div class="stats-row">
                     <div class="stat-card">
                         <div class="stat-number" id="stat-inscricoes">0</div>
                         <div class="stat-label">Inscrições</div>
                     </div>
-
                     <div class="stat-card">
                         <div class="stat-number" id="stat-aprovadas">0</div>
                         <div class="stat-label">Aprovadas</div>
                     </div>
-
                     <div class="stat-card">
                         <div class="stat-number" id="stat-pendentes">0</div>
                         <div class="stat-label">Pendentes</div>
                     </div>
                 </div>
 
-                <button class="btn-edit" onclick="alert('Funcionalidade de edição em desenvolvimento')">
-                    <i class="fas fa-edit"></i>
-                    Editar Perfil
+                <!-- ✅ FIX 3: botão abre modal de edição real -->
+                <button class="btn-edit" id="open-edit-modal">
+                    <i class="fas fa-edit"></i> Editar Perfil
                 </button>
             </div>
         </div>
     </div>
 
+    <!-- ── Modal de Edição ── -->
+    <div class="edit-modal-overlay" id="edit-modal-overlay">
+        <div class="edit-modal">
+            <button class="close-modal" id="close-edit-modal" aria-label="Fechar">&times;</button>
+            <h2><i class="fas fa-edit"></i> Editar Perfil</h2>
+
+            <div class="form-group">
+                <label for="edit-name"><i class="fas fa-user"></i> Nome completo</label>
+                <input type="text" id="edit-name" placeholder="Seu nome completo">
+            </div>
+
+            <div class="form-group">
+                <label for="edit-location"><i class="fas fa-map-marker-alt"></i> Localização</label>
+                <input type="text" id="edit-location" placeholder="Ex: Gravataí, RS">
+            </div>
+
+            <div class="form-group">
+                <label for="edit-skills"><i class="fas fa-tools"></i> Habilidades</label>
+                <input type="text" id="edit-skills" placeholder="Ex: Primeiros socorros, Cozinha, Logística">
+                <p class="form-hint">Separe as habilidades por vírgula.</p>
+            </div>
+
+            <div class="form-group">
+                <label for="edit-availability"><i class="fas fa-clock"></i> Disponibilidade</label>
+                <textarea id="edit-availability" placeholder="Ex: Fins de semana pela manhã, tardes de terça e quinta"></textarea>
+            </div>
+
+            <button class="btn-save" id="btn-save-profile">
+                <i class="fas fa-save"></i> Salvar Alterações
+            </button>
+            <p class="edit-msg" id="edit-msg"></p>
+        </div>
+    </div>
+
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { initializeApp }    from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut }
+            from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, query, where, getDocs }
+            from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDhQs9Kz4LLGaKIhWV9nUiTjlst5YEWhjg",
@@ -377,125 +365,166 @@
             appId: "1:650753472587:web:65b706993648dc602975ce"
         };
 
-        const app = initializeApp(firebaseConfig);
+        const app  = initializeApp(firebaseConfig);
         const auth = getAuth(app);
-        const db = getFirestore(app);
+        const db   = getFirestore(app);
 
-        const loadingState = document.getElementById('loading-state');
-        const perfilContent = document.getElementById('perfil-content');
-        const userDropdown = document.getElementById('user-dropdown');
-        const userNameDisplay = document.getElementById('user-name-display');
-        const menuLogout = document.getElementById('menu-logout');
-        const themeToggle = document.getElementById('theme-toggle');
+        /* ── refs DOM ── */
+        const loadingState      = document.getElementById('loading-state');
+        const perfilContent     = document.getElementById('perfil-content');
+        const userDropdown      = document.getElementById('user-dropdown');
+        const userNameDisplay   = document.getElementById('user-name-display');
+        const menuLogout        = document.getElementById('menu-logout');
+        const themeToggle       = document.getElementById('theme-toggle');
+        const editModalOverlay  = document.getElementById('edit-modal-overlay');
+        const closeEditModal    = document.getElementById('close-edit-modal');
+        const openEditModal     = document.getElementById('open-edit-modal');
+        const btnSaveProfile    = document.getElementById('btn-save-profile');
+        const editMsg           = document.getElementById('edit-msg');
 
+        let currentUserUid = null;
+        let currentUserData = null;
+
+        /* ── tema ── */
         function initTheme() {
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme === 'dark') {
+            if (localStorage.getItem('theme') === 'dark') {
                 document.body.classList.add('dark-mode');
                 themeToggle.querySelector('i').classList.replace('fa-sun', 'fa-moon');
             }
         }
-
         themeToggle.addEventListener('click', () => {
             document.body.classList.toggle('dark-mode');
             const isDark = document.body.classList.contains('dark-mode');
-            const icon = themeToggle.querySelector('i');
-            
-            if (isDark) {
-                icon.classList.replace('fa-sun', 'fa-moon');
-                localStorage.setItem('theme', 'dark');
-            } else {
-                icon.classList.replace('fa-moon', 'fa-sun');
-                localStorage.setItem('theme', 'light');
-            }
+            themeToggle.querySelector('i').classList.replace(isDark ? 'fa-sun':'fa-moon', isDark ? 'fa-moon':'fa-sun');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
         });
+
+        /* ── estatísticas ── */
         async function loadUserStats(userId) {
             try {
-                const q = query(collection(db, 'applications'), where('userId', '==', userId));
-                const snapshot = await getDocs(q);
-                
-                let total = 0;
-                let aprovadas = 0;
-                let pendentes = 0;
-
-                snapshot.forEach(doc => {
-                    const data = doc.data();
+                const q    = query(collection(db, 'applications'), where('userId', '==', userId));
+                const snap = await getDocs(q);
+                let total = 0, aprovadas = 0, pendentes = 0;
+                snap.forEach(d => {
                     total++;
-                    if (data.status === 'approved') aprovadas++;
-                    if (data.status === 'pending') pendentes++;
+                    if (d.data().status === 'approved') aprovadas++;
+                    if (d.data().status === 'pending')  pendentes++;
                 });
-
                 document.getElementById('stat-inscricoes').textContent = total;
-                document.getElementById('stat-aprovadas').textContent = aprovadas;
-                document.getElementById('stat-pendentes').textContent = pendentes;
-            } catch (error) {
-                console.error('Erro ao carregar estatísticas:', error);
-            }
+                document.getElementById('stat-aprovadas').textContent  = aprovadas;
+                document.getElementById('stat-pendentes').textContent  = pendentes;
+            } catch (e) { console.error('Erro stats:', e); }
         }
 
+        /* ── renderiza perfil na tela ── */
+        function renderProfile(userData, userEmail) {
+            const fullName = userData.name || 'Usuário';
+            document.getElementById('user-full-name').textContent   = fullName;
+            document.getElementById('avatar-initial').textContent   = fullName.charAt(0).toUpperCase();
+            document.getElementById('user-role-display').textContent = userData.role === 'ong' ? 'Administrador de ONG' : 'Voluntário';
+            document.getElementById('user-email').textContent       = userData.email || userEmail;
+            document.getElementById('user-location').textContent    = userData.location || 'Não informado';
+
+            const since = userData.createdAt?.toDate
+                ? userData.createdAt.toDate().toLocaleDateString('pt-BR', { month:'long', year:'numeric' })
+                : 'Não disponível';
+            document.getElementById('user-member-since').textContent = since;
+
+            const skillsEl = document.getElementById('user-skills');
+            skillsEl.innerHTML = (userData.skills?.length > 0)
+                ? userData.skills.map(s => `<span class="skill-badge"><i class="fas fa-check"></i>${s}</span>`).join('')
+                : '<p style="color:var(--text-secondary)">Nenhuma habilidade cadastrada</p>';
+
+            document.getElementById('user-availability').textContent = userData.availability || 'Não informado';
+        }
+
+        /* ── carrega perfil ── */
         async function loadUserProfile(user) {
             try {
                 const userDocRef = doc(db, 'users', user.uid);
-                const userDoc = await getDoc(userDocRef);
+                const userDoc    = await getDoc(userDocRef);
+                if (!userDoc.exists()) throw new Error('Perfil não encontrado');
 
-                if (!userDoc.exists()) {
-                    throw new Error('Perfil não encontrado');
-                }
-
-                const userData = userDoc.data();
-
-                const fullName = userData.name || 'Usuário';
-                const initial = fullName.charAt(0).toUpperCase();
-                document.getElementById('user-full-name').textContent = fullName;
-                document.getElementById('avatar-initial').textContent = initial;
-
-                const roleText = userData.role === 'ong' ? 'Administrador de ONG' : 'Voluntário';
-                document.getElementById('user-role-display').textContent = roleText;
-
-                document.getElementById('user-email').textContent = userData.email || user.email;
-                document.getElementById('user-location').textContent = userData.location || 'Não informado';
-
-                const memberSince = userData.createdAt?.toDate 
-                    ? userData.createdAt.toDate().toLocaleDateString('pt-BR', { 
-                        month: 'long', 
-                        year: 'numeric' 
-                    })
-                    : 'Não disponível';
-                document.getElementById('user-member-since').textContent = memberSince;
-
-                const skillsContainer = document.getElementById('user-skills');
-                if (userData.skills && userData.skills.length > 0) {
-                    skillsContainer.innerHTML = userData.skills.map(skill => `
-                        <span class="skill-badge">
-                            <i class="fas fa-check"></i>
-                            ${skill}
-                        </span>
-                    `).join('');
-                } else {
-                    skillsContainer.innerHTML = '<p style="color: var(--text-secondary);">Nenhuma habilidade cadastrada</p>';
-                }
-
-                const availabilityBox = document.getElementById('user-availability');
-                availabilityBox.textContent = userData.availability || 'Não informado';
-
+                currentUserData = userDoc.data();
+                renderProfile(currentUserData, user.email);
                 await loadUserStats(user.uid);
 
-                loadingState.style.display = 'none';
+                loadingState.style.display  = 'none';
                 perfilContent.style.display = 'block';
-
-            } catch (error) {
-                console.error('Erro ao carregar perfil:', error);
+            } catch (err) {
+                console.error('Erro perfil:', err);
                 loadingState.innerHTML = `
-                    <i class="fas fa-exclamation-triangle" style="color: var(--color-error);"></i>
-                    <p>Erro ao carregar perfil: ${error.message}</p>
-                `;
+                    <i class="fas fa-exclamation-triangle" style="color:var(--color-error);"></i>
+                    <p>Erro ao carregar perfil: ${err.message}</p>`;
             }
         }
 
+        /* ── modal de edição ── */
+        openEditModal.addEventListener('click', () => {
+            if (!currentUserData) return;
+            // Preenche os campos com os dados atuais
+            document.getElementById('edit-name').value         = currentUserData.name        || '';
+            document.getElementById('edit-location').value     = currentUserData.location    || '';
+            document.getElementById('edit-skills').value       = (currentUserData.skills || []).join(', ');
+            document.getElementById('edit-availability').value = currentUserData.availability || '';
+            editMsg.textContent = '';
+            editModalOverlay.classList.add('open');
+        });
+
+        function closeModal() { editModalOverlay.classList.remove('open'); }
+        closeEditModal.addEventListener('click', closeModal);
+        editModalOverlay.addEventListener('click', (e) => {
+            if (e.target === editModalOverlay) closeModal();
+        });
+
+        /* ── salva edições no Firestore ── */
+        btnSaveProfile.addEventListener('click', async () => {
+            if (!currentUserUid) return;
+
+            const name         = document.getElementById('edit-name').value.trim();
+            const location     = document.getElementById('edit-location').value.trim();
+            const skillsRaw    = document.getElementById('edit-skills').value;
+            const availability = document.getElementById('edit-availability').value.trim();
+            const skills       = skillsRaw.split(',').map(s => s.trim()).filter(s => s.length > 0);
+
+            if (!name) {
+                editMsg.textContent = 'O nome não pode ficar em branco.';
+                editMsg.className   = 'edit-msg error';
+                return;
+            }
+
+            btnSaveProfile.disabled     = true;
+            btnSaveProfile.textContent  = 'Salvando...';
+            editMsg.textContent         = '';
+
+            try {
+                await updateDoc(doc(db, 'users', currentUserUid), { name, location, skills, availability });
+
+                // Atualiza estado local e re-renderiza sem reload
+                currentUserData = { ...currentUserData, name, location, skills, availability };
+                renderProfile(currentUserData, '');
+
+                // Atualiza nome no header
+                userNameDisplay.textContent = name;
+
+                editMsg.textContent = '✅ Perfil atualizado com sucesso!';
+                editMsg.className   = 'edit-msg success';
+                setTimeout(closeModal, 1400);
+            } catch (err) {
+                console.error('Erro ao salvar:', err);
+                editMsg.textContent = `Erro: ${err.message}`;
+                editMsg.className   = 'edit-msg error';
+            } finally {
+                btnSaveProfile.disabled    = false;
+                btnSaveProfile.innerHTML   = '<i class="fas fa-save"></i> Salvar Alterações';
+            }
+        });
+
+        /* ── auth ── */
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                userNameDisplay.textContent = user.displayName || user.email;
-                userDropdown.style.display = 'block';
+                currentUserUid              = user.uid;
+                userDropdown.style.display  = 'block';
                 await loadUserProfile(user);
             } else {
                 window.location.href = 'index.html';
@@ -511,11 +540,9 @@
         document.getElementById('user-menu-button')?.addEventListener('click', () => {
             document.getElementById('user-dropdown-menu').classList.toggle('show');
         });
-
         document.addEventListener('click', (e) => {
-            if (!userDropdown.contains(e.target)) {
+            if (!userDropdown.contains(e.target))
                 document.getElementById('user-dropdown-menu')?.classList.remove('show');
-            }
         });
 
         initTheme();
