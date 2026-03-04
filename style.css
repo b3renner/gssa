@@ -310,6 +310,8 @@ body {
     cursor: pointer;
     transition: background 0.2s, color 0.2s;
     white-space: nowrap;
+    margin-left: 0.5rem; 
+}
 }
 
 .lang-toggle-btn:hover {
@@ -819,4 +821,5 @@ body {
         font-size: 14px;
     }
 }
+
 
