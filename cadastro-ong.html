@@ -6,7 +6,8 @@
     <title>Cadastrar ONG - GSSA</title>
     <link rel="icon" href="gssa_logo_transp.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+      <link rel="stylesheet" href="style.css">
+    <script src="translations.js"></script>
     <style>
         .cadastro-ong-container {
             max-width: 800px;
@@ -203,213 +204,224 @@
     </style>
 </head>
 <body>
-    <header class="main-header">
-        <div class="header-left">
-            <img src="gssa_logo.png" alt="Logo GSSA" class="gssa-logo-img">
-            <div class="logo-titles">
-                <h1 class="logo-main-title">GSSA</h1>
-                <p class="logo-subtitle">Gravataí Support & Shelter Assist</p>
-            </div>
+   <header class="main-header">
+    <div class="header-left">
+        <img src="gssa_logo.png" alt="Logo GSSA" class="gssa-logo-img">
+        <div class="logo-titles">
+            <h1 class="logo-main-title">GSSA</h1>
+            <p class="logo-subtitle" data-i18n="logo-subtitle">Gravataí Support & Shelter Assist</p>
         </div>
-        <nav class="header-right">
-            <a href="index.html" class="nav-button">Voltar ao Início</a>
-            <button id="theme-toggle" class="toggle-button" aria-label="Alternar Tema">
-                <i class="fas fa-sun"></i>
-            </button>
-        </nav>
-    </header>
+    </div>
+    <nav class="header-right">
+        <a href="index.html" class="nav-button" data-i18n="nav-voltar">Voltar ao Início</a>
 
-    <div class="cadastro-ong-container">
-        <div class="page-header">
-            <h1><i class="fas fa-hands-helping"></i> Cadastrar ONG</h1>
-            <p>Junte-se à rede de organizações parceiras do GSSA</p>
-        </div>
+        <button id="lang-toggle" class="lang-toggle-btn" title="Switch to English">
+            <span class="lang-flag">🌐</span>
+            <span class="lang-label">EN</span>
+        </button>
 
-        <div class="alert-box">
-            <h3><i class="fas fa-info-circle"></i> Informações Importantes</h3>
-            <ul style="margin-left: 25px;">
-                <li>CNPJ da organização (obrigatório)</li>
-                <li>Comprovante de registro (PDF, JPG ou PNG - máx. 2MB)</li>
-                <li>E-mail institucional da ONG</li>
-                <li style="font-weight: bold; margin-top: 10px;">⚠️ Seu cadastro será analisado manualmente antes da aprovação.</li>
-            </ul>
-        </div>
+        <button id="theme-toggle" class="toggle-button" aria-label="Alternar Tema">
+            <i class="fas fa-sun"></i>
+        </button>
+    </nav>
+</header>
+
+   <div class="page-header">
+    <h1><i class="fas fa-hands-helping"></i> <span data-i18n="cong-page-title">Cadastrar ONG</span></h1>
+    <p data-i18n="cong-page-subtitle">Junte-se à rede de organizações parceiras do GSSA</p>
+</div>
+
+<div class="alert-box">
+    <h3><i class="fas fa-info-circle"></i> <span data-i18n="cong-alert-title">Informações Importantes</span></h3>
+    <ul style="margin-left: 25px;">
+        <li>CNPJ da organização (obrigatório)</li>
+        <li>Comprovante de registro (PDF, JPG ou PNG - máx. 2MB)</li>
+        <li>E-mail institucional da ONG</li>
+        <li style="font-weight: bold; margin-top: 10px;">⚠️ Seu cadastro será analisado manualmente antes da aprovação.</li>
+    </ul>
+</div>
 
         <form id="cadastro-ong-form">
             <!-- SEÇÃO 1: Informações Básicas -->
             <div class="form-section">
-                <h2><i class="fas fa-building"></i> Informações da Organização</h2>
-                
-                <div class="form-group">
-                    <label for="ong-name">Nome Completo da ONG *</label>
-                    <input type="text" id="ong-name" required placeholder="Ex: Fundação Casa dos Sonhos">
-                </div>
+    <h2><i class="fas fa-building"></i> <span data-i18n="cong-sec1-title">Informações da Organização</span></h2>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="ong-cnpj">CNPJ *</label>
-                        <input type="text" id="ong-cnpj" required placeholder="00.000.000/0000-00" maxlength="18">
-                        <span class="help-text">Formato: XX.XXX.XXX/XXXX-XX</span>
-                    </div>
-                    <div class="form-group">
-                        <label for="ong-phone">Telefone *</label>
-                        <input type="tel" id="ong-phone" required placeholder="(51) 99999-9999">
-                    </div>
-                </div>
+    <div class="form-group">
+        <label for="ong-name" data-i18n="cong-name-label">Nome Completo da ONG *</label>
+        <input type="text" id="ong-name" required data-i18n-ph="cong-name-ph" placeholder="Ex: Fundação Casa dos Sonhos">
+    </div>
 
-                <div class="form-group">
-                    <label for="ong-email">E-mail Institucional *</label>
-                    <input type="email" id="ong-email" required placeholder="contato@ong.org.br">
-                    <span class="help-text">Preferível usar e-mail oficial da ONG</span>
-                </div>
+    <div class="form-row">
+        <div class="form-group">
+            <label for="ong-cnpj" data-i18n="cong-cnpj-label">CNPJ *</label>
+            <input type="text" id="ong-cnpj" required placeholder="00.000.000/0000-00" maxlength="18">
+            <span class="help-text" data-i18n="cong-cnpj-hint">Formato: XX.XXX.XXX/XXXX-XX</span>
+        </div>
+        <div class="form-group">
+            <label for="ong-phone" data-i18n="cong-phone-label">Telefone *</label>
+            <input type="tel" id="ong-phone" required placeholder="(51) 99999-9999">
+        </div>
+    </div>
 
-                <div class="form-group">
-                    <label for="ong-website">Website (Opcional)</label>
-                    <input type="url" id="ong-website" placeholder="https://www.suaong.org.br">
-                </div>
-            </div>
+    <div class="form-group">
+        <label for="ong-email" data-i18n="cong-email-label">E-mail Institucional *</label>
+        <input type="email" id="ong-email" required placeholder="contato@ong.org.br">
+        <span class="help-text" data-i18n="cong-email-hint">Preferível usar e-mail oficial da ONG</span>
+    </div>
+
+    <div class="form-group">
+        <label for="ong-website" data-i18n="cong-website-label">Website (Opcional)</label>
+        <input type="url" id="ong-website" placeholder="https://www.suaong.org.br">
+    </div>
+</div>
 
             <!-- SEÇÃO 2: Endereço -->
             <div class="form-section">
-                <h2><i class="fas fa-map-marker-alt"></i> Localização</h2>
-                
-                <div class="form-group">
-                    <label for="ong-address">Endereço Completo *</label>
-                    <input type="text" id="ong-address" required placeholder="Rua, Número, Complemento">
-                </div>
+    <h2><i class="fas fa-map-marker-alt"></i> <span data-i18n="cong-sec2-title">Localização</span></h2>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="ong-neighborhood">Bairro *</label>
-                        <input type="text" id="ong-neighborhood" required placeholder="Ex: Centro">
-                    </div>
-                    <div class="form-group">
-                        <label for="ong-zip">CEP *</label>
-                        <input type="text" id="ong-zip" required placeholder="00000-000" maxlength="9">
-                    </div>
-                </div>
+    <div class="form-group">
+        <label for="ong-address" data-i18n="cong-address-label">Endereço Completo *</label>
+        <input type="text" id="ong-address" required data-i18n-ph="cong-address-ph" placeholder="Rua, Número, Complemento">
+    </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="ong-lat">Latitude *</label>
-                        <input type="text" id="ong-lat" required placeholder="-29.9402" step="any">
-                        <span class="help-text">
-                            <a href="https://www.google.com/maps" target="_blank" style="color: var(--color-highlight);">
-                                <i class="fas fa-map-marker-alt"></i> Buscar no Google Maps
-                            </a>
-                        </span>
-                    </div>
-                    <div class="form-group">
-                        <label for="ong-lon">Longitude *</label>
-                        <input type="text" id="ong-lon" required placeholder="-50.9944" step="any">
-                        <span class="help-text">Clique com botão direito no mapa → "O que há aqui?"</span>
-                    </div>
-                </div>
-            </div>
+    <div class="form-row">
+        <div class="form-group">
+            <label for="ong-neighborhood" data-i18n="cong-neighborhood-label">Bairro *</label>
+            <input type="text" id="ong-neighborhood" required placeholder="Ex: Centro">
+        </div>
+        <div class="form-group">
+            <label for="ong-zip" data-i18n="cong-zip-label">CEP *</label>
+            <input type="text" id="ong-zip" required placeholder="00000-000" maxlength="9">
+        </div>
+    </div>
 
+    <div class="form-row">
+        <div class="form-group">
+            <label for="ong-lat" data-i18n="cong-lat-label">Latitude *</label>
+            <input type="text" id="ong-lat" required placeholder="-29.9402" step="any">
+            <span class="help-text">
+                <a href="https://www.google.com/maps" target="_blank" style="color: var(--color-highlight);">
+                    <i class="fas fa-map-marker-alt"></i> Buscar no Google Maps
+                </a>
+            </span>
+        </div>
+        <div class="form-group">
+            <label for="ong-lon" data-i18n="cong-lon-label">Longitude *</label>
+            <input type="text" id="ong-lon" required placeholder="-50.9944" step="any">
+            <span class="help-text" data-i18n="cong-maps-hint">Clique com botão direito no mapa → "O que há aqui?"</span>
+        </div>
+    </div>
+</div>
             <!-- SEÇÃO 3: Sobre a ONG -->
             <div class="form-section">
-                <h2><i class="fas fa-heart"></i> Sobre a Organização</h2>
-                
-                <div class="form-group">
-                    <label for="ong-description">Descrição da ONG *</label>
-                    <textarea id="ong-description" rows="4" required placeholder="Descreva brevemente a missão e atividades da organização (mínimo 100 caracteres)..."></textarea>
-                    <span class="help-text" id="char-count">0 / 100 caracteres</span>
-                </div>
+    <h2><i class="fas fa-heart"></i> <span data-i18n="cong-sec3-title">Sobre a Organização</span></h2>
 
-                <div class="form-group">
-                    <label for="ong-services">Serviços Oferecidos *</label>
-                    <input type="text" id="ong-services" required placeholder="Ex: Alimentação, Roupa, Abrigo, Suporte Psicossocial">
-                    <span class="help-text">Separe por vírgulas</span>
-                </div>
+    <div class="form-group">
+        <label for="ong-description" data-i18n="cong-desc-label">Descrição da ONG *</label>
+        <textarea id="ong-description" rows="4" required data-i18n-ph="cong-desc-ph"
+                  placeholder="Descreva brevemente a missão e atividades da organização (mínimo 100 caracteres)..."></textarea>
+        <span class="help-text" id="char-count">0 / 100 caracteres</span>
+    </div>
 
-                <div class="form-group">
-                    <label for="ong-target">Público Alvo *</label>
-                    <input type="text" id="ong-target" required placeholder="Ex: População em situação vulnerável">
-                </div>
+    <div class="form-group">
+        <label for="ong-services" data-i18n="cong-services-label">Serviços Oferecidos *</label>
+        <input type="text" id="ong-services" required data-i18n-ph="cong-services-ph"
+               placeholder="Ex: Alimentação, Roupa, Abrigo, Suporte Psicossocial">
+        <span class="help-text" data-i18n="cong-services-hint">Separe por vírgulas</span>
+    </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="ong-capacity">Capacidade de Atendimento (pessoas/dia)</label>
-                        <input type="number" id="ong-capacity" placeholder="Ex: 50" min="1">
-                    </div>
-                    <div class="form-group">
-                        <label for="ong-schedule">Horário de Funcionamento *</label>
-                        <input type="text" id="ong-schedule" required placeholder="Ex: Seg-Sex, 8h-18h">
-                    </div>
-                </div>
-            </div>
+    <div class="form-group">
+        <label for="ong-target" data-i18n="cong-target-label">Público Alvo *</label>
+        <input type="text" id="ong-target" required data-i18n-ph="cong-target-ph"
+               placeholder="Ex: População em situação vulnerável">
+    </div>
+
+    <div class="form-row">
+        <div class="form-group">
+            <label for="ong-capacity" data-i18n="cong-capacity-label">Capacidade de Atendimento (pessoas/dia)</label>
+            <input type="number" id="ong-capacity" placeholder="Ex: 50" min="1">
+        </div>
+        <div class="form-group">
+            <label for="ong-schedule" data-i18n="cong-schedule-label">Horário de Funcionamento *</label>
+            <input type="text" id="ong-schedule" required data-i18n-ph="cong-schedule-ph"
+                   placeholder="Ex: Seg-Sex, 8h-18h">
+        </div>
+    </div>
+</div>
 
             <!-- SEÇÃO 4: Documentação -->
             <div class="form-section">
-                <h2><i class="fas fa-file-upload"></i> Documentação</h2>
-                
-                <div class="form-group">
-                    <label>Comprovante de CNPJ *</label>
-                    <div class="file-upload">
-                        <input type="file" id="cnpj-document" accept="image/*,.pdf" required>
-                        <label for="cnpj-document" class="file-upload-label" id="cnpj-label">
-                            <i class="fas fa-cloud-upload-alt"></i>
-                            <span>Clique para selecionar arquivo</span>
-                        </label>
-                        <div class="file-name" id="cnpj-filename"></div>
-                    </div>
-                    <span class="help-text">Formatos aceitos: PDF, JPG, PNG (máx. 2MB)</span>
-                </div>
-            </div>
+    <h2><i class="fas fa-file-upload"></i> <span data-i18n="cong-sec4-title">Documentação</span></h2>
+
+    <div class="form-group">
+        <label data-i18n="cong-doc-label">Comprovante de CNPJ *</label>
+        <div class="file-upload">
+            <input type="file" id="cnpj-document" accept="image/*,.pdf" required>
+            <label for="cnpj-document" class="file-upload-label" id="cnpj-label">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <span data-i18n="cong-doc-click">Clique para selecionar arquivo</span>
+            </label>
+            <div class="file-name" id="cnpj-filename"></div>
+        </div>
+        <span class="help-text" data-i18n="cong-doc-hint">Formatos aceitos: PDF, JPG, PNG (máx. 2MB)</span>
+    </div>
+</div>
 
             <!-- SEÇÃO 5: Responsável -->
             <div class="form-section">
-                <h2><i class="fas fa-user-tie"></i> Dados do Responsável</h2>
-                
-                <div class="form-group">
-                    <label for="admin-name">Nome Completo do Responsável *</label>
-                    <input type="text" id="admin-name" required placeholder="Nome completo">
-                </div>
+    <h2><i class="fas fa-user-tie"></i> <span data-i18n="cong-sec5-title">Dados do Responsável</span></h2>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="admin-role">Cargo na Organização *</label>
-                        <input type="text" id="admin-role" required placeholder="Ex: Diretor, Coordenador">
-                    </div>
-                    <div class="form-group">
-                        <label for="admin-phone">Telefone do Responsável *</label>
-                        <input type="tel" id="admin-phone" required placeholder="(51) 99999-9999">
-                    </div>
-                </div>
+    <div class="form-group">
+        <label for="admin-name" data-i18n="cong-admin-name-label">Nome Completo do Responsável *</label>
+        <input type="text" id="admin-name" required placeholder="Nome completo">
+    </div>
 
-                <div class="form-group">
-                    <label for="admin-email">E-mail do Responsável (Login) *</label>
-                    <input type="email" id="admin-email" required placeholder="seu@email.com">
-                    <span class="help-text">Este será o e-mail de login para acessar o painel administrativo</span>
-                </div>
+    <div class="form-row">
+        <div class="form-group">
+            <label for="admin-role" data-i18n="cong-admin-role-label">Cargo na Organização *</label>
+            <input type="text" id="admin-role" required data-i18n-ph="cong-admin-role-ph"
+                   placeholder="Ex: Diretor, Coordenador">
+        </div>
+        <div class="form-group">
+            <label for="admin-phone" data-i18n="cong-admin-phone-label">Telefone do Responsável *</label>
+            <input type="tel" id="admin-phone" required placeholder="(51) 99999-9999">
+        </div>
+    </div>
 
-                <div class="form-group">
-                    <label for="admin-password">Senha de Acesso *</label>
-                    <input type="password" id="admin-password" required placeholder="Mínimo 6 caracteres" minlength="6">
-                </div>
+    <div class="form-group">
+        <label for="admin-email" data-i18n="cong-admin-email-label">E-mail do Responsável (Login) *</label>
+        <input type="email" id="admin-email" required placeholder="seu@email.com">
+        <span class="help-text" data-i18n="cong-admin-email-hint">Este será o e-mail de login para acessar o painel administrativo</span>
+    </div>
 
-                <div class="form-group">
-                    <label for="admin-password-confirm">Confirme a Senha *</label>
-                    <input type="password" id="admin-password-confirm" required placeholder="Digite a senha novamente">
-                </div>
-            </div>
+    <div class="form-group">
+        <label for="admin-password" data-i18n="cong-admin-pass-label">Senha de Acesso *</label>
+        <input type="password" id="admin-password" required placeholder="Mínimo 6 caracteres" minlength="6">
+    </div>
 
+    <div class="form-group">
+        <label for="admin-password-confirm" data-i18n="cong-admin-passconf-label">Confirme a Senha *</label>
+        <input type="password" id="admin-password-confirm" required placeholder="Digite a senha novamente">
+    </div>
+</div>
             <!-- Termos -->
             <div class="terms-checkbox">
-                <input type="checkbox" id="terms-checkbox" required>
-                <label for="terms-checkbox">
-                    Declaro que as informações fornecidas são verdadeiras e estou ciente de que o cadastro será analisado pela equipe do GSSA antes da aprovação. 
-                    Concordo em receber voluntários através da plataforma e comprometo-me a gerenciar as inscrições de forma responsável.
-                </label>
-            </div>
+    <input type="checkbox" id="terms-checkbox" required>
+    <label for="terms-checkbox" data-i18n="cong-terms">
+        Declaro que as informações fornecidas são verdadeiras...
+    </label>
+</div>
 
-            <!-- Botão de Envio -->
-            <div class="submit-section">
-                <button type="submit" class="submit-button-large" id="submit-button">
-                    <i class="fas fa-paper-plane"></i> Enviar Cadastro para Análise
-                </button>
-            </div>
+<div class="submit-section">
+    <button type="submit" class="submit-button-large" id="submit-button">
+        <i class="fas fa-paper-plane"></i> <span data-i18n="cong-submit">Enviar Cadastro para Análise</span>
+    </button>
+</div>
+
+<div class="progress-indicator" id="progress-indicator">
+    <h3><i class="fas fa-spinner fa-spin"></i> <span data-i18n="cong-processing">Processando seu cadastro...</span></h3>
+    <p class="progress-steps" id="progress-text">Iniciando...</p>
+</div>
 
             <!-- Indicador de Progresso -->
             <div class="progress-indicator" id="progress-indicator">
@@ -490,23 +502,24 @@
 
         // Contador de caracteres
         document.getElementById('ong-description').addEventListener('input', (e) => {
-            const count = e.target.value.length;
-            document.getElementById('char-count').textContent = `${count} / 100 caracteres`;
-        });
+    const count = e.target.value.length;
+    const _t = (k) => window.gssaI18n ? window.gssaI18n.t(k) : k;
+    document.getElementById('char-count').textContent = `${count} / 100 ${_t('cong-cnpj-hint') ? 'caracteres' : 'characters'}`;
+});
 
         // Preview de arquivo
         document.getElementById('cnpj-document').addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                const label = document.getElementById('cnpj-label');
-                const filename = document.getElementById('cnpj-filename');
-                
-                label.classList.add('has-file');
-                label.innerHTML = '<i class="fas fa-check-circle"></i><span>Arquivo selecionado</span>';
-                filename.classList.add('show');
-                filename.innerHTML = `<i class="fas fa-file"></i> ${file.name} (${(file.size / 1024).toFixed(0)} KB)`;
-            }
-        });
+    const file = e.target.files[0];
+    if (file) {
+        const _t = (k) => window.gssaI18n ? window.gssaI18n.t(k) : k;
+        const label = document.getElementById('cnpj-label');
+        const filename = document.getElementById('cnpj-filename');
+        label.classList.add('has-file');
+        label.innerHTML = `<i class="fas fa-check-circle"></i><span>${_t('cong-doc-selected')}</span>`;
+        filename.classList.add('show');
+        filename.innerHTML = `<i class="fas fa-file"></i> ${file.name} (${(file.size / 1024).toFixed(0)} KB)`;
+    }
+});
 
         // Converter arquivo para Base64
         function fileToBase64(file) {
@@ -700,6 +713,11 @@
                 submitButton.disabled = false;
             }
         });
+
+        document.addEventListener('gssa-lang-changed', () => {
+    if (window.gssaI18n) window.gssaI18n.applyTranslations();
+});
     </script>
 </body>
+
 </html>
