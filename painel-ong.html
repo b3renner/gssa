@@ -6,7 +6,8 @@
     <title>Painel Admin ONG - GSSA</title>
     <link rel="icon" href="gssa_logo_transp.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+     <link rel="stylesheet" href="style.css">
+    <script src="translations.js"></script>
     <style>
         .admin-ong-container {
             max-width: 1400px;
@@ -342,25 +343,30 @@
     </style>
 </head>
 <body>
-    <header class="main-header">
-        <div class="header-left">
-            <img src="gssa_logo.png" alt="Logo GSSA" class="gssa-logo-img">
-            <div class="logo-titles">
-                <h1 class="logo-main-title">GSSA</h1>
-                <p class="logo-subtitle">Gravataí Support & Shelter Assist</p>
-            </div>
+   <header class="main-header">
+    <div class="header-left">
+        <img src="gssa_logo.png" alt="Logo GSSA" class="gssa-logo-img">
+        <div class="logo-titles">
+            <h1 class="logo-main-title">GSSA</h1>
+            <p class="logo-subtitle" data-i18n="logo-subtitle">Gravataí Support & Shelter Assist</p>
         </div>
-        <nav class="header-right">
-            <a href="index.html" class="nav-button">Início</a>
-            <button id="logout-button" class="volunteer-button" style="background: var(--color-error);">
-                <i class="fas fa-sign-out-alt"></i> Sair
-            </button>
-            <button id="theme-toggle" class="toggle-button">
-                <i class="fas fa-sun"></i>
-            </button>
-        </nav>
-    </header>
+    </div>
+    <nav class="header-right">
+        <a href="index.html" class="nav-button" data-i18n="nav-inicio">Início</a>
+        <button id="logout-button" class="volunteer-button" style="background: var(--color-error);">
+            <i class="fas fa-sign-out-alt"></i> <span data-i18n="pong-logout">Sair</span>
+        </button>
 
+        <button id="lang-toggle" class="lang-toggle-btn" title="Switch to English">
+            <span class="lang-flag">🌐</span>
+            <span class="lang-label">EN</span>
+        </button>
+
+        <button id="theme-toggle" class="toggle-button">
+            <i class="fas fa-sun"></i>
+        </button>
+    </nav>
+</header>
     <div class="admin-ong-container">
         <div id="status-banner" class="status-banner">
             <i class="fas fa-info-circle"></i>
@@ -371,35 +377,122 @@
         </div>
 
         <div id="loading-state" class="loading">
-            <i class="fas fa-spinner"></i>
-            <p>Carregando dados da ONG...</p>
-        </div>
+    <i class="fas fa-spinner"></i>
+    <p data-i18n="pong-loading">Carregando dados da ONG...</p>
+</div>
 
         <div id="main-content" style="display: none;">
-            <div class="admin-header">
-                <h1 id="ong-name">Nome da ONG</h1>
-                <p id="ong-subtitle">Painel Administrativo</p>
-            </div>
+    <div class="admin-header">
+        <h1 id="ong-name">Nome da ONG</h1>
+        <p id="ong-subtitle" data-i18n="pong-subtitle">Painel Administrativo</p>
+    </div>
 
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-number" id="stat-total">0</div>
+            <div class="stat-label" data-i18n="pong-stat-total">Total Inscrições</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="stat-pending" style="color: #F1C40F;">0</div>
+            <div class="stat-label" data-i18n="pong-stat-pending">Pendentes</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="stat-approved" style="color: #2ECC71;">0</div>
+            <div class="stat-label" data-i18n="pong-stat-approved">Aprovados</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="stat-rejected" style="color: #E74C3C;">0</div>
+            <div class="stat-label" data-i18n="pong-stat-rejected">Rejeitados</div>
+        </div>
+    </div>
+
+    <div class="tabs-container">
+        <button class="tab-button active" data-tab="inscricoes">
+            <i class="fas fa-users"></i> <span data-i18n="pong-tab-inscricoes">Gerenciar Inscrições</span>
+        </button>
+        <button class="tab-button" data-tab="dados">
+            <i class="fas fa-building"></i> <span data-i18n="pong-tab-dados">Dados da ONG</span>
+        </button>
+        <button class="tab-button" data-tab="estatisticas">
+            <i class="fas fa-chart-bar"></i> <span data-i18n="pong-tab-stats">Estatísticas</span>
+        </button>
+    </div>
+
+    <div id="tab-inscricoes" class="tab-content active">
+        <div id="inscricoes-container" class="voluntarios-grid"></div>
+        <div id="empty-inscricoes" class="empty-state" style="display: none;">
+            <i class="fas fa-inbox"></i>
+            <h2 data-i18n="pong-empty-title">Nenhuma inscrição ainda</h2>
+            <p data-i18n="pong-empty-text">Quando voluntários se inscreverem na sua ONG, eles aparecerão aqui.</p>
+        </div>
+    </div>
+
+    <div id="tab-dados" class="tab-content">
+        <div class="edit-form">
+            <h2 style="color: var(--color-tint); margin-bottom: 20px;">
+                <i class="fas fa-edit"></i> <span data-i18n="pong-edit-title">Editar Informações da ONG</span>
+            </h2>
+            <form id="edit-ong-form">
+                <div class="form-group">
+                    <label for="edit-name" data-i18n="pong-edit-name">Nome da ONG</label>
+                    <input type="text" id="edit-name" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="edit-phone" data-i18n="pong-edit-phone">Telefone</label>
+                        <input type="tel" id="edit-phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-email" data-i18n="pong-edit-email">E-mail</label>
+                        <input type="email" id="edit-email" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="edit-description" data-i18n="pong-edit-desc">Descrição</label>
+                    <textarea id="edit-description" rows="4" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="edit-services" data-i18n="pong-edit-services">Serviços Oferecidos</label>
+                    <input type="text" id="edit-services" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="edit-capacity" data-i18n="pong-edit-capacity">Capacidade (pessoas/dia)</label>
+                        <input type="number" id="edit-capacity">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-schedule" data-i18n="pong-edit-schedule">Horário de Funcionamento</label>
+                        <input type="text" id="edit-schedule" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn-save">
+                    <i class="fas fa-save"></i> <span data-i18n="pong-save">Salvar Alterações</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div id="tab-estatisticas" class="tab-content">
+        <div class="edit-form">
+            <h2 style="color: var(--color-tint); margin-bottom: 20px;">
+                <i class="fas fa-chart-line"></i> <span data-i18n="pong-stats-title">Estatísticas Detalhadas</span>
+            </h2>
+            <p style="color: var(--text-secondary); margin-bottom: 30px;" data-i18n="pong-stats-subtitle">
+                Visualize dados sobre voluntários e atividades da sua ONG
+            </p>
             <div class="stats-grid">
                 <div class="stat-card">
-                    <div class="stat-number" id="stat-total">0</div>
-                    <div class="stat-label">Total Inscrições</div>
+                    <div class="stat-label" data-i18n="pong-top-skills">Habilidades Mais Comuns</div>
+                    <div id="top-skills" style="margin-top: 15px; text-align: left;"></div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-number" id="stat-pending" style="color: #F1C40F;">0</div>
-                    <div class="stat-label">Pendentes</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="stat-approved" style="color: #2ECC71;">0</div>
-                    <div class="stat-label">Aprovados</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="stat-rejected" style="color: #E74C3C;">0</div>
-                    <div class="stat-label">Rejeitados</div>
+                    <div class="stat-label" data-i18n="pong-approval-rate">Taxa de Aprovação</div>
+                    <div class="stat-number" id="approval-rate" style="font-size: 2em;">0%</div>
                 </div>
             </div>
-
+        </div>
+    </div>
+</div>
             <div class="tabs-container">
                 <button class="tab-button active" data-tab="inscricoes">
                     <i class="fas fa-users"></i> Gerenciar Inscrições
@@ -504,7 +597,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, getDocs, doc, getDoc, updateDoc, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
+const _t = (k) => window.gssaI18n ? window.gssaI18n.t(k) : k;
         const firebaseConfig = {
             apiKey: "AIzaSyDhQs9Kz4LLGaKIhWV9nUiTjlst5YEWhjg",
             authDomain: "gssa-gravatai.firebaseapp.com",
@@ -604,28 +697,26 @@
             }
         }
 
-        function checkOngStatus() {
-            const status = ongData.status;
-            
-            if (status === 'pending') {
-                statusBanner.className = 'status-banner pending show';
-                document.getElementById('status-title').textContent = '⏳ Aguardando Aprovação';
-                document.getElementById('status-message').textContent = 'Sua ONG está em análise. Você será notificado quando for aprovada.';
-            } else if (status === 'rejected') {
-                statusBanner.className = 'status-banner rejected show';
-                document.getElementById('status-title').textContent = '❌ Cadastro Rejeitado';
-                const reason = ongData.rejectionReason || 'Não especificado';
-                document.getElementById('status-message').textContent = `Motivo: ${reason}. Entre em contato para mais informações.`;
-            } else if (status === 'approved') {
-                statusBanner.className = 'status-banner approved show';
-                document.getElementById('status-title').textContent = '✅ ONG Aprovada';
-                document.getElementById('status-message').textContent = 'Sua ONG está ativa e pode receber voluntários!';
-                
-                setTimeout(() => {
-                    statusBanner.classList.remove('show');
-                }, 5000);
-            }
-        }
+       function checkOngStatus() {
+    const _t = (k) => window.gssaI18n ? window.gssaI18n.t(k) : k;
+    const status = ongData.status;
+
+    if (status === 'pending') {
+        statusBanner.className = 'status-banner pending show';
+        document.getElementById('status-title').textContent   = _t('pong-status-pending-title');
+        document.getElementById('status-message').textContent = _t('pong-status-pending-msg');
+    } else if (status === 'rejected') {
+        statusBanner.className = 'status-banner rejected show';
+        document.getElementById('status-title').textContent   = _t('pong-status-rejected-title');
+        const reason = ongData.rejectionReason || _t('pong-vol-not-informed');
+        document.getElementById('status-message').textContent = `${reason}`;
+    } else if (status === 'approved') {
+        statusBanner.className = 'status-banner approved show';
+        document.getElementById('status-title').textContent   = _t('pong-status-approved-title');
+        document.getElementById('status-message').textContent = _t('pong-status-approved-msg');
+        setTimeout(() => statusBanner.classList.remove('show'), 5000);
+    }
+}
 
         // ✅ CORREÇÃO: Buscar inscrições pelo ID da ONG (STRING)
         async function loadApplications() {
@@ -736,95 +827,97 @@
         }
 
         function createVoluntarioCard(app) {
-            const voluntario = app.voluntarioData;
-            const statusClass = app.status === 'approved' ? 'status-approved' : 
-                               app.status === 'rejected' ? 'status-rejected' : 'status-pending';
-            const statusText = app.status === 'approved' ? 'Aprovado' : 
-                              app.status === 'rejected' ? 'Rejeitado' : 'Pendente';
+    const _t = (k) => window.gssaI18n ? window.gssaI18n.t(k) : k;
+    const lang = window.gssaI18n ? window.gssaI18n.currentLang() : 'pt';
+    const voluntario = app.voluntarioData;
 
-            const createdAt = app.createdAt?.toDate 
-                ? app.createdAt.toDate().toLocaleDateString('pt-BR')
-                : 'Data não disponível';
+    const statusClass = app.status === 'approved' ? 'status-approved' :
+                        app.status === 'rejected'  ? 'status-rejected' : 'status-pending';
+    const statusText  = app.status === 'approved' ? _t('status-approved') :
+                        app.status === 'rejected'  ? _t('status-rejected') : _t('status-pending');
 
-            const card = document.createElement('div');
-            card.className = 'voluntario-card';
-            card.innerHTML = `
-                <div class="voluntario-header">
-                    <div class="voluntario-info">
-                        <h3>${voluntario.name}</h3>
-                        <p><i class="fas fa-envelope"></i> ${voluntario.email}</p>
-                        <p><i class="fas fa-map-marker-alt"></i> ${voluntario.location || 'Não informado'}</p>
-                        <p style="font-size: 0.85em; color: var(--text-secondary); margin-top: 5px;">
-                            <i class="fas fa-calendar"></i> Inscrito em: ${createdAt}
-                        </p>
-                    </div>
-                    <span class="status-badge ${statusClass}">${statusText}</span>
+    const createdAt = app.createdAt?.toDate
+        ? app.createdAt.toDate().toLocaleDateString(
+            lang === 'en' ? 'en-US' : 'pt-BR'
+          )
+        : _t('pong-vol-not-informed');
+
+    const card = document.createElement('div');
+    card.className = 'voluntario-card';
+    card.innerHTML = `
+        <div class="voluntario-header">
+            <div class="voluntario-info">
+                <h3>${voluntario.name}</h3>
+                <p><i class="fas fa-envelope"></i> ${voluntario.email}</p>
+                <p><i class="fas fa-map-marker-alt"></i> ${voluntario.location || _t('pong-vol-not-informed')}</p>
+                <p style="font-size: 0.85em; color: var(--text-secondary); margin-top: 5px;">
+                    <i class="fas fa-calendar"></i> ${_t('pong-vol-inscribed')} ${createdAt}
+                </p>
+            </div>
+            <span class="status-badge ${statusClass}">${statusText}</span>
+        </div>
+
+        <div class="voluntario-details">
+            <div class="detail-box">
+                <div class="detail-label">${_t('pong-vol-availability')}</div>
+                <div class="detail-value">${voluntario.availability || _t('pong-vol-not-informed')}</div>
+            </div>
+            <div class="detail-box">
+                <div class="detail-label">${_t('pong-vol-skills')}</div>
+                <div class="skills-tags">
+                    ${voluntario.skills?.length > 0
+                        ? voluntario.skills.map(s => `<span class="skill-tag">${s}</span>`).join('')
+                        : `<span style="color: var(--text-secondary);">${_t('pong-vol-no-skills')}</span>`}
                 </div>
+            </div>
+        </div>
 
-                <div class="voluntario-details">
-                    <div class="detail-box">
-                        <div class="detail-label">Disponibilidade</div>
-                        <div class="detail-value">${voluntario.availability || 'Não informado'}</div>
-                    </div>
-                    <div class="detail-box">
-                        <div class="detail-label">Habilidades</div>
-                        <div class="skills-tags">
-                            ${voluntario.skills && voluntario.skills.length > 0 
-                                ? voluntario.skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('') 
-                                : '<span style="color: var(--text-secondary);">Nenhuma cadastrada</span>'}
-                        </div>
-                    </div>
-                </div>
+        ${app.status === 'pending' ? `
+            <div class="action-buttons">
+                <button class="btn-approve" onclick="handleApprove('${app.id}')">
+                    <i class="fas fa-check"></i> ${_t('pong-approve')}
+                </button>
+                <button class="btn-reject" onclick="handleReject('${app.id}')">
+                    <i class="fas fa-times"></i> ${_t('pong-reject')}
+                </button>
+            </div>
+        ` : ''}
+    `;
+    return card;
+}
 
-                ${app.status === 'pending' ? `
-                    <div class="action-buttons">
-                        <button class="btn-approve" onclick="handleApprove('${app.id}')">
-                            <i class="fas fa-check"></i> Aprovar
-                        </button>
-                        <button class="btn-reject" onclick="handleReject('${app.id}')">
-                            <i class="fas fa-times"></i> Rejeitar
-                        </button>
-                    </div>
-                ` : ''}
-            `;
+       window.handleApprove = async function(appId) {
+    const _t = (k) => window.gssaI18n ? window.gssaI18n.t(k) : k;
+    if (!confirm(_t('pong-approve-confirm'))) return;
+    try {
+        await updateDoc(doc(db, 'applications', appId), {
+            status: 'approved',
+            reviewedAt: serverTimestamp(),
+            reviewedBy: auth.currentUser.uid
+        });
+        alert(_t('pong-save-ok'));
+        await loadApplications();
+    } catch (error) {
+        alert('Erro: ' + error.message);
+    }
+};
 
-            return card;
-        }
-
-        window.handleApprove = async function(appId) {
-            if (!confirm('Aprovar este voluntário?')) return;
-
-            try {
-                await updateDoc(doc(db, 'applications', appId), {
-                    status: 'approved',
-                    reviewedAt: serverTimestamp(),
-                    reviewedBy: auth.currentUser.uid
-                });
-
-                alert('Voluntário aprovado!');
-                await loadApplications();
-            } catch (error) {
-                alert('Erro: ' + error.message);
-            }
-        };
-
-        window.handleReject = async function(appId) {
-            const reason = prompt('Motivo da rejeição (opcional):');
-            
-            try {
-                await updateDoc(doc(db, 'applications', appId), {
-                    status: 'rejected',
-                    reviewedAt: serverTimestamp(),
-                    reviewedBy: auth.currentUser.uid,
-                    rejectionReason: reason || 'Não especificado'
-                });
-
-                alert('Inscrição rejeitada.');
-                await loadApplications();
-            } catch (error) {
-                alert('Erro: ' + error.message);
-            }
-        };
+window.handleReject = async function(appId) {
+    const _t = (k) => window.gssaI18n ? window.gssaI18n.t(k) : k;
+    const reason = prompt(_t('pong-reject-prompt'));
+    try {
+        await updateDoc(doc(db, 'applications', appId), {
+            status: 'rejected',
+            reviewedAt: serverTimestamp(),
+            reviewedBy: auth.currentUser.uid,
+            rejectionReason: reason || _t('pong-vol-not-informed')
+        });
+        alert(_t('pong-rejected-ok'));
+        await loadApplications();
+    } catch (error) {
+        alert('Erro: ' + error.message);
+    }
+};
 
         // Sistema de Tabs
         document.querySelectorAll('.tab-button').forEach(button => {
@@ -865,6 +958,13 @@
                 alert('Erro ao salvar: ' + error.message);
             }
         });
+
+        document.addEventListener('gssa-lang-changed', () => {
+    if (window.gssaI18n) window.gssaI18n.applyTranslations();
+    checkOngStatus();
+    renderApplications();
+});
     </script>
 </body>
+
 </html>
