@@ -312,7 +312,6 @@ body {
     white-space: nowrap;
     margin-left: 0.5rem; 
 }
-}
 
 .lang-toggle-btn:hover {
     background: var(--color-highlight);
@@ -821,5 +820,6 @@ body {
         font-size: 14px;
     }
 }
+
 
 
