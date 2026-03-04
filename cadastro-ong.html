@@ -237,7 +237,7 @@
     <li>CNPJ da organização (obrigatório)</li>
     <li>Comprovante de registro (PDF, JPG ou PNG - máx. 2MB)</li>
     <li>E-mail institucional da ONG</li>
-    <li style="font-weight: bold; margin-top: 10px;" data-i18n="cong-alert-warning">⚠️ Seu cadastro será analisado manualmente antes da aprovação.</li>
+    <li style="font-weight: bold; margin-top: 10px;" data-i18n="cong-alert-warning"></li>
 </ul>
 </div>
 
@@ -412,7 +412,7 @@
             <!-- Termos -->
             <div class="terms-checkbox">
     <input type="checkbox" id="terms-checkbox" required>
-    <label for="terms-checkbox" data-i18n="cong-terms">
+    <label for="terms-checkbox" data-i18n="cong-terms"></label>
         Declaro que as informações fornecidas são verdadeiras...
     </label>
 </div>
@@ -424,15 +424,9 @@
 </div>
 
 <div class="progress-indicator" id="progress-indicator">
-    <h3><i class="fas fa-spinner fa-spin"></i> <span data-i18n="cong-processing">Processando seu cadastro...</span></h3>
+    <h3><i class="fas fa-spinner fa-spin"></i> <span data-i18n="cong-processing"></span></h3>
     <p class="progress-steps" id="progress-text">Iniciando...</p>
 </div>
-
-            <!-- Indicador de Progresso -->
-            <div class="progress-indicator" id="progress-indicator">
-                <h3><i class="fas fa-spinner fa-spin"></i> Processando seu cadastro...</h3>
-                <p class="progress-steps" id="progress-text">Iniciando...</p>
-            </div>
 
             <!-- Mensagem de Resultado -->
             <div id="form-message" class="form-message"></div>
@@ -508,8 +502,9 @@
         // Contador de caracteres
         document.getElementById('ong-description').addEventListener('input', (e) => {
     const count = e.target.value.length;
-    const _t = (k) => window.gssaI18n ? window.gssaI18n.t(k) : k;
-    document.getElementById('char-count').textContent = `${count} / 100 ${_t('cong-cnpj-hint') ? 'caracteres' : 'characters'}`;
+    const lang = window.gssaI18n ? window.gssaI18n.currentLang() : 'pt';
+    const label = lang === 'en' ? 'characters' : 'caracteres';
+    document.getElementById('char-count').textContent = `${count} / 100 ${label}`;
 });
 
         // Preview de arquivo
@@ -726,4 +721,5 @@
 </body>
 
 </html>
+
 
