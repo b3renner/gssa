@@ -294,6 +294,34 @@ body {
     transition: width 0.5s ease-in-out;
 }
 
+/* ── Botão de idioma (global) ── */
+.lang-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 13px;
+    background: transparent;
+    border: 1.5px solid var(--color-highlight);
+    color: var(--color-highlight);
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.82em;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    white-space: nowrap;
+}
+
+.lang-toggle-btn:hover {
+    background: var(--color-highlight);
+    color: #fff;
+}
+
+.lang-toggle-btn .lang-flag {
+    font-size: 1em;
+    line-height: 1;
+}
+
 
 .details-panel {
     width: 0; 
@@ -791,3 +819,4 @@ body {
         font-size: 14px;
     }
 }
+
