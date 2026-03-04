@@ -291,236 +291,216 @@
 </div>
 
     <script type="module">
-        import { initializeApp }          from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, query, where, getDocs, doc, deleteDoc, getDoc }
-            from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    import { initializeApp }          from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, collection, query, where, getDocs, doc, deleteDoc, getDoc }
+        from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyDhQs9Kz4LLGaKIhWV9nUiTjlst5YEWhjg",
-            authDomain: "gssa-gravatai.firebaseapp.com",
-            projectId: "gssa-gravatai",
-            storageBucket: "gssa-gravatai.firebasestorage.app",
-            messagingSenderId: "650753472587",
-            appId: "1:650753472587:web:65b706993648dc602975ce"
-        };
+    const firebaseConfig = {
+        apiKey: "AIzaSyDhQs9Kz4LLGaKIhWV9nUiTjlst5YEWhjg",
+        authDomain: "gssa-gravatai.firebaseapp.com",
+        projectId: "gssa-gravatai",
+        storageBucket: "gssa-gravatai.firebasestorage.app",
+        messagingSenderId: "650753472587",
+        appId: "1:650753472587:web:65b706993648dc602975ce"
+    };
 
-        const app  = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db   = getFirestore(app);
+    const app  = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
 
-        const loadingState      = document.getElementById('loading-state');
-        const inscricoesContent = document.getElementById('inscricoes-content');
-        const emptyState        = document.getElementById('empty-state');
-        const inscricoesList    = document.getElementById('inscricoes-list');
-        const userDropdown      = document.getElementById('user-dropdown');
-        const userNameDisplay   = document.getElementById('user-name-display');
-        const menuLogout        = document.getElementById('menu-logout');
-        const themeToggle       = document.getElementById('theme-toggle');
+    const loadingState      = document.getElementById('loading-state');
+    const inscricoesContent = document.getElementById('inscricoes-content');
+    const emptyState        = document.getElementById('empty-state');
+    const inscricoesList    = document.getElementById('inscricoes-list');
+    const userDropdown      = document.getElementById('user-dropdown');
+    const userNameDisplay   = document.getElementById('user-name-display');
+    const menuLogout        = document.getElementById('menu-logout');
+    const themeToggle       = document.getElementById('theme-toggle');
 
-        /* ── tema ── */
-        function initTheme() {
-            if (localStorage.getItem('theme') === 'dark') {
-                document.body.classList.add('dark-mode');
-                themeToggle.querySelector('i').classList.replace('fa-sun', 'fa-moon');
-            }
-        }
-        themeToggle.addEventListener('click', () => {
-            document.body.classList.toggle('dark-mode');
-            const isDark = document.body.classList.contains('dark-mode');
-            themeToggle.querySelector('i').classList.replace(isDark ? 'fa-sun' : 'fa-moon', isDark ? 'fa-moon' : 'fa-sun');
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
-        });
-
-        /* ── helpers ── */
-        function getStatusInfo(status) {
-    const _t = (k) => window.gssaI18n ? window.gssaI18n.t(k) : k;
-    return {
-        pending:  { text: _t('status-pending'),  cls: 'status-pending',  icon: 'fa-clock'        },
-        approved: { text: _t('status-approved'), cls: 'status-approved', icon: 'fa-check-circle' },
-        rejected: { text: _t('status-rejected'), cls: 'status-rejected', icon: 'fa-times-circle' }
-    }[status] ?? { text: _t('status-pending'), cls: 'status-pending', icon: 'fa-clock' };
-}
-
-        /* ── ✅ FIX 2: busca nome da ONG direto no Firestore quando não vier no doc ── */
-        async function resolveOngName(inscricao) {
-            // O campo ongName é salvo em app.js quando o voluntário se inscreve.
-            // Se existir, usa direto. Se não, busca no Firestore (ONGs dinâmicas antigas).
-            if (inscricao.ongName && inscricao.ongName.trim() !== '') {
-                return { nome: inscricao.ongName, servicos: inscricao.ongServicos || '' };
-            }
-
-            // Tenta buscar na coleção 'ongs' pelo ID
-            try {
-                const ongDoc = await getDoc(doc(db, 'ongs', String(inscricao.ongId)));
-                if (ongDoc.exists()) {
-                    const d = ongDoc.data();
-                    return {
-                        nome: d.basicInfo?.name || 'ONG sem nome',
-                        servicos: d.services || ''
-                    };
-                }
-            } catch (_) { /* ignora */ }
-
-            return { nome: 'ONG não encontrada', servicos: '' };
-        }
-
-        /* ── carrega inscrições ── */
-        async function loadInscricoes(userId) {
-            try {
-                const q = query(collection(db, 'applications'), where('userId', '==', userId));
-                const snap = await getDocs(q);
-
-                if (snap.empty) {
-                    loadingState.style.display = 'none';
-                    emptyState.style.display   = 'block';
-                    return;
-                }
-
-                const inscricoes = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-                inscricoes.sort((a, b) => {
-                    const dA = a.createdAt?.toDate() || new Date(0);
-                    const dB = b.createdAt?.toDate() || new Date(0);
-                    return dB - dA;
-                });
-
-                await renderInscricoes(inscricoes);
-
-                loadingState.style.display      = 'none';
-                inscricoesContent.style.display = 'block';
-
-            } catch (err) {
-                console.error('Erro ao carregar inscrições:', err);
-                loadingState.innerHTML = `
-                    <i class="fas fa-exclamation-triangle" style="color:var(--color-error);"></i>
-                    <p>Erro ao carregar inscrições: ${err.message}</p>
-                `;
-            }
-        }
-
-        async function renderInscricoes(inscricoes) {
-    inscricoesList.innerHTML = '';
-
-    for (const inscricao of inscricoes) {
-        const { nome: ongNome, servicos: ongServicos } = await resolveOngName(inscricao);
-        const statusInfo = getStatusInfo(inscricao.status);
-        const _t = (k) => window.gssaI18n ? window.gssaI18n.t(k) : k;
-        const lang = window.gssaI18n ? window.gssaI18n.currentLang() : 'pt';
-
-        const dataInscricao = inscricao.createdAt?.toDate()
-            ? inscricao.createdAt.toDate().toLocaleDateString(
-                lang === 'en' ? 'en-US' : 'pt-BR',
-                { day: '2-digit', month: 'long', year: 'numeric' }
-              )
-            : _t('inscricoes-loading');
-
-        const card = document.createElement('div');
-        card.className = 'inscricao-card';
-        card.innerHTML = `
-            <div class="ong-name">
-                <i class="fas fa-hands-helping"></i>
-                ${ongNome}
-            </div>
-            <div class="inscricao-info">
-                ${ongServicos ? `
-                <div class="info-row">
-                    <i class="fas fa-info-circle"></i>
-                    <span class="info-value">${ongServicos}</span>
-                </div>` : ''}
-                <div class="info-row">
-                    <i class="fas fa-calendar-alt"></i>
-                    <span class="info-label">${_t('inscricoes-date-label')}</span>
-                    <span class="info-value">${dataInscricao}</span>
-                </div>
-                <div class="info-row">
-                    <i class="fas fa-flag"></i>
-                    <span class="info-label">${_t('status-label')}</span>
-                    <span class="status-badge ${statusInfo.cls}">
-                        <i class="fas ${statusInfo.icon}"></i>
-                        ${statusInfo.text}
-                    </span>
-                </div>
-            </div>
-            ${inscricao.status === 'pending' ? `
-                <div class="action-buttons">
-                    <button class="btn-cancel" data-id="${inscricao.id}">
-                        <i class="fas fa-times"></i> ${_t('inscricoes-cancel')}
-                    </button>
-                </div>` : ''}
-        `;
-
-        // ✅ Adiciona o card ao DOM
-        inscricoesList.appendChild(card);
-
-        // ✅ Listener no card específico, não em todos os botões do documento
-        const cancelBtn = card.querySelector('.btn-cancel');
-        if (cancelBtn) {
-            cancelBtn.addEventListener('click', async (e) => {
-                const id = e.currentTarget.dataset.id;
-                if (!confirm(_t('inscricoes-cancel') + '?')) return;
-                try {
-                    await deleteDoc(doc(db, 'applications', id));
-                    location.reload();
-                } catch (err) {
-                    alert('Erro ao cancelar inscrição: ' + err.message);
-                }
-            });
+    /* ── tema ── */
+    function initTheme() {
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+            themeToggle.querySelector('i').classList.replace('fa-sun', 'fa-moon');
         }
     }
-}
+    themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+        themeToggle.querySelector('i').classList.replace(isDark ? 'fa-sun' : 'fa-moon', isDark ? 'fa-moon' : 'fa-sun');
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    });
 
-            document.querySelectorAll('.btn-cancel').forEach(btn => {
-                btn.addEventListener('click', async (e) => {
+    /* ── helpers ── */
+    function getStatusInfo(status) {
+        const _t = (k) => window.gssaI18n ? window.gssaI18n.t(k) : k;
+        return {
+            pending:  { text: _t('status-pending'),  cls: 'status-pending',  icon: 'fa-clock'        },
+            approved: { text: _t('status-approved'), cls: 'status-approved', icon: 'fa-check-circle' },
+            rejected: { text: _t('status-rejected'), cls: 'status-rejected', icon: 'fa-times-circle' }
+        }[status] ?? { text: _t('status-pending'), cls: 'status-pending', icon: 'fa-clock' };
+    }
+
+    async function resolveOngName(inscricao) {
+        if (inscricao.ongName && inscricao.ongName.trim() !== '') {
+            return { nome: inscricao.ongName, servicos: inscricao.ongServicos || '' };
+        }
+        try {
+            const ongDoc = await getDoc(doc(db, 'ongs', String(inscricao.ongId)));
+            if (ongDoc.exists()) {
+                const d = ongDoc.data();
+                return { nome: d.basicInfo?.name || 'ONG sem nome', servicos: d.services || '' };
+            }
+        } catch (_) { /* ignora */ }
+        return { nome: 'ONG não encontrada', servicos: '' };
+    }
+
+    /* ── carrega inscrições ── */
+    async function loadInscricoes(userId) {
+        loadingState.style.display      = 'block';
+        inscricoesContent.style.display = 'none';
+        emptyState.style.display        = 'none';
+
+        try {
+            const q    = query(collection(db, 'applications'), where('userId', '==', userId));
+            const snap = await getDocs(q);
+
+            if (snap.empty) {
+                loadingState.style.display = 'none';
+                emptyState.style.display   = 'block';
+                return;
+            }
+
+            const inscricoes = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+            inscricoes.sort((a, b) => {
+                const dA = a.createdAt?.toDate() || new Date(0);
+                const dB = b.createdAt?.toDate() || new Date(0);
+                return dB - dA;
+            });
+
+            await renderInscricoes(inscricoes);
+
+            loadingState.style.display      = 'none';
+            inscricoesContent.style.display = 'block';
+
+        } catch (err) {
+            console.error('Erro ao carregar inscrições:', err);
+            loadingState.innerHTML = `
+                <i class="fas fa-exclamation-triangle" style="color:var(--color-error);"></i>
+                <p>Erro ao carregar inscrições: ${err.message}</p>
+            `;
+        }
+    }
+
+    /* ── renderiza cards ── */
+    async function renderInscricoes(inscricoes) {
+        inscricoesList.innerHTML = '';
+        const _t  = (k) => window.gssaI18n ? window.gssaI18n.t(k) : k;
+        const lang = window.gssaI18n ? window.gssaI18n.currentLang() : 'pt';
+
+        for (const inscricao of inscricoes) {
+            const { nome: ongNome, servicos: ongServicos } = await resolveOngName(inscricao);
+            const statusInfo = getStatusInfo(inscricao.status);
+
+            const dataInscricao = inscricao.createdAt?.toDate()
+                ? inscricao.createdAt.toDate().toLocaleDateString(
+                    lang === 'en' ? 'en-US' : 'pt-BR',
+                    { day: '2-digit', month: 'long', year: 'numeric' }
+                  )
+                : _t('inscricoes-loading');
+
+            const card = document.createElement('div');
+            card.className = 'inscricao-card';
+            card.innerHTML = `
+                <div class="ong-name">
+                    <i class="fas fa-hands-helping"></i>
+                    ${ongNome}
+                </div>
+                <div class="inscricao-info">
+                    ${ongServicos ? `
+                    <div class="info-row">
+                        <i class="fas fa-info-circle"></i>
+                        <span class="info-value">${ongServicos}</span>
+                    </div>` : ''}
+                    <div class="info-row">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span class="info-label">${_t('inscricoes-date-label')}</span>
+                        <span class="info-value">${dataInscricao}</span>
+                    </div>
+                    <div class="info-row">
+                        <i class="fas fa-flag"></i>
+                        <span class="info-label">${_t('status-label')}</span>
+                        <span class="status-badge ${statusInfo.cls}">
+                            <i class="fas ${statusInfo.icon}"></i>
+                            ${statusInfo.text}
+                        </span>
+                    </div>
+                </div>
+                ${inscricao.status === 'pending' ? `
+                    <div class="action-buttons">
+                        <button class="btn-cancel" data-id="${inscricao.id}">
+                            <i class="fas fa-times"></i> ${_t('inscricoes-cancel')}
+                        </button>
+                    </div>` : ''}
+            `;
+
+            inscricoesList.appendChild(card);
+
+            const cancelBtn = card.querySelector('.btn-cancel');
+            if (cancelBtn) {
+                cancelBtn.addEventListener('click', async (e) => {
                     const id = e.currentTarget.dataset.id;
-                    if (!confirm('Tem certeza que deseja cancelar esta inscrição?')) return;
+                    if (!confirm(_t('inscricoes-cancel') + '?')) return;
                     try {
                         await deleteDoc(doc(db, 'applications', id));
-                        alert('Inscrição cancelada com sucesso!');
                         location.reload();
                     } catch (err) {
-                        alert('Erro ao cancelar inscrição: ' + err.message);
+                        alert('Erro ao cancelar: ' + err.message);
                     }
                 });
-            });
-        }
-
-        /* ── auth ── */
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                const userDoc = await getDoc(doc(db, 'users', user.uid));
-                if (userDoc.exists()) {
-                    userNameDisplay.textContent  = userDoc.data().name || user.email;
-                    userDropdown.style.display   = 'block';
-                }
-                loadInscricoes(user.uid);
-            } else {
-                window.location.href = 'index.html';
             }
-        });
+        }
+    }
 
-        menuLogout.addEventListener('click', async (e) => {
-            e.preventDefault();
-            await signOut(auth);
+    /* ── auth ── */
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            const userDoc = await getDoc(doc(db, 'users', user.uid));
+            if (userDoc.exists()) {
+                userNameDisplay.textContent = userDoc.data().name || user.email;
+                userDropdown.style.display  = 'block';
+            }
+            loadInscricoes(user.uid);
+        } else {
             window.location.href = 'index.html';
-        });
+        }
+    });
 
-        document.getElementById('user-menu-button')?.addEventListener('click', () => {
-            document.getElementById('user-dropdown-menu').classList.toggle('show');
-        });
-        document.addEventListener('click', (e) => {
-            if (!userDropdown.contains(e.target))
-                document.getElementById('user-dropdown-menu')?.classList.remove('show');
-        });
+    menuLogout.addEventListener('click', async (e) => {
+        e.preventDefault();
+        await signOut(auth);
+        window.location.href = 'index.html';
+    });
 
-        initTheme();
-            document.addEventListener('gssa-lang-changed', () => {
-    if (window.gssaI18n) window.gssaI18n.applyTranslations();
-    // Recarrega os cards com textos atualizados
-    const user = auth.currentUser;
-    if (user) loadInscricoes(user.uid);
-});
-    </script>
+    document.getElementById('user-menu-button')?.addEventListener('click', () => {
+        document.getElementById('user-dropdown-menu').classList.toggle('show');
+    });
+    document.addEventListener('click', (e) => {
+        if (!userDropdown.contains(e.target))
+            document.getElementById('user-dropdown-menu')?.classList.remove('show');
+    });
+
+    document.addEventListener('gssa-lang-changed', () => {
+        if (window.gssaI18n) window.gssaI18n.applyTranslations();
+        const user = auth.currentUser;
+        if (user) loadInscricoes(user.uid);
+    });
+
+    initTheme();
+</script>
 </body>
 </html>
+
 
 
