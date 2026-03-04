@@ -154,6 +154,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (fixedLogoutButton) fixedLogoutButton.style.display = 'block';
             
             const adminPanel = document.getElementById('menu-admin-panel');
+            const superAdminPanel = document.getElementById('menu-super-admin');
+
+            // ✅ FIX: só mostra painel ONG se role for exatamente 'ong'
             if (adminPanel) {
                 if (userRole === 'ong') {
                     adminPanel.style.display = 'block';
@@ -161,6 +164,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     adminPanel.style.display = 'none';
                 }
+            }
+
+            // ✅ FIX: painel super-admin nunca aparece aqui — só é exibido
+            // após confirmação do doc 'superAdmins' no onAuthStateChanged
+            if (superAdminPanel && userRole !== 'superadmin') {
+                superAdminPanel.style.display = 'none';
             }
         } else {
             if (authButton) authButton.style.display = 'block';
@@ -185,21 +194,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
+            // Verifica super-admin apenas no Firestore — nunca pela role do users doc
             try {
                 const superAdminDoc = await getDoc(doc(db, 'superAdmins', user.uid));
+                const superAdminLink = document.getElementById('menu-super-admin');
                 if (superAdminDoc.exists()) {
-                    const superAdminLink = document.getElementById('menu-super-admin');
-                    if (superAdminLink) {
-                        superAdminLink.style.display = 'block';
-                    }
+                    if (superAdminLink) superAdminLink.style.display = 'block';
                     console.log('✅ Super-Admin detectado!');
                 } else {
-                    const superAdminLink = document.getElementById('menu-super-admin');
-                    if (superAdminLink) {
-                        superAdminLink.style.display = 'none';
-                    }
+                    if (superAdminLink) superAdminLink.style.display = 'none';
                 }
             } catch (error) {
+                const superAdminLink = document.getElementById('menu-super-admin');
+                if (superAdminLink) superAdminLink.style.display = 'none';
                 console.log('Não é super-admin ou erro ao verificar:', error);
             }
             
@@ -569,7 +576,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     await addDoc(collection(db, 'applications'), {
                         ongId: String(ong.id),
-                        ongName: ong.nome,
+                        ongName: ong.nome,         // ✅ salva nome para evitar "ONG não encontrada"
+                        ongServicos: ong.servicos,  // ✅ salva serviços junto
                         userId: currentUser.uid,
                         status: 'pending',
                         createdAt: serverTimestamp()
@@ -634,22 +642,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-
-    document.getElementById('nav-inscricoes')?.addEventListener('click', (e) => {
-        e.preventDefault();
-        if (currentUser) {
-            window.location.href = 'minhas_inscricoes.html';
-        } else {
-            alert('Faça login para ver suas inscrições');
-            authModal.style.display = 'block';
-            showLoginForm();
-        }
-    });
-
-    document.getElementById('menu-contacts')?.addEventListener('click', (e) => {
-        e.preventDefault();
+    // ✅ FIX: todos os links para a página de inscrições usam underscore (minhas_inscricoes.html)
+document.getElementById('nav-inscricoes')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    if (currentUser) {
         window.location.href = 'minhas_inscricoes.html';
-    });
+    } else {
+        alert('Faça login para ver suas inscrições');
+        authModal.style.display = 'block';
+        showLoginForm();
+    }
+});
+
+document.getElementById('menu-contacts')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.location.href = 'minhas_inscricoes.html';
+});
 
     document.getElementById('menu-profile')?.addEventListener('click', (e) => {
         e.preventDefault();
