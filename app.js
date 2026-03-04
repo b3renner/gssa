@@ -1,478 +1,668 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minhas Inscrições - GSSA</title>
-    <link rel="Website Icon" href="gssa_logo_transp.png">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
-    <style>
-        .inscricoes-container {
-            max-width: 1000px;
-            margin: 40px auto;
-            padding: 20px;
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, addDoc, collection, serverTimestamp, query, where, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+document.addEventListener('DOMContentLoaded', () => {
+    const firebaseConfig = {
+        apiKey: "AIzaSyDhQs9Kz4LLGaKIhWV9nUiTjlst5YEWhjg",
+        authDomain: "gssa-gravatai.firebaseapp.com",
+        projectId: "gssa-gravatai",
+        storageBucket: "gssa-gravatai.firebasestorage.app",
+        messagingSenderId: "650753472587",
+        appId: "1:650753472587:web:65b706993648dc602975ce",
+        measurementId: "G-2HS4CYEZ9H"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    console.log("Firebase inicializado com sucesso.");
+
+    let currentUser = null;
+    let userRole = null;
+
+    const authModal = document.getElementById('auth-modal');
+    const authButton = document.getElementById('auth-button');
+    const loginFormContainer = document.getElementById('login-form-container');
+    const registerFormContainer = document.getElementById('register-form-container');
+    const loginForm = document.getElementById('login-form');
+    const registerForm = document.getElementById('register-form');
+    const switchToRegister = document.getElementById('switch-to-register');
+    const switchToLogin = document.getElementById('switch-to-login');
+    const userDropdown = document.getElementById('user-dropdown');
+    const userNameDisplay = document.getElementById('user-name-display');
+    const menuLogout = document.getElementById('menu-logout');
+    const fixedLogoutButton = document.getElementById('fixed-logout-button');
+
+
+    function showLoginForm() {
+        if (loginFormContainer && registerFormContainer) {
+            loginFormContainer.classList.add('active');
+            loginFormContainer.style.display = 'block';
+            registerFormContainer.classList.remove('active');
+            registerFormContainer.style.display = 'none';
         }
+    }
 
-        .page-header {
-            text-align: center;
-            margin-bottom: 40px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid var(--bg-map-border);
+    function showRegisterForm() {
+        if (loginFormContainer && registerFormContainer) {
+            registerFormContainer.classList.add('active');
+            registerFormContainer.style.display = 'block';
+            loginFormContainer.classList.remove('active');
+            loginFormContainer.style.display = 'none';
         }
+    }
 
-        .page-header h1 {
-            color: var(--color-highlight);
-            font-size: 2.5em;
-            margin-bottom: 10px;
-        }
+    authButton?.addEventListener('click', () => {
+        authModal.style.display = 'block';
+        showLoginForm();
+    });
 
-        .page-header p {
-            color: var(--text-secondary);
-            font-size: 1.1em;
-        }
+    document.getElementById('close-auth-modal')?.addEventListener('click', () => {
+        authModal.style.display = 'none';
+    });
 
-        .inscricoes-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
-        }
+    switchToRegister?.addEventListener('click', (e) => {
+        e.preventDefault();
+        showRegisterForm();
+    });
 
-        .inscricao-card {
-            background: var(--bg-secondary);
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 4px 8px var(--color-shadow);
-            transition: transform 0.3s, box-shadow 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
+    switchToLogin?.addEventListener('click', (e) => {
+        e.preventDefault();
+        showLoginForm();
+    });
 
-        .inscricao-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px var(--color-shadow);
-        }
-
-        .inscricao-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(to right, var(--color-highlight), var(--color-tint));
-        }
-
-        .ong-name {
-            font-size: 1.3em;
-            font-weight: bold;
-            color: var(--text-primary);
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .ong-name i {
-            color: var(--color-highlight);
-        }
-
-        .inscricao-info {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .info-row {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px 0;
-            border-bottom: 1px solid var(--bg-map-border);
-        }
-
-        .info-row:last-child {
-            border-bottom: none;
-        }
-
-        .info-row i {
-            width: 20px;
-            color: var(--color-highlight);
-            font-size: 0.9em;
-        }
-
-        .info-label {
-            font-weight: bold;
-            color: var(--text-secondary);
-            font-size: 0.85em;
-            text-transform: uppercase;
-        }
-
-        .info-value {
-            color: var(--text-primary);
-            flex: 1;
-        }
-
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 0.85em;
-            text-transform: uppercase;
-        }
-
-        .status-pending  { background-color: rgba(241,196,15,0.2);  color: #F1C40F; }
-        .status-approved { background-color: rgba(46,204,113,0.2);  color: #2ECC71; }
-        .status-rejected { background-color: rgba(231,76,60,0.2);   color: #E74C3C; }
-
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: var(--text-secondary);
-        }
-
-        .empty-state i {
-            font-size: 5em;
-            color: var(--bg-map-border);
-            margin-bottom: 20px;
-        }
-
-        .empty-state h2 {
-            font-size: 1.8em;
-            margin-bottom: 10px;
-            color: var(--text-primary);
-        }
-
-        .empty-state p {
-            font-size: 1.1em;
-            margin-bottom: 30px;
-        }
-
-        .btn-primary {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 24px;
-            background-color: var(--color-highlight);
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: bold;
-            transition: background-color 0.3s, transform 0.1s;
-        }
-
-        .btn-primary:hover {
-            background-color: var(--color-tint);
-            transform: translateY(-2px);
-        }
-
-        .loading-state {
-            text-align: center;
-            padding: 60px 20px;
-        }
-
-        .loading-state i {
-            font-size: 3em;
-            color: var(--color-highlight);
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0%   { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .btn-cancel {
-            flex: 1;
-            padding: 8px 16px;
-            background-color: transparent;
-            border: 1px solid var(--color-error);
-            color: var(--color-error);
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s;
-        }
-
-        .btn-cancel:hover {
-            background-color: var(--color-error);
-            color: white;
-        }
-
-        @media (max-width: 768px) {
-            .inscricoes-grid  { grid-template-columns: 1fr; }
-            .page-header h1   { font-size: 2em; }
-        }
-    </style>
-</head>
-<body>
-    <header class="main-header">
-        <div class="header-left">
-            <img src="gssa_logo.png" alt="Logo GSSA" class="gssa-logo-img">
-            <div class="logo-titles">
-                <h1 class="logo-main-title">GSSA</h1>
-                <p class="logo-subtitle">Gravataí Support & Shelter Assist</p>
-            </div>
-        </div>
-
-        <nav class="header-right">
-            <a href="index.html" class="nav-button">Início</a>
-           <!-- ✅ FIX: link consistente com underscore em todos os lugares -->
-<a href="minhas_inscricoes.html" class="nav-button" style="border-color: var(--color-highlight);">Contatos</a>
-
-            <div id="user-dropdown" class="user-dropdown" style="display: none;">
-                <button id="user-menu-button" class="user-menu-button">
-                    <i class="fas fa-user-circle"></i>
-                    <span id="user-name-display"></span>
-                    <i class="fas fa-chevron-down"></i>
-                </button>
-                <div id="user-dropdown-menu" class="user-dropdown-menu">
-                    <a href="perfil.html"><i class="fas fa-user"></i> Meu Perfil</a>
-                    <a href="minhas_inscricoes.html"><i class="fas fa-address-book"></i> Minhas Inscrições</a>
-                    <hr>
-                    <a href="#" id="menu-logout"><i class="fas fa-sign-out-alt"></i> Sair</a>
-                </div>
-            </div>
-
-            <button id="theme-toggle" class="toggle-button" aria-label="Alternar Tema">
-                <i class="fas fa-sun"></i>
-            </button>
-        </nav>
-    </header>
-
-    <div class="inscricoes-container">
-        <div class="page-header">
-            <h1><i class="fas fa-clipboard-list"></i> Minhas Inscrições</h1>
-            <p>Acompanhe o status das suas candidaturas como voluntário</p>
-        </div>
-
-        <div id="loading-state" class="loading-state">
-            <i class="fas fa-spinner"></i>
-            <p>Carregando suas inscrições...</p>
-        </div>
-
-        <div id="inscricoes-content" style="display: none;">
-            <div id="inscricoes-list" class="inscricoes-grid"></div>
-        </div>
-
-        <div id="empty-state" class="empty-state" style="display: none;">
-            <i class="fas fa-inbox"></i>
-            <h2>Nenhuma inscrição ainda</h2>
-            <p>Você ainda não se inscreveu em nenhuma ONG. Que tal começar agora?</p>
-            <a href="index.html" class="btn-primary">
-                <i class="fas fa-search"></i> Explorar ONGs
-            </a>
-        </div>
-    </div>
-
-    <script type="module">
-        import { initializeApp }          from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, query, where, getDocs, doc, deleteDoc, getDoc }
-            from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyDhQs9Kz4LLGaKIhWV9nUiTjlst5YEWhjg",
-            authDomain: "gssa-gravatai.firebaseapp.com",
-            projectId: "gssa-gravatai",
-            storageBucket: "gssa-gravatai.firebasestorage.app",
-            messagingSenderId: "650753472587",
-            appId: "1:650753472587:web:65b706993648dc602975ce"
-        };
-
-        const app  = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db   = getFirestore(app);
-
-        const loadingState      = document.getElementById('loading-state');
-        const inscricoesContent = document.getElementById('inscricoes-content');
-        const emptyState        = document.getElementById('empty-state');
-        const inscricoesList    = document.getElementById('inscricoes-list');
-        const userDropdown      = document.getElementById('user-dropdown');
-        const userNameDisplay   = document.getElementById('user-name-display');
-        const menuLogout        = document.getElementById('menu-logout');
-        const themeToggle       = document.getElementById('theme-toggle');
-
-        /* ── tema ── */
-        function initTheme() {
-            if (localStorage.getItem('theme') === 'dark') {
-                document.body.classList.add('dark-mode');
-                themeToggle.querySelector('i').classList.replace('fa-sun', 'fa-moon');
+    loginForm?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('login-email').value;
+        const password = document.getElementById('login-password').value;
+        
+        try {
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            currentUser = userCredential.user;
+            
+            const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
+            if (userDoc.exists()) {
+                userRole = userDoc.data().role;
             }
+            
+            console.log('Login bem-sucedido:', currentUser.uid, 'Role:', userRole);
+            authModal.style.display = 'none';
+            updateUI();
+            refreshPanelIfOpen();
+        } catch (error) {
+            document.getElementById('login-message').textContent = `Erro: ${error.message}`;
         }
-        themeToggle.addEventListener('click', () => {
-            document.body.classList.toggle('dark-mode');
-            const isDark = document.body.classList.contains('dark-mode');
-            themeToggle.querySelector('i').classList.replace(isDark ? 'fa-sun' : 'fa-moon', isDark ? 'fa-moon' : 'fa-sun');
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
-        });
+    });
 
-        /* ── helpers ── */
-        function getStatusInfo(status) {
-            return {
-                pending:  { text: 'Pendente',  cls: 'status-pending',  icon: 'fa-clock'        },
-                approved: { text: 'Aprovado',  cls: 'status-approved', icon: 'fa-check-circle' },
-                rejected: { text: 'Rejeitado', cls: 'status-rejected', icon: 'fa-times-circle' }
-            }[status] ?? { text: 'Pendente', cls: 'status-pending', icon: 'fa-clock' };
+    registerForm?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const name = document.getElementById('register-name').value;
+        const email = document.getElementById('register-email').value;
+        const password = document.getElementById('register-password').value;
+        const confirmPassword = document.getElementById('register-password-confirm').value;
+        const location = document.getElementById('register-location').value;
+        const skills = document.getElementById('register-skills').value.split(',').map(s => s.trim()).filter(s => s.length > 0);
+        const availability = document.getElementById('register-availability').value;
+
+        if (password !== confirmPassword) {
+            document.getElementById('register-message').textContent = 'As senhas não coincidem.';
+            return;
         }
 
-        /* ── ✅ FIX 2: busca nome da ONG direto no Firestore quando não vier no doc ── */
-        async function resolveOngName(inscricao) {
-            // O campo ongName é salvo em app.js quando o voluntário se inscreve.
-            // Se existir, usa direto. Se não, busca no Firestore (ONGs dinâmicas antigas).
-            if (inscricao.ongName && inscricao.ongName.trim() !== '') {
-                return { nome: inscricao.ongName, servicos: inscricao.ongServicos || '' };
-            }
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            currentUser = userCredential.user;
+            userRole = 'voluntario';
+            
+            await setDoc(doc(db, 'users', currentUser.uid), {
+                name: name,
+                email: email,
+                location: location,
+                skills: skills,
+                availability: availability,
+                role: userRole,
+                createdAt: serverTimestamp()
+            });
+            
+            console.log('Cadastro bem-sucedido:', currentUser.uid, 'Role:', userRole);
+            authModal.style.display = 'none';
+            updateUI();
+            refreshPanelIfOpen();
+        } catch (error) {
+            document.getElementById('register-message').textContent = `Erro: ${error.message}`;
+        }
+    });
 
-            // Tenta buscar na coleção 'ongs' pelo ID
-            try {
-                const ongDoc = await getDoc(doc(db, 'ongs', String(inscricao.ongId)));
-                if (ongDoc.exists()) {
-                    const d = ongDoc.data();
-                    return {
-                        nome: d.basicInfo?.name || 'ONG sem nome',
-                        servicos: d.services || ''
-                    };
+    async function handleLogout() {
+        await signOut(auth);
+        currentUser = null;
+        userRole = null;
+        console.log('Logout realizado');
+        updateUI();
+        refreshPanelIfOpen();
+    }
+
+    menuLogout?.addEventListener('click', handleLogout);
+    fixedLogoutButton?.addEventListener('click', handleLogout);
+
+    function updateUI() {
+        if (currentUser) {
+            if (authButton) authButton.style.display = 'none';
+            if (userDropdown) userDropdown.style.display = 'block';
+            if (fixedLogoutButton) fixedLogoutButton.style.display = 'block';
+            
+            const adminPanel = document.getElementById('menu-admin-panel');
+            const superAdminPanel = document.getElementById('menu-super-admin');
+
+            // ✅ FIX: só mostra painel ONG se role for exatamente 'ong'
+            if (adminPanel) {
+                if (userRole === 'ong') {
+                    adminPanel.style.display = 'block';
+                    adminPanel.href = 'painel-ong.html';
+                } else {
+                    adminPanel.style.display = 'none';
                 }
-            } catch (_) { /* ignora */ }
+            }
 
-            return { nome: 'ONG não encontrada', servicos: '' };
+            // ✅ FIX: painel super-admin nunca aparece aqui — só é exibido
+            // após confirmação do doc 'superAdmins' no onAuthStateChanged
+            if (superAdminPanel && userRole !== 'superadmin') {
+                superAdminPanel.style.display = 'none';
+            }
+        } else {
+            if (authButton) authButton.style.display = 'block';
+            if (userDropdown) userDropdown.style.display = 'none';
+            if (fixedLogoutButton) fixedLogoutButton.style.display = 'none';
+            
+            const adminPanel = document.getElementById('menu-admin-panel');
+            const superAdminPanel = document.getElementById('menu-super-admin');
+            if (adminPanel) adminPanel.style.display = 'none';
+            if (superAdminPanel) superAdminPanel.style.display = 'none';
         }
+    }
 
-        /* ── carrega inscrições ── */
-        async function loadInscricoes(userId) {
+    onAuthStateChanged(auth, async (user) => {
+        currentUser = user;
+        if (user) {
+            const userDoc = await getDoc(doc(db, 'users', user.uid));
+            if (userDoc.exists()) {
+                userRole = userDoc.data().role;
+                if (userNameDisplay) {
+                    userNameDisplay.textContent = userDoc.data().name || user.email;
+                }
+            }
+
+            // Verifica super-admin apenas no Firestore — nunca pela role do users doc
             try {
-                const q = query(collection(db, 'applications'), where('userId', '==', userId));
-                const snap = await getDocs(q);
+                const superAdminDoc = await getDoc(doc(db, 'superAdmins', user.uid));
+                const superAdminLink = document.getElementById('menu-super-admin');
+                if (superAdminDoc.exists()) {
+                    if (superAdminLink) superAdminLink.style.display = 'block';
+                    console.log('✅ Super-Admin detectado!');
+                } else {
+                    if (superAdminLink) superAdminLink.style.display = 'none';
+                }
+            } catch (error) {
+                const superAdminLink = document.getElementById('menu-super-admin');
+                if (superAdminLink) superAdminLink.style.display = 'none';
+                console.log('Não é super-admin ou erro ao verificar:', error);
+            }
+            
+            console.log('Estado autenticado:', currentUser.uid, 'Role:', userRole);
+            updateUI();
+            refreshPanelIfOpen();
+        } else {
+            userRole = null;
+            console.log('Estado não autenticado');
+            updateUI();
+            refreshPanelIfOpen();
+        }
+    });
 
-                if (snap.empty) {
-                    loadingState.style.display = 'none';
-                    emptyState.style.display   = 'block';
+    const themeToggle = document.getElementById('theme-toggle');
+    const body = document.body;
+
+    function toggleTheme() {
+        body.classList.toggle('dark-mode');
+        const isDarkMode = body.classList.contains('dark-mode');
+        const icon = themeToggle.querySelector('i');
+        
+        if (isDarkMode) {
+            icon.classList.remove('fa-sun');
+            icon.classList.add('fa-moon');
+            localStorage.setItem('theme', 'dark');
+        } else {
+            icon.classList.remove('fa-moon');
+            icon.classList.add('fa-sun');
+            localStorage.setItem('theme', 'light');
+        }
+    }
+
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+        body.classList.add('dark-mode');
+        themeToggle.querySelector('i').classList.remove('fa-sun');
+        themeToggle.querySelector('i').classList.add('fa-moon');
+    }
+    
+    themeToggle.addEventListener('click', toggleTheme);
+
+
+    const gravataiCoords = [-29.9402, -50.9944];
+    const initialZoom = 13;
+    const map = L.map('map', { zoomControl: true }).setView(gravataiCoords, initialZoom);
+    
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    function calculateDistance(lat1, lon1, lat2, lon2) {
+        const R = 6371;
+        const dLat = (lat2 - lat1) * (Math.PI / 180);
+        const dLon = (lon2 - lon1) * (Math.PI / 180);
+        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + 
+                  Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) * 
+                  Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return (R * c).toFixed(1);
+    }
+
+    let userLocation = null;
+    let userMarker = null;
+    const markers = new Map();
+    let ongsData = [];
+
+    async function loadOngsFromFirestore() {
+        try {
+            console.log(' Carregando ONGs do Firestore...');
+            const ongsRef = collection(db, 'ongs');
+            const q = query(ongsRef, where('status', '==', 'approved'));
+            const snapshot = await getDocs(q);
+
+            console.log(` ${snapshot.size} ONGs aprovadas encontradas`);
+
+            ongsData = [];
+            snapshot.forEach(docSnap => {
+                const data = docSnap.data();
+                console.log(' ONG encontrada:', data.basicInfo.name, 'ID:', docSnap.id);
+                
+                if (!data.coordinates || !data.coordinates.lat || !data.coordinates.lon) {
+                    console.warn(' ONG sem coordenadas:', data.basicInfo.name);
                     return;
                 }
 
-                const inscricoes = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-                inscricoes.sort((a, b) => {
-                    const dA = a.createdAt?.toDate() || new Date(0);
-                    const dB = b.createdAt?.toDate() || new Date(0);
-                    return dB - dA;
-                });
+                const ongFormatted = {
+                    id: String(docSnap.id),
+                    nome: data.basicInfo.name,
+                    lat: parseFloat(data.coordinates.lat),
+                    lon: parseFloat(data.coordinates.lon),
+                    servicos: data.services,
+                    publico: data.targetAudience,
+                    endereco: `${data.address.street}, ${data.address.neighborhood} - ${data.address.city}/${data.address.state} - CEP: ${data.address.zip}`,
+                    contato: data.basicInfo.phone,
+                    horario: data.schedule,
+                    email: data.basicInfo.email,
+                    cnpj: data.basicInfo.cnpj,
+                    descricao: data.description,
+                    capacidade: data.capacity
+                };
 
-                await renderInscricoes(inscricoes);
+                console.log('✅ ONG formatada:', ongFormatted);
+                ongsData.push(ongFormatted);
+            });
 
-                loadingState.style.display      = 'none';
-                inscricoesContent.style.display = 'block';
+            console.log(`✅ ${ongsData.length} ONGs carregadas e formatadas`);
 
-            } catch (err) {
-                console.error('Erro ao carregar inscrições:', err);
-                loadingState.innerHTML = `
-                    <i class="fas fa-exclamation-triangle" style="color:var(--color-error);"></i>
-                    <p>Erro ao carregar inscrições: ${err.message}</p>
-                `;
-            }
-        }
-
-        async function renderInscricoes(inscricoes) {
-            inscricoesList.innerHTML = '';
-
-            for (const inscricao of inscricoes) {
-                const { nome: ongNome, servicos: ongServicos } = await resolveOngName(inscricao);
-                const statusInfo   = getStatusInfo(inscricao.status);
-                const dataInscricao = inscricao.createdAt?.toDate()
-                    ? inscricao.createdAt.toDate().toLocaleDateString('pt-BR', { day:'2-digit', month:'long', year:'numeric' })
-                    : 'Data não disponível';
-
-                const card = document.createElement('div');
-                card.className = 'inscricao-card';
-                card.innerHTML = `
-                    <div class="ong-name">
-                        <i class="fas fa-hands-helping"></i>
-                        ${ongNome}
-                    </div>
-                    <div class="inscricao-info">
-                        ${ongServicos ? `
-                        <div class="info-row">
-                            <i class="fas fa-info-circle"></i>
-                            <span class="info-value">${ongServicos}</span>
-                        </div>` : ''}
-                        <div class="info-row">
-                            <i class="fas fa-calendar-alt"></i>
-                            <span class="info-label">Data de Inscrição:</span>
-                            <span class="info-value">${dataInscricao}</span>
-                        </div>
-                        <div class="info-row">
-                            <i class="fas fa-flag"></i>
-                            <span class="info-label">Status:</span>
-                            <span class="status-badge ${statusInfo.cls}">
-                                <i class="fas ${statusInfo.icon}"></i>
-                                ${statusInfo.text}
-                            </span>
-                        </div>
-                    </div>
-                    ${inscricao.status === 'pending' ? `
-                        <div class="action-buttons">
-                            <button class="btn-cancel" data-id="${inscricao.id}">
-                                <i class="fas fa-times"></i> Cancelar Inscrição
-                            </button>
-                        </div>` : ''}
-                `;
-                inscricoesList.appendChild(card);
-            }
-
-            document.querySelectorAll('.btn-cancel').forEach(btn => {
-                btn.addEventListener('click', async (e) => {
-                    const id = e.currentTarget.dataset.id;
-                    if (!confirm('Tem certeza que deseja cancelar esta inscrição?')) return;
-                    try {
-                        await deleteDoc(doc(db, 'applications', id));
-                        alert('Inscrição cancelada com sucesso!');
-                        location.reload();
-                    } catch (err) {
-                        alert('Erro ao cancelar inscrição: ' + err.message);
+            if (typeof ONGS_DATA !== 'undefined' && ONGS_DATA.length > 0) {
+                console.log(' Adicionando ONGs estáticas do data.js...');
+                ONGS_DATA.forEach(ong => {
+                    if (!ongsData.find(o => o.nome === ong.nome)) {
+                        ongsData.push({
+                            ...ong,
+                            id: String(ong.id)
+                        });
                     }
                 });
+                console.log(` Total de ONGs: ${ongsData.length}`);
+            }
+
+            addOngsToMap();
+
+        } catch (error) {
+            console.error('❌ Erro ao carregar ONGs:', error);
+            if (typeof ONGS_DATA !== 'undefined') {
+                console.log('⚠️ Usando fallback (data.js)');
+                ongsData = ONGS_DATA.map(ong => ({
+                    ...ong,
+                    id: String(ong.id)
+                }));
+                addOngsToMap();
+            }
+        }
+    }
+
+    function addOngsToMap() {
+        console.log(` Adicionando ${ongsData.length} ONGs ao mapa...`);
+        
+        markers.forEach(marker => marker.remove());
+        markers.clear();
+
+        ongsData.forEach(ong => {
+            console.log(` Adicionando marcador: ${ong.nome} (ID: ${ong.id})`);
+            
+            const marker = L.marker([ong.lat, ong.lon]).addTo(map);
+            markers.set(String(ong.id), marker);
+
+            const popupContent = `
+                <div style="text-align: center; min-width: 150px;">
+                    <strong style="font-size: 1.1em; color: #D9534F;">${ong.nome}</strong><br>
+                    <span style="color: #666; font-size: 0.9em;">${ong.servicos.split(',')[0]}</span><br>
+                    <button onclick="window.showDetails('${ong.id}')" 
+                            style="margin-top: 8px; padding: 6px 12px; background: #D9534F; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">
+                        <i class="fas fa-info-circle"></i> Ver Detalhes
+                    </button>
+                </div>
+            `;
+
+            marker.bindPopup(popupContent);
+            marker.on('click', () => {
+                console.log('🖱️ Marcador clicado:', ong.nome, 'ID:', ong.id);
+                showDetails(ong.id);
+            });
+        });
+
+        console.log(`✅ ${markers.size} marcadores adicionados`);
+    }
+
+    function locateUser() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const lat = position.coords.latitude;
+                    const lon = position.coords.longitude;
+                    const accuracy = position.coords.accuracy;
+                    userLocation = { lat, lon };
+                    
+                    const userIcon = L.icon({
+                        iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+                        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                        iconSize: [25, 41],
+                        iconAnchor: [12, 41],
+                        popupAnchor: [1, -34],
+                        shadowSize: [41, 41]
+                    });
+                    
+                    userMarker = L.marker([lat, lon], { icon: userIcon })
+                        .addTo(map)
+                        .bindPopup(`Você está aqui! (Precisão ± ${accuracy.toFixed(0)}m)`)
+                        .openPopup();
+                    
+                    map.setView([lat, lon], 14, { animate: true });
+                },
+                (error) => console.warn(`Erro na geolocalização: ${error.message}`)
+            );
+        }
+    }
+    
+    locateUser();
+
+    const detailsPanel = document.getElementById('details-panel');
+    const panelContent = detailsPanel.querySelector('.panel-content');
+    const closeButton = document.getElementById('close-panel');
+
+    function closeDetailsPanel() {
+        detailsPanel.classList.remove('open');
+        panelContent.innerHTML = '';
+        setTimeout(() => map.invalidateSize(), 500);
+    }
+    
+    closeButton.addEventListener('click', closeDetailsPanel);
+
+    async function showDetails(ongId) {
+        console.log(' Buscando detalhes da ONG ID:', ongId);
+        
+        const ong = ongsData.find(o => String(o.id) === String(ongId));
+        
+        if (!ong) {
+            console.error('❌ ONG não encontrada para ID:', ongId);
+            alert('ONG não encontrada. Tente recarregar a página.');
+            return;
+        }
+        
+        console.log('✅ ONG encontrada:', ong.nome);
+        
+        map.setView([ong.lat, ong.lon], 15, { animate: true });
+
+        let distanceHtml = '';
+        if (userLocation) {
+            const distance = calculateDistance(userLocation.lat, userLocation.lon, ong.lat, ong.lon);
+            distanceHtml = `
+                <div class="info-block distance-info">
+                    <h3><i class="fas fa-route"></i> Distância Estimada</h3>
+                    <p style="font-weight: bold; font-size: 1.1em;">${distance} km de você</p>
+                    <p style="font-size: 0.8em; color: var(--text-secondary);">Cálculo em linha reta.</p>
+                </div>
+            `;
+        }
+
+        let applyButtonHtml = '';
+        let existingApplicationId = null;
+        
+        if (currentUser && userRole === 'voluntario') {
+            const q = query(
+                collection(db, 'applications'),
+                where('userId', '==', currentUser.uid),
+                where('ongId', '==', String(ong.id))
+            );
+            
+            try {
+                const snapshot = await getDocs(q);
+                
+                if (!snapshot.empty) {
+                    const inscricaoDoc = snapshot.docs[0];
+                    const inscricao = inscricaoDoc.data();
+                    existingApplicationId = inscricaoDoc.id;
+                    
+                    const statusText = inscricao.status === 'approved' ? 'Aprovado' : 
+                                      inscricao.status === 'rejected' ? 'Rejeitado' : 'Pendente';
+                    const statusColor = inscricao.status === 'approved' ? '#2ECC71' : 
+                                       inscricao.status === 'rejected' ? '#E74C3C' : '#F1C40F';
+                    
+                    applyButtonHtml = `
+                        <div style="text-align: center; padding: 15px; background: rgba(217, 83, 79, 0.1); border-radius: 8px; margin-top: 20px;">
+                            <i class="fas fa-info-circle"></i> 
+                            <strong>Status: <span style="color: ${statusColor};">${statusText}</span></strong>
+                            ${inscricao.status === 'pending' ? `
+                                <button id="cancel-button" class="submit-button" style="margin-top: 15px; background: #E74C3C;">
+                                    <i class="fas fa-times"></i> Cancelar Inscrição
+                                </button>
+                            ` : ''}
+                        </div>
+                    `;
+                } else {
+                    applyButtonHtml = `
+                        <button id="apply-button" class="submit-button" style="margin-top: 20px;">
+                            <i class="fas fa-hand-holding-heart"></i> Inscrever-se como Voluntário
+                        </button>
+                    `;
+                }
+            } catch (error) {
+                console.error('Erro ao verificar inscrição:', error);
+                applyButtonHtml = `
+                    <button id="apply-button" class="submit-button" style="margin-top: 20px;">
+                        <i class="fas fa-hand-holding-heart"></i> Inscrever-se como Voluntário
+                    </button>
+                `;
+            }
+        } else if (!currentUser) {
+            applyButtonHtml = `
+                <p style="text-align: center; padding: 15px; background: rgba(217, 83, 79, 0.1); border-radius: 8px; margin-top: 20px;">
+                    <i class="fas fa-info-circle"></i> 
+                    <strong>Faça login como voluntário para se inscrever</strong>
+                </p>
+            `;
+        }
+
+        panelContent.innerHTML = `
+            <h2 class="panel-title">${ong.nome}</h2>
+            
+            ${distanceHtml}
+            
+            <div class="info-block">
+                <h3><i class="fas fa-handshake"></i> Serviços Oferecidos</h3>
+                <p>${ong.servicos}</p>
+            </div>
+            
+            <div class="info-block">
+                <h3><i class="fas fa-map-marker-alt"></i> Endereço</h3>
+                <p>${ong.endereco}</p>
+                <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(ong.endereco)}" 
+                   target="_blank" 
+                   class="open-map-button"
+                   style="margin-top: 10px;">
+                    <i class="fas fa-external-link-alt"></i> Abrir no Google Maps
+                </a>
+            </div>
+            
+            <div class="info-block">
+                <h3><i class="fas fa-clock"></i> Horário</h3>
+                <p>${ong.horario}</p>
+            </div>
+            
+            <div class="info-block">
+                <h3><i class="fas fa-phone-alt"></i> Contato</h3>
+                <p>${ong.contato}</p>
+            </div>
+            
+            ${applyButtonHtml}
+        `;
+        
+        detailsPanel.classList.add('open');
+        setTimeout(() => map.invalidateSize(), 500);
+
+        const cancelButton = document.getElementById('cancel-button');
+        if (cancelButton && existingApplicationId) {
+            cancelButton.addEventListener('click', async () => {
+                if (!confirm(`Cancelar inscrição na ${ong.nome}?`)) return;
+
+                try {
+                    cancelButton.disabled = true;
+                    cancelButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Cancelando...';
+                    
+                    await deleteDoc(doc(db, 'applications', existingApplicationId));
+                    
+                    alert('✅ Inscrição cancelada!');
+                    showDetails(ong.id);
+                } catch (error) {
+                    console.error('❌ Erro ao cancelar:', error);
+                    alert(`Erro: ${error.message}`);
+                    cancelButton.disabled = false;
+                    cancelButton.innerHTML = '<i class="fas fa-times"></i> Cancelar Inscrição';
+                }
             });
         }
 
-        /* ── auth ── */
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                const userDoc = await getDoc(doc(db, 'users', user.uid));
-                if (userDoc.exists()) {
-                    userNameDisplay.textContent  = userDoc.data().name || user.email;
-                    userDropdown.style.display   = 'block';
+        const applyButton = document.getElementById('apply-button');
+        if (applyButton && currentUser && userRole === 'voluntario') {
+            applyButton.addEventListener('click', async () => {
+                if (!confirm(`Inscrever-se na ${ong.nome}?`)) return;
+
+                try {
+                    applyButton.disabled = true;
+                    applyButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+                    
+                    await addDoc(collection(db, 'applications'), {
+                        ongId: String(ong.id),
+                        ongName: ong.nome,         // ✅ salva nome para evitar "ONG não encontrada"
+                        ongServicos: ong.servicos,  // ✅ salva serviços junto
+                        userId: currentUser.uid,
+                        status: 'pending',
+                        createdAt: serverTimestamp()
+                    });
+                    
+                    alert('✅ Inscrição enviada!');
+                    showDetails(ong.id);
+                } catch (error) {
+                    console.error('❌ Erro ao inscrever:', error);
+                    alert(`Erro: ${error.message}`);
+                    applyButton.disabled = false;
+                    applyButton.innerHTML = '<i class="fas fa-hand-holding-heart"></i> Inscrever-se';
                 }
-                loadInscricoes(user.uid);
-            } else {
-                window.location.href = 'index.html';
+            });
+        }
+    }
+
+    function refreshPanelIfOpen() {
+        if (detailsPanel.classList.contains('open')) {
+            const ongId = panelContent.querySelector('.panel-title') 
+                ? ongsData.find(o => o.nome === panelContent.querySelector('.panel-title').textContent)?.id 
+                : null;
+            if (ongId) {
+                showDetails(ongId);
             }
-        });
+        }
+    }
 
-        menuLogout.addEventListener('click', async (e) => {
-            e.preventDefault();
-            await signOut(auth);
-            window.location.href = 'index.html';
-        });
+    loadOngsFromFirestore();
 
-        document.getElementById('user-menu-button')?.addEventListener('click', () => {
-            document.getElementById('user-dropdown-menu').classList.toggle('show');
-        });
-        document.addEventListener('click', (e) => {
-            if (!userDropdown.contains(e.target))
-                document.getElementById('user-dropdown-menu')?.classList.remove('show');
-        });
+    const searchButton = document.getElementById('search-button');
+    searchButton.addEventListener('click', () => {
+        const query = document.getElementById('search-input').value.trim().toLowerCase();
+        const foundOng = ongsData.find(ong => 
+            ong.nome.toLowerCase().includes(query) || 
+            ong.servicos.toLowerCase().includes(query)
+        );
+        
+        if (foundOng) {
+            const marker = markers.get(String(foundOng.id));
+            if (marker) {
+                map.setView(marker.getLatLng(), 15, { animate: true });
+                marker.openPopup();
+                showDetails(foundOng.id);
+            }
+        } else {
+            alert('Nenhuma ONG encontrada.');
+        }
+    });
 
-        initTheme();
-    </script>
-</body>
-</html>
+    window.showDetails = showDetails;
+
+    document.getElementById('user-menu-button')?.addEventListener('click', () => {
+        const menu = document.getElementById('user-dropdown-menu');
+        menu.classList.toggle('show');
+    });
+
+    document.addEventListener('click', (e) => {
+        const dropdown = document.getElementById('user-dropdown');
+        if (dropdown && !dropdown.contains(e.target)) {
+            document.getElementById('user-dropdown-menu')?.classList.remove('show');
+        }
+    });
+
+    // ✅ FIX: todos os links para a página de inscrições usam hífen (minhas-inscricoes.html)
+    document.getElementById('nav-inscricoes')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (currentUser) {
+            window.location.href = 'minhas_inscricoes.html';
+        } else {
+            alert('Faça login para ver suas inscrições');
+            authModal.style.display = 'block';
+            showLoginForm();
+        }
+    });
+
+    document.getElementById('menu-contacts')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.location.href = 'minhas_inscricoes.html';
+    });
+
+    document.getElementById('menu-profile')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.location.href = 'perfil.html';
+    });
+
+    setTimeout(() => map.invalidateSize(), 200);
+});
