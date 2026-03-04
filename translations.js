@@ -194,6 +194,16 @@ const TRANSLATIONS = {
         'pong-approved-ok':         'Voluntário aprovado!',
         'pong-rejected-ok':         'Inscrição rejeitada.',
         'pong-save-ok':             'Dados atualizados com sucesso!',
+        // PT
+'cong-admin-name-ph':     'Nome completo',
+'cong-admin-phone-ph':    '(51) 99999-9999',
+'cong-admin-email-ph':    'seu@email.com',
+'cong-admin-pass-ph':     'Mínimo 6 caracteres',
+'cong-admin-passconf-ph': 'Digite a senha novamente',
+                // PT
+'cong-alert-warning': '⚠️ Seu cadastro será analisado manualmente antes da aprovação.',
+
+
     },
     en: {
         /* ── Header global ── */
@@ -387,6 +397,15 @@ const TRANSLATIONS = {
         'pong-approved-ok':         'Volunteer approved!',
         'pong-rejected-ok':         'Application rejected.',
         'pong-save-ok':             'Data updated successfully!',
+        // EN
+'cong-admin-name-ph':     'Full name',
+'cong-admin-phone-ph':    '(51) 99999-9999',
+'cong-admin-email-ph':    'your@email.com',
+'cong-admin-pass-ph':     'Minimum 6 characters',
+'cong-admin-passconf-ph': 'Type your password again',
+
+// EN
+'cong-alert-warning': '⚠️ Your registration will be manually reviewed before approval.',
     }
 };
 
