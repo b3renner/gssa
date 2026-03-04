@@ -234,11 +234,11 @@
 <div class="alert-box">
     <h3><i class="fas fa-info-circle"></i> <span data-i18n="cong-alert-title">Informações Importantes</span></h3>
     <ul style="margin-left: 25px;">
-        <li>CNPJ da organização (obrigatório)</li>
-        <li>Comprovante de registro (PDF, JPG ou PNG - máx. 2MB)</li>
-        <li>E-mail institucional da ONG</li>
-        <li style="font-weight: bold; margin-top: 10px;">⚠️ Seu cadastro será analisado manualmente antes da aprovação.</li>
-    </ul>
+    <li>CNPJ da organização (obrigatório)</li>
+    <li>Comprovante de registro (PDF, JPG ou PNG - máx. 2MB)</li>
+    <li>E-mail institucional da ONG</li>
+    <li style="font-weight: bold; margin-top: 10px;" data-i18n="cong-alert-warning">⚠️ Seu cadastro será analisado manualmente antes da aprovação.</li>
+</ul>
 </div>
 
         <form id="cadastro-ong-form">
@@ -300,10 +300,10 @@
             <label for="ong-lat" data-i18n="cong-lat-label">Latitude *</label>
             <input type="text" id="ong-lat" required placeholder="-29.9402" step="any">
             <span class="help-text">
-                <a href="https://www.google.com/maps" target="_blank" style="color: var(--color-highlight);">
-                    <i class="fas fa-map-marker-alt"></i> Buscar no Google Maps
-                </a>
-            </span>
+    <a href="https://www.google.com/maps" target="_blank" style="color: var(--color-highlight);">
+        <i class="fas fa-map-marker-alt"></i> Google Maps
+    </a>
+</span>
         </div>
         <div class="form-group">
             <label for="ong-lon" data-i18n="cong-lon-label">Longitude *</label>
@@ -373,7 +373,8 @@
 
     <div class="form-group">
         <label for="admin-name" data-i18n="cong-admin-name-label">Nome Completo do Responsável *</label>
-        <input type="text" id="admin-name" required placeholder="Nome completo">
+        <input type="text" id="admin-name" required
+       data-i18n-ph="cong-admin-name-ph" placeholder="Full name">
     </div>
 
     <div class="form-row">
@@ -384,24 +385,28 @@
         </div>
         <div class="form-group">
             <label for="admin-phone" data-i18n="cong-admin-phone-label">Telefone do Responsável *</label>
-            <input type="tel" id="admin-phone" required placeholder="(51) 99999-9999">
+            <input type="tel" id="admin-phone" required
+       data-i18n-ph="cong-admin-phone-ph" placeholder="(51) 99999-9999">
         </div>
     </div>
 
     <div class="form-group">
         <label for="admin-email" data-i18n="cong-admin-email-label">E-mail do Responsável (Login) *</label>
-        <input type="email" id="admin-email" required placeholder="seu@email.com">
+        <input type="email" id="admin-email" required
+       data-i18n-ph="cong-admin-email-ph" placeholder="your@email.com">
         <span class="help-text" data-i18n="cong-admin-email-hint">Este será o e-mail de login para acessar o painel administrativo</span>
     </div>
 
     <div class="form-group">
         <label for="admin-password" data-i18n="cong-admin-pass-label">Senha de Acesso *</label>
-        <input type="password" id="admin-password" required placeholder="Mínimo 6 caracteres" minlength="6">
+        <input type="password" id="admin-password" required
+       data-i18n-ph="cong-admin-pass-ph" placeholder="Minimum 6 characters" minlength="6">
     </div>
 
     <div class="form-group">
         <label for="admin-password-confirm" data-i18n="cong-admin-passconf-label">Confirme a Senha *</label>
-        <input type="password" id="admin-password-confirm" required placeholder="Digite a senha novamente">
+        <input type="password" id="admin-password-confirm" required
+       data-i18n-ph="cong-admin-passconf-ph" placeholder="Type your password again">
     </div>
 </div>
             <!-- Termos -->
@@ -721,3 +726,4 @@
 </body>
 
 </html>
+
