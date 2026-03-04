@@ -200,7 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const superAdminLink = document.getElementById('menu-super-admin');
                 if (superAdminDoc.exists()) {
                     if (superAdminLink) superAdminLink.style.display = 'block';
-                    console.log('✅ Super-Admin detectado!');
+                    console.log(' Super-Admin detectado!');
                 } else {
                     if (superAdminLink) superAdminLink.style.display = 'none';
                 }
@@ -310,11 +310,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     capacidade: data.capacity
                 };
 
-                console.log('✅ ONG formatada:', ongFormatted);
+                console.log(' ONG formatada:', ongFormatted);
                 ongsData.push(ongFormatted);
             });
 
-            console.log(`✅ ${ongsData.length} ONGs carregadas e formatadas`);
+            console.log(` ${ongsData.length} ONGs carregadas e formatadas`);
 
             if (typeof ONGS_DATA !== 'undefined' && ONGS_DATA.length > 0) {
                 console.log(' Adicionando ONGs estáticas do data.js...');
@@ -332,9 +332,9 @@ document.addEventListener('DOMContentLoaded', () => {
             addOngsToMap();
 
         } catch (error) {
-            console.error('❌ Erro ao carregar ONGs:', error);
+            console.error(' Erro ao carregar ONGs:', error);
             if (typeof ONGS_DATA !== 'undefined') {
-                console.log('⚠️ Usando fallback (data.js)');
+                console.log(' Usando fallback (data.js)');
                 ongsData = ONGS_DATA.map(ong => ({
                     ...ong,
                     id: String(ong.id)
@@ -374,7 +374,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        console.log(`✅ ${markers.size} marcadores adicionados`);
+        console.log(`${markers.size} marcadores adicionados`);
     }
 
     function locateUser() {
@@ -427,23 +427,26 @@ document.addEventListener('DOMContentLoaded', () => {
         const ong = ongsData.find(o => String(o.id) === String(ongId));
         
         if (!ong) {
-            console.error('❌ ONG não encontrada para ID:', ongId);
+            console.error(' ONG não encontrada para ID:', ongId);
             alert('ONG não encontrada. Tente recarregar a página.');
             return;
         }
         
-        console.log('✅ ONG encontrada:', ong.nome);
+        console.log(' ONG encontrada:', ong.nome);
         
         map.setView([ong.lat, ong.lon], 15, { animate: true });
+
+        // helper — usa traduções se disponíveis, senão fallback PT
+        const _t = (key) => window.gssaI18n ? window.gssaI18n.t(key) : key;
 
         let distanceHtml = '';
         if (userLocation) {
             const distance = calculateDistance(userLocation.lat, userLocation.lon, ong.lat, ong.lon);
             distanceHtml = `
                 <div class="info-block distance-info">
-                    <h3><i class="fas fa-route"></i> Distância Estimada</h3>
-                    <p style="font-weight: bold; font-size: 1.1em;">${distance} km de você</p>
-                    <p style="font-size: 0.8em; color: var(--text-secondary);">Cálculo em linha reta.</p>
+                    <h3><i class="fas fa-route"></i> ${_t('panel-distance-title')}</h3>
+                    <p style="font-weight: bold; font-size: 1.1em;">${distance} ${_t('panel-km-from-you')}</p>
+                    <p style="font-size: 0.8em; color: var(--text-secondary);">${_t('panel-distance-sub')}</p>
                 </div>
             `;
         }
@@ -466,18 +469,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     const inscricao = inscricaoDoc.data();
                     existingApplicationId = inscricaoDoc.id;
                     
-                    const statusText = inscricao.status === 'approved' ? 'Aprovado' : 
-                                      inscricao.status === 'rejected' ? 'Rejeitado' : 'Pendente';
+                    const statusText = inscricao.status === 'approved' ? _t('status-approved') :
+                                      inscricao.status === 'rejected' ? _t('status-rejected') : _t('status-pending');
                     const statusColor = inscricao.status === 'approved' ? '#2ECC71' : 
                                        inscricao.status === 'rejected' ? '#E74C3C' : '#F1C40F';
                     
                     applyButtonHtml = `
                         <div style="text-align: center; padding: 15px; background: rgba(217, 83, 79, 0.1); border-radius: 8px; margin-top: 20px;">
                             <i class="fas fa-info-circle"></i> 
-                            <strong>Status: <span style="color: ${statusColor};">${statusText}</span></strong>
+                            <strong>${_t('status-label')} <span style="color: ${statusColor};">${statusText}</span></strong>
                             ${inscricao.status === 'pending' ? `
                                 <button id="cancel-button" class="submit-button" style="margin-top: 15px; background: #E74C3C;">
-                                    <i class="fas fa-times"></i> Cancelar Inscrição
+                                    <i class="fas fa-times"></i> ${_t('panel-cancel-button')}
                                 </button>
                             ` : ''}
                         </div>
@@ -485,7 +488,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     applyButtonHtml = `
                         <button id="apply-button" class="submit-button" style="margin-top: 20px;">
-                            <i class="fas fa-hand-holding-heart"></i> Inscrever-se como Voluntário
+                            <i class="fas fa-hand-holding-heart"></i> ${_t('panel-apply-button')}
                         </button>
                     `;
                 }
@@ -493,7 +496,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error('Erro ao verificar inscrição:', error);
                 applyButtonHtml = `
                     <button id="apply-button" class="submit-button" style="margin-top: 20px;">
-                        <i class="fas fa-hand-holding-heart"></i> Inscrever-se como Voluntário
+                        <i class="fas fa-hand-holding-heart"></i> ${_t('panel-apply-button')}
                     </button>
                 `;
             }
@@ -501,7 +504,7 @@ document.addEventListener('DOMContentLoaded', () => {
             applyButtonHtml = `
                 <p style="text-align: center; padding: 15px; background: rgba(217, 83, 79, 0.1); border-radius: 8px; margin-top: 20px;">
                     <i class="fas fa-info-circle"></i> 
-                    <strong>Faça login como voluntário para se inscrever</strong>
+                    <strong>${_t('panel-login-hint')}</strong>
                 </p>
             `;
         }
@@ -512,28 +515,28 @@ document.addEventListener('DOMContentLoaded', () => {
             ${distanceHtml}
             
             <div class="info-block">
-                <h3><i class="fas fa-handshake"></i> Serviços Oferecidos</h3>
+                <h3><i class="fas fa-handshake"></i> ${_t('panel-services-title')}</h3>
                 <p>${ong.servicos}</p>
             </div>
             
             <div class="info-block">
-                <h3><i class="fas fa-map-marker-alt"></i> Endereço</h3>
+                <h3><i class="fas fa-map-marker-alt"></i> ${_t('panel-address-title')}</h3>
                 <p>${ong.endereco}</p>
                 <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(ong.endereco)}" 
                    target="_blank" 
                    class="open-map-button"
                    style="margin-top: 10px;">
-                    <i class="fas fa-external-link-alt"></i> Abrir no Google Maps
+                    <i class="fas fa-external-link-alt"></i> ${_t('panel-maps-button')}
                 </a>
             </div>
             
             <div class="info-block">
-                <h3><i class="fas fa-clock"></i> Horário</h3>
+                <h3><i class="fas fa-clock"></i> ${_t('panel-hours-title')}</h3>
                 <p>${ong.horario}</p>
             </div>
             
             <div class="info-block">
-                <h3><i class="fas fa-phone-alt"></i> Contato</h3>
+                <h3><i class="fas fa-phone-alt"></i> ${_t('panel-contact-title')}</h3>
                 <p>${ong.contato}</p>
             </div>
             
@@ -554,10 +557,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     await deleteDoc(doc(db, 'applications', existingApplicationId));
                     
-                    alert('✅ Inscrição cancelada!');
+                    alert(' Inscrição cancelada!');
                     showDetails(ong.id);
                 } catch (error) {
-                    console.error('❌ Erro ao cancelar:', error);
+                    console.error(' Erro ao cancelar:', error);
                     alert(`Erro: ${error.message}`);
                     cancelButton.disabled = false;
                     cancelButton.innerHTML = '<i class="fas fa-times"></i> Cancelar Inscrição';
@@ -583,10 +586,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         createdAt: serverTimestamp()
                     });
                     
-                    alert('✅ Inscrição enviada!');
+                    alert(' Inscrição enviada!');
                     showDetails(ong.id);
                 } catch (error) {
-                    console.error('❌ Erro ao inscrever:', error);
+                    console.error(' Erro ao inscrever:', error);
                     alert(`Erro: ${error.message}`);
                     applyButton.disabled = false;
                     applyButton.innerHTML = '<i class="fas fa-hand-holding-heart"></i> Inscrever-se';
@@ -665,4 +668,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     setTimeout(() => map.invalidateSize(), 200);
+
+    // Re-renderiza o painel lateral quando o idioma muda
+    document.addEventListener('gssa-lang-changed', () => {
+        refreshPanelIfOpen();
+    });
 });
