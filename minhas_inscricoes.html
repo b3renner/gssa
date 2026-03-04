@@ -215,65 +215,80 @@
         }
     </style>
 </head>
+
+    <script src="translations.js"></script>
 <body>
     <header class="main-header">
-        <div class="header-left">
-            <img src="gssa_logo.png" alt="Logo GSSA" class="gssa-logo-img">
-            <div class="logo-titles">
-                <h1 class="logo-main-title">GSSA</h1>
-                <p class="logo-subtitle">Gravataí Support & Shelter Assist</p>
-            </div>
-        </div>
-
-        <nav class="header-right">
-            <a href="index.html" class="nav-button">Início</a>
-            <!-- ✅ FIX 1: link consistente com hífen em todos os lugares -->
-            <a href="minhas_inscricoes.html" class="nav-button" style="border-color: var(--color-highlight);">Contatos</a>
-
-            <div id="user-dropdown" class="user-dropdown" style="display: none;">
-                <button id="user-menu-button" class="user-menu-button">
-                    <i class="fas fa-user-circle"></i>
-                    <span id="user-name-display"></span>
-                    <i class="fas fa-chevron-down"></i>
-                </button>
-                <div id="user-dropdown-menu" class="user-dropdown-menu">
-                    <a href="perfil.html"><i class="fas fa-user"></i> Meu Perfil</a>
-                    <a href="minhas_inscricoes.html"><i class="fas fa-address-book"></i> Minhas Inscrições</a>
-                    <hr>
-                    <a href="#" id="menu-logout"><i class="fas fa-sign-out-alt"></i> Sair</a>
-                </div>
-            </div>
-
-            <button id="theme-toggle" class="toggle-button" aria-label="Alternar Tema">
-                <i class="fas fa-sun"></i>
-            </button>
-        </nav>
-    </header>
-
-    <div class="inscricoes-container">
-        <div class="page-header">
-            <h1><i class="fas fa-clipboard-list"></i> Minhas Inscrições</h1>
-            <p>Acompanhe o status das suas candidaturas como voluntário</p>
-        </div>
-
-        <div id="loading-state" class="loading-state">
-            <i class="fas fa-spinner"></i>
-            <p>Carregando suas inscrições...</p>
-        </div>
-
-        <div id="inscricoes-content" style="display: none;">
-            <div id="inscricoes-list" class="inscricoes-grid"></div>
-        </div>
-
-        <div id="empty-state" class="empty-state" style="display: none;">
-            <i class="fas fa-inbox"></i>
-            <h2>Nenhuma inscrição ainda</h2>
-            <p>Você ainda não se inscreveu em nenhuma ONG. Que tal começar agora?</p>
-            <a href="index.html" class="btn-primary">
-                <i class="fas fa-search"></i> Explorar ONGs
-            </a>
+    <div class="header-left">
+        <img src="gssa_logo.png" alt="Logo GSSA" class="gssa-logo-img">
+        <div class="logo-titles">
+            <h1 class="logo-main-title">GSSA</h1>
+            <p class="logo-subtitle" data-i18n="logo-subtitle">Gravataí Support & Shelter Assist</p>
         </div>
     </div>
+
+    <nav class="header-right">
+        <a href="index.html" class="nav-button" data-i18n="nav-inicio">Início</a>
+        <a href="minhas_inscricoes.html" class="nav-button" style="border-color: var(--color-highlight);" data-i18n="nav-contatos">Contatos</a>
+
+        <div id="user-dropdown" class="user-dropdown" style="display: none;">
+            <button id="user-menu-button" class="user-menu-button">
+                <i class="fas fa-user-circle"></i>
+                <span id="user-name-display"></span>
+                <i class="fas fa-chevron-down"></i>
+            </button>
+            <div id="user-dropdown-menu" class="user-dropdown-menu">
+                <a href="perfil.html">
+                    <i class="fas fa-user"></i>
+                    <span data-i18n="menu-profile-text">Meu Perfil</span>
+                </a>
+                <a href="minhas_inscricoes.html">
+                    <i class="fas fa-address-book"></i>
+                    <span data-i18n="menu-contacts-text">Minhas Inscrições</span>
+                </a>
+                <hr>
+                <a href="#" id="menu-logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span data-i18n="menu-logout-text">Sair</span>
+                </a>
+            </div>
+        </div>
+
+        <button id="lang-toggle" class="lang-toggle-btn" title="Switch to English">
+            <span class="lang-flag">🌐</span>
+            <span class="lang-label">EN</span>
+        </button>
+
+        <button id="theme-toggle" class="toggle-button" aria-label="Alternar Tema">
+            <i class="fas fa-sun"></i>
+        </button>
+    </nav>
+</header>
+    <div class="inscricoes-container">
+    <div class="page-header">
+        <h1><i class="fas fa-clipboard-list"></i> <span data-i18n="inscricoes-title">Minhas Inscrições</span></h1>
+        <p data-i18n="inscricoes-subtitle">Acompanhe o status das suas candidaturas como voluntário</p>
+    </div>
+
+    <div id="loading-state" class="loading-state">
+        <i class="fas fa-spinner"></i>
+        <p data-i18n="inscricoes-loading">Carregando suas inscrições...</p>
+    </div>
+
+    <div id="inscricoes-content" style="display: none;">
+        <div id="inscricoes-list" class="inscricoes-grid"></div>
+    </div>
+
+    <div id="empty-state" class="empty-state" style="display: none;">
+        <i class="fas fa-inbox"></i>
+        <h2 data-i18n="inscricoes-empty-title">Nenhuma inscrição ainda</h2>
+        <p data-i18n="inscricoes-empty-text">Você ainda não se inscreveu em nenhuma ONG. Que tal começar agora?</p>
+        <a href="index.html" class="btn-primary">
+            <i class="fas fa-search"></i>
+            <span data-i18n="inscricoes-explore">Explorar ONGs</span>
+        </a>
+    </div>
+</div>
 
     <script type="module">
         import { initializeApp }          from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
@@ -319,12 +334,13 @@
 
         /* ── helpers ── */
         function getStatusInfo(status) {
-            return {
-                pending:  { text: 'Pendente',  cls: 'status-pending',  icon: 'fa-clock'        },
-                approved: { text: 'Aprovado',  cls: 'status-approved', icon: 'fa-check-circle' },
-                rejected: { text: 'Rejeitado', cls: 'status-rejected', icon: 'fa-times-circle' }
-            }[status] ?? { text: 'Pendente', cls: 'status-pending', icon: 'fa-clock' };
-        }
+    const _t = (k) => window.gssaI18n ? window.gssaI18n.t(k) : k;
+    return {
+        pending:  { text: _t('status-pending'),  cls: 'status-pending',  icon: 'fa-clock'        },
+        approved: { text: _t('status-approved'), cls: 'status-approved', icon: 'fa-check-circle' },
+        rejected: { text: _t('status-rejected'), cls: 'status-rejected', icon: 'fa-times-circle' }
+    }[status] ?? { text: _t('status-pending'), cls: 'status-pending', icon: 'fa-clock' };
+}
 
         /* ── ✅ FIX 2: busca nome da ONG direto no Firestore quando não vier no doc ── */
         async function resolveOngName(inscricao) {
@@ -388,46 +404,50 @@
             for (const inscricao of inscricoes) {
                 const { nome: ongNome, servicos: ongServicos } = await resolveOngName(inscricao);
                 const statusInfo   = getStatusInfo(inscricao.status);
-                const dataInscricao = inscricao.createdAt?.toDate()
-                    ? inscricao.createdAt.toDate().toLocaleDateString('pt-BR', { day:'2-digit', month:'long', year:'numeric' })
-                    : 'Data não disponível';
+                const _t = (k) => window.gssaI18n ? window.gssaI18n.t(k) : k;
+const lang = window.gssaI18n ? window.gssaI18n.currentLang() : 'pt';
 
-                const card = document.createElement('div');
-                card.className = 'inscricao-card';
-                card.innerHTML = `
-                    <div class="ong-name">
-                        <i class="fas fa-hands-helping"></i>
-                        ${ongNome}
-                    </div>
-                    <div class="inscricao-info">
-                        ${ongServicos ? `
-                        <div class="info-row">
-                            <i class="fas fa-info-circle"></i>
-                            <span class="info-value">${ongServicos}</span>
-                        </div>` : ''}
-                        <div class="info-row">
-                            <i class="fas fa-calendar-alt"></i>
-                            <span class="info-label">Data de Inscrição:</span>
-                            <span class="info-value">${dataInscricao}</span>
-                        </div>
-                        <div class="info-row">
-                            <i class="fas fa-flag"></i>
-                            <span class="info-label">Status:</span>
-                            <span class="status-badge ${statusInfo.cls}">
-                                <i class="fas ${statusInfo.icon}"></i>
-                                ${statusInfo.text}
-                            </span>
-                        </div>
-                    </div>
-                    ${inscricao.status === 'pending' ? `
-                        <div class="action-buttons">
-                            <button class="btn-cancel" data-id="${inscricao.id}">
-                                <i class="fas fa-times"></i> Cancelar Inscrição
-                            </button>
-                        </div>` : ''}
-                `;
-                inscricoesList.appendChild(card);
-            }
+const dataInscricao = inscricao.createdAt?.toDate()
+    ? inscricao.createdAt.toDate().toLocaleDateString(
+        lang === 'en' ? 'en-US' : 'pt-BR',
+        { day: '2-digit', month: 'long', year: 'numeric' }
+      )
+    : _t('inscricoes-loading');
+
+const card = document.createElement('div');
+card.className = 'inscricao-card';
+card.innerHTML = `
+    <div class="ong-name">
+        <i class="fas fa-hands-helping"></i>
+        ${ongNome}
+    </div>
+    <div class="inscricao-info">
+        ${ongServicos ? `
+        <div class="info-row">
+            <i class="fas fa-info-circle"></i>
+            <span class="info-value">${ongServicos}</span>
+        </div>` : ''}
+        <div class="info-row">
+            <i class="fas fa-calendar-alt"></i>
+            <span class="info-label">${_t('inscricoes-date-label')}</span>
+            <span class="info-value">${dataInscricao}</span>
+        </div>
+        <div class="info-row">
+            <i class="fas fa-flag"></i>
+            <span class="info-label">${_t('status-label')}</span>
+            <span class="status-badge ${statusInfo.cls}">
+                <i class="fas ${statusInfo.icon}"></i>
+                ${statusInfo.text}
+            </span>
+        </div>
+    </div>
+    ${inscricao.status === 'pending' ? `
+        <div class="action-buttons">
+            <button class="btn-cancel" data-id="${inscricao.id}">
+                <i class="fas fa-times"></i> ${_t('inscricoes-cancel')}
+            </button>
+        </div>` : ''}
+`;
 
             document.querySelectorAll('.btn-cancel').forEach(btn => {
                 btn.addEventListener('click', async (e) => {
@@ -473,6 +493,13 @@
         });
 
         initTheme();
+            document.addEventListener('gssa-lang-changed', () => {
+    if (window.gssaI18n) window.gssaI18n.applyTranslations();
+    // Recarrega os cards com textos atualizados
+    const user = auth.currentUser;
+    if (user) loadInscricoes(user.uid);
+});
     </script>
 </body>
 </html>
+
