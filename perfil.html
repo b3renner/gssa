@@ -213,49 +213,60 @@
             .edit-modal    { padding: 24px 18px; }
         }
     </style>
+ <script src="translations.js"></script>
 </head>
 <body>
     <header class="main-header">
-        <div class="header-left">
-            <img src="gssa_logo.png" alt="Logo GSSA" class="gssa-logo-img">
-            <div class="logo-titles">
-                <h1 class="logo-main-title">GSSA</h1>
-                <p class="logo-subtitle">Gravataí Support & Shelter Assist</p>
+    <div class="header-left">
+        <img src="gssa_logo.png" alt="Logo GSSA" class="gssa-logo-img">
+        <div class="logo-titles">
+            <h1 class="logo-main-title">GSSA</h1>
+            <p class="logo-subtitle" data-i18n="logo-subtitle">Gravataí Support & Shelter Assist</p>
+        </div>
+    </div>
+
+    <nav class="header-right">
+        <a href="index.html" class="nav-button" data-i18n="nav-inicio">Início</a>
+        <a href="minhas_inscricoes.html" class="nav-button" data-i18n="nav-contatos">Contatos</a>
+
+        <div id="user-dropdown" class="user-dropdown" style="display: none;">
+            <button id="user-menu-button" class="user-menu-button">
+                <i class="fas fa-user-circle"></i>
+                <span id="user-name-display"></span>
+                <i class="fas fa-chevron-down"></i>
+            </button>
+            <div id="user-dropdown-menu" class="user-dropdown-menu">
+                <a href="perfil.html" style="border-left: 3px solid var(--color-highlight);">
+                    <i class="fas fa-user"></i>
+                    <span data-i18n="menu-profile-text">Meu Perfil</span>
+                </a>
+                <a href="minhas_inscricoes.html">
+                    <i class="fas fa-address-book"></i>
+                    <span data-i18n="menu-contacts-text">Minhas Inscrições</span>
+                </a>
+                <hr>
+                <a href="#" id="menu-logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span data-i18n="menu-logout-text">Sair</span>
+                </a>
             </div>
         </div>
 
-        <nav class="header-right">
-            <a href="index.html" class="nav-button">Início</a>
-            <!-- ✅ FIX: link consistente com underscore -->
-<a href="minhas_inscricoes.html" class="nav-button">Contatos</a>
+        <button id="lang-toggle" class="lang-toggle-btn" title="Switch to English">
+            <span class="lang-flag">🌐</span>
+            <span class="lang-label">EN</span>
+        </button>
 
-            <div id="user-dropdown" class="user-dropdown" style="display: none;">
-                <button id="user-menu-button" class="user-menu-button">
-                    <i class="fas fa-user-circle"></i>
-                    <span id="user-name-display"></span>
-                    <i class="fas fa-chevron-down"></i>
-                </button>
-                <div id="user-dropdown-menu" class="user-dropdown-menu">
-                    <a href="perfil.html" style="border-left: 3px solid var(--color-highlight);">
-                        <i class="fas fa-user"></i> Meu Perfil
-                    </a>
-                    <a href="minhas_inscricoes.html"><i class="fas fa-address-book"></i> Minhas Inscrições</a>
-                    <hr>
-                    <a href="#" id="menu-logout"><i class="fas fa-sign-out-alt"></i> Sair</a>
-                </div>
-            </div>
-
-            <button id="theme-toggle" class="toggle-button" aria-label="Alternar Tema">
-                <i class="fas fa-sun"></i>
-            </button>
-        </nav>
-    </header>
-
+        <button id="theme-toggle" class="toggle-button" aria-label="Alternar Tema">
+            <i class="fas fa-sun"></i>
+        </button>
+    </nav>
+</header>
     <div class="perfil-container">
         <div id="loading-state" class="loading">
-            <i class="fas fa-spinner"></i>
-            <p>Carregando perfil...</p>
-        </div>
+    <i class="fas fa-spinner"></i>
+    <p data-i18n="perfil-loading">Carregando perfil...</p>
+</div>
 
         <div id="perfil-content" style="display: none;">
             <div class="perfil-header">
@@ -268,86 +279,82 @@
             </div>
 
             <div class="perfil-body">
-                <h2 class="section-title"><i class="fas fa-info-circle"></i> Informações Pessoais</h2>
+                <h2 class="section-title"><i class="fas fa-info-circle"></i> <span data-i18n="perfil-section-info">Informações Pessoais</span></h2>
 
-                <div class="info-grid">
-                    <div class="info-card">
-                        <div class="info-label"><i class="fas fa-envelope"></i> E-mail</div>
-                        <div class="info-value" id="user-email">-</div>
-                    </div>
-                    <div class="info-card">
-                        <div class="info-label"><i class="fas fa-map-marker-alt"></i> Localização</div>
-                        <div class="info-value" id="user-location">-</div>
-                    </div>
-                    <div class="info-card">
-                        <div class="info-label"><i class="fas fa-calendar-alt"></i> Membro desde</div>
-                        <div class="info-value" id="user-member-since">-</div>
-                    </div>
-                </div>
+<div class="info-grid">
+    <div class="info-card">
+        <div class="info-label"><i class="fas fa-envelope"></i> <span data-i18n="perfil-email-label">E-mail</span></div>
+        <div class="info-value" id="user-email">-</div>
+    </div>
+    <div class="info-card">
+        <div class="info-label"><i class="fas fa-map-marker-alt"></i> <span data-i18n="perfil-location-label">Localização</span></div>
+        <div class="info-value" id="user-location">-</div>
+    </div>
+    <div class="info-card">
+        <div class="info-label"><i class="fas fa-calendar-alt"></i> <span data-i18n="perfil-member-label">Membro desde</span></div>
+        <div class="info-value" id="user-member-since">-</div>
+    </div>
+</div>
 
-                <h2 class="section-title"><i class="fas fa-tools"></i> Habilidades e Experiência</h2>
-                <div class="skills-container" id="user-skills"></div>
+<h2 class="section-title"><i class="fas fa-tools"></i> <span data-i18n="perfil-section-skills">Habilidades e Experiência</span></h2>
+<div class="skills-container" id="user-skills"></div>
 
-                <h2 class="section-title"><i class="fas fa-clock"></i> Disponibilidade</h2>
-                <div class="availability-box" id="user-availability"></div>
+<h2 class="section-title"><i class="fas fa-clock"></i> <span data-i18n="perfil-section-avail">Disponibilidade</span></h2>
+<div class="availability-box" id="user-availability"></div>
 
-                <h2 class="section-title"><i class="fas fa-chart-line"></i> Estatísticas</h2>
-                <div class="stats-row">
-                    <div class="stat-card">
-                        <div class="stat-number" id="stat-inscricoes">0</div>
-                        <div class="stat-label">Inscrições</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="stat-aprovadas">0</div>
-                        <div class="stat-label">Aprovadas</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="stat-pendentes">0</div>
-                        <div class="stat-label">Pendentes</div>
-                    </div>
-                </div>
+<h2 class="section-title"><i class="fas fa-chart-line"></i> <span data-i18n="perfil-section-stats">Estatísticas</span></h2>
+<div class="stats-row">
+    <div class="stat-card">
+        <div class="stat-number" id="stat-inscricoes">0</div>
+        <div class="stat-label" data-i18n="perfil-stat-inscricoes">Inscrições</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number" id="stat-aprovadas">0</div>
+        <div class="stat-label" data-i18n="perfil-stat-aprovadas">Aprovadas</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number" id="stat-pendentes">0</div>
+        <div class="stat-label" data-i18n="perfil-stat-pendentes">Pendentes</div>
+    </div>
+</div>
 
-                <!-- ✅ FIX 3: botão abre modal de edição real -->
-                <button class="btn-edit" id="open-edit-modal">
-                    <i class="fas fa-edit"></i> Editar Perfil
-                </button>
+<button class="btn-edit" id="open-edit-modal">
+    <i class="fas fa-edit"></i> <span data-i18n="perfil-edit-btn">Editar Perfil</span>
+</button>
             </div>
         </div>
     </div>
 
     <!-- ── Modal de Edição ── -->
     <div class="edit-modal-overlay" id="edit-modal-overlay">
-        <div class="edit-modal">
-            <button class="close-modal" id="close-edit-modal" aria-label="Fechar">&times;</button>
-            <h2><i class="fas fa-edit"></i> Editar Perfil</h2>
+    <div class="edit-modal">
+        <button class="close-modal" id="close-edit-modal" aria-label="Fechar">&times;</button>
+        <h2><i class="fas fa-edit"></i> <span data-i18n="edit-modal-title">Editar Perfil</span></h2>
 
-            <div class="form-group">
-                <label for="edit-name"><i class="fas fa-user"></i> Nome completo</label>
-                <input type="text" id="edit-name" placeholder="Seu nome completo">
-            </div>
-
-            <div class="form-group">
-                <label for="edit-location"><i class="fas fa-map-marker-alt"></i> Localização</label>
-                <input type="text" id="edit-location" placeholder="Ex: Gravataí, RS">
-            </div>
-
-            <div class="form-group">
-                <label for="edit-skills"><i class="fas fa-tools"></i> Habilidades</label>
-                <input type="text" id="edit-skills" placeholder="Ex: Primeiros socorros, Cozinha, Logística">
-                <p class="form-hint">Separe as habilidades por vírgula.</p>
-            </div>
-
-            <div class="form-group">
-                <label for="edit-availability"><i class="fas fa-clock"></i> Disponibilidade</label>
-                <textarea id="edit-availability" placeholder="Ex: Fins de semana pela manhã, tardes de terça e quinta"></textarea>
-            </div>
-
-            <button class="btn-save" id="btn-save-profile">
-                <i class="fas fa-save"></i> Salvar Alterações
-            </button>
-            <p class="edit-msg" id="edit-msg"></p>
+        <div class="form-group">
+            <label for="edit-name"><i class="fas fa-user"></i> <span data-i18n="edit-name-label">Nome completo</span></label>
+            <input type="text" id="edit-name" data-i18n-ph="edit-name-ph" placeholder="Seu nome completo">
         </div>
+        <div class="form-group">
+            <label for="edit-location"><i class="fas fa-map-marker-alt"></i> <span data-i18n="edit-location-label">Localização</span></label>
+            <input type="text" id="edit-location" data-i18n-ph="edit-location-ph" placeholder="Ex: Gravataí, RS">
+        </div>
+        <div class="form-group">
+            <label for="edit-skills"><i class="fas fa-tools"></i> <span data-i18n="edit-skills-label">Habilidades</span></label>
+            <input type="text" id="edit-skills" data-i18n-ph="edit-skills-ph" placeholder="Ex: Primeiros socorros, Cozinha, Logística">
+            <p class="form-hint" data-i18n="edit-skills-hint">Separe as habilidades por vírgula.</p>
+        </div>
+        <div class="form-group">
+            <label for="edit-availability"><i class="fas fa-clock"></i> <span data-i18n="edit-avail-label">Disponibilidade</span></label>
+            <textarea id="edit-availability" data-i18n-ph="edit-avail-ph" placeholder="Ex: Fins de semana pela manhã"></textarea>
+        </div>
+
+        <button class="btn-save" id="btn-save-profile">
+            <i class="fas fa-save"></i> <span data-i18n="edit-save-btn">Salvar Alterações</span>
+        </button>
+        <p class="edit-msg" id="edit-msg"></p>
     </div>
+</div>
 
     <script type="module">
         import { initializeApp }    from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
@@ -418,25 +425,33 @@
 
         /* ── renderiza perfil na tela ── */
         function renderProfile(userData, userEmail) {
-            const fullName = userData.name || 'Usuário';
-            document.getElementById('user-full-name').textContent   = fullName;
-            document.getElementById('avatar-initial').textContent   = fullName.charAt(0).toUpperCase();
-            document.getElementById('user-role-display').textContent = userData.role === 'ong' ? 'Administrador de ONG' : 'Voluntário';
-            document.getElementById('user-email').textContent       = userData.email || userEmail;
-            document.getElementById('user-location').textContent    = userData.location || 'Não informado';
+    const _t = (k) => window.gssaI18n ? window.gssaI18n.t(k) : k;
+    const lang = window.gssaI18n ? window.gssaI18n.currentLang() : 'pt';
 
-            const since = userData.createdAt?.toDate
-                ? userData.createdAt.toDate().toLocaleDateString('pt-BR', { month:'long', year:'numeric' })
-                : 'Não disponível';
-            document.getElementById('user-member-since').textContent = since;
+    const fullName = userData.name || 'Usuário';
+    document.getElementById('user-full-name').textContent    = fullName;
+    document.getElementById('avatar-initial').textContent    = fullName.charAt(0).toUpperCase();
+    document.getElementById('user-role-display').textContent =
+        userData.role === 'ong' ? _t('perfil-role-ong') : _t('perfil-role-voluntario');
+    document.getElementById('user-email').textContent        = userData.email || userEmail;
+    document.getElementById('user-location').textContent     = userData.location || _t('perfil-not-informed');
 
-            const skillsEl = document.getElementById('user-skills');
-            skillsEl.innerHTML = (userData.skills?.length > 0)
-                ? userData.skills.map(s => `<span class="skill-badge"><i class="fas fa-check"></i>${s}</span>`).join('')
-                : '<p style="color:var(--text-secondary)">Nenhuma habilidade cadastrada</p>';
+    const since = userData.createdAt?.toDate
+        ? userData.createdAt.toDate().toLocaleDateString(
+            lang === 'en' ? 'en-US' : 'pt-BR',
+            { month: 'long', year: 'numeric' }
+          )
+        : _t('perfil-not-informed');
+    document.getElementById('user-member-since').textContent = since;
 
-            document.getElementById('user-availability').textContent = userData.availability || 'Não informado';
-        }
+    const skillsEl = document.getElementById('user-skills');
+    skillsEl.innerHTML = (userData.skills?.length > 0)
+        ? userData.skills.map(s => `<span class="skill-badge"><i class="fas fa-check"></i>${s}</span>`).join('')
+        : `<p style="color:var(--text-secondary)">${_t('perfil-no-skills')}</p>`;
+
+    document.getElementById('user-availability').textContent =
+        userData.availability || _t('perfil-not-informed');
+}}
 
         /* ── carrega perfil ── */
         async function loadUserProfile(user) {
@@ -488,14 +503,14 @@
             const skills       = skillsRaw.split(',').map(s => s.trim()).filter(s => s.length > 0);
 
             if (!name) {
-                editMsg.textContent = 'O nome não pode ficar em branco.';
-                editMsg.className   = 'edit-msg error';
-                return;
-            }
+    editMsg.textContent = _t('edit-name-required');
+    editMsg.className   = 'edit-msg error';
+    return;
+}
 
-            btnSaveProfile.disabled     = true;
-            btnSaveProfile.textContent  = 'Salvando...';
-            editMsg.textContent         = '';
+btnSaveProfile.disabled   = true;
+btnSaveProfile.innerHTML  = `<i class="fas fa-spinner fa-spin"></i> ${_t('edit-saving')}`;
+editMsg.textContent = _t('edit-success');
 
             try {
                 await updateDoc(doc(db, 'users', currentUserUid), { name, location, skills, availability });
@@ -544,8 +559,12 @@
             if (!userDropdown.contains(e.target))
                 document.getElementById('user-dropdown-menu')?.classList.remove('show');
         });
-
+document.addEventListener('gssa-lang-changed', () => {
+    if (window.gssaI18n) window.gssaI18n.applyTranslations();
+    if (currentUserData) renderProfile(currentUserData, auth.currentUser?.email || '');
+});
         initTheme();
     </script>
 </body>
 </html>
+
