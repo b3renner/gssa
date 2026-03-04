@@ -271,7 +271,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     let userLocation = null;
-    let userMarker = null;
+let userMarker = null;
+let userAccuracy = null;
     const markers = new Map();
     let ongsData = [];
 
@@ -384,6 +385,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const lon = position.coords.longitude;
                     const accuracy = position.coords.accuracy;
                     userLocation = { lat, lon };
+userAccuracy = accuracy;
                     
                     const userIcon = L.icon({
                         iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
@@ -668,10 +670,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     setTimeout(() => map.invalidateSize(), 200);
 
-    // Re-renderiza o painel lateral quando o idioma muda
     document.addEventListener('gssa-lang-changed', () => {
-        refreshPanelIfOpen();
-    });
+    // Atualiza popup do marcador do usuário
+    if (userMarker && userAccuracy !== null) {
+        const _t = (key) => window.gssaI18n ? window.gssaI18n.t(key) : key;
+        userMarker.setPopupContent(
+            `${_t('popup-you-are-here')} (${_t('popup-accuracy')} ${userAccuracy.toFixed(0)}m)`
+        );
+    }
+    // Recria marcadores das ONGs com texto atualizado
+    addOngsToMap();
+    refreshPanelIfOpen();
 });
+});
+
 
 
