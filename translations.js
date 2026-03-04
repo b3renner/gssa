@@ -202,6 +202,7 @@ const TRANSLATIONS = {
 'cong-admin-passconf-ph': 'Digite a senha novamente',
                 // PT
 'cong-alert-warning': '⚠️ Seu cadastro será analisado manualmente antes da aprovação.',
+        'search-placeholder':       'Buscar ONGs por nome, serviço ou bairro...',
 
 
     },
@@ -406,6 +407,7 @@ const TRANSLATIONS = {
 
 // EN
 'cong-alert-warning': '⚠️ Your registration will be manually reviewed before approval.',
+        'search-placeholder':       'Search NGOs by name, service or neighbourhood...',
     }
 };
 
