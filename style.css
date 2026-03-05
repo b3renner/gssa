@@ -1274,8 +1274,16 @@ body {
     margin-bottom: 0;
 }
 
-/* Nome e email ocupam linha inteira */
-#register-form .form-group:has(#register-name),
+/* Nome ocupa linha inteira */
+#register-form .form-group:has(#register-name) {
+    grid-column: 1 / -1;
+}
+
+/* Email + Senha — par */
+/* Confirmar Senha + Localização — par */
+/* Habilidades + Disponibilidade — par */
+
+/* Disponibilidade ocupa linha inteira */
 #register-form .form-group:has(#register-availability) {
     grid-column: 1 / -1;
 }
@@ -1287,23 +1295,14 @@ body {
     grid-column: 1 / -1;
 }
 
-/* Labels menores para caber */
 #register-form .form-group label {
-    font-size: 0.72em;
+    font-size: 0.75em;
 }
 
-/* Textarea de disponibilidade menor */
 #register-form textarea {
     min-height: 46px;
     max-height: 46px;
 }
-
-/* Título e subtítulo fora do grid */
-#register-form-container .modal-title,
-#register-form-container .modal-subtitle {
-    display: block;
-}
-
 @media (max-width: 900px) {
    
     .main-header {
@@ -1391,6 +1390,7 @@ body {
         font-size: 14px;
     }
 }
+
 
 
 
