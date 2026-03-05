@@ -19,9 +19,9 @@ async function fetchClimateAlert() {
         const maxTemp     = Math.max(...temp);
         const totalPrecip = precip.reduce((a, b) => a + b, 0);
 
-        window._lastClimateData = { maxPrecip: 35, maxWind: 25, maxTemp: 28, totalPrecip: 35 };
-renderClimateAlert(35, 25, 28, 35);
-syncPrepCenter('warning', 35, 25, 28);
+        window._lastClimateData = { maxPrecip: 70, maxWind: 30, maxTemp: 25, totalPrecip: 70 };
+renderClimateAlert(70, 30, 25, 70);
+syncPrepCenter('danger', 70, 30, 25);
 
     } catch (err) {
         console.warn('Erro ao buscar dados climáticos:', err);
