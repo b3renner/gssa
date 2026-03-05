@@ -20,7 +20,13 @@ async function fetchClimateAlert() {
         const totalPrecip = precip.reduce((a, b) => a + b, 0);
 
         window._lastClimateData = { maxPrecip, maxWind, maxTemp, totalPrecip };
-        renderClimateAlert(maxPrecip, maxWind, maxTemp, totalPrecip);
+renderClimateAlert(maxPrecip, maxWind, maxTemp, totalPrecip);
+syncPrepCenter(
+    maxPrecip >= 60 || maxWind >= 90 ? 'danger'  :
+    maxPrecip >= 30 || maxWind >= 60 || maxTemp >= 40 ? 'warning' :
+    maxPrecip >= 10 || maxWind >= 40 || maxTemp >= 35 ? 'watch'   : 'normal',
+    maxPrecip, maxWind, maxTemp
+);
 
     } catch (err) {
         console.warn('Erro ao buscar dados climáticos:', err);
@@ -98,10 +104,10 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 document.addEventListener('gssa-lang-changed', () => {
-    // Reusa os últimos dados sem nova requisição à API
     if (window._lastClimateData) {
         const { maxPrecip, maxWind, maxTemp, totalPrecip } = window._lastClimateData;
         renderClimateAlert(maxPrecip, maxWind, maxTemp, totalPrecip);
+        // syncPrepCenter não precisa de tradução — conteúdo é estático por ora
     }
 });
 
