@@ -733,6 +733,265 @@ body {
     box-shadow: 0 5px 10px var(--color-shadow);
 }
 
+/* ══════════════════════════════════════════
+   CENTRAL DE PREPARAÇÃO PARA CRISES
+══════════════════════════════════════════ */
+.prep-center {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 48px 24px 64px;
+}
+
+.prep-center-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.prep-center-header h2 {
+    font-size: 1.75em;
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+}
+
+.prep-center-header h2 span {
+    color: var(--color-highlight);
+}
+
+.prep-center-header p {
+    color: var(--text-secondary);
+    font-size: 1em;
+    max-width: 540px;
+    margin: 0 auto;
+}
+
+/* ── Seletor de eventos ── */
+.event-selector {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 36px;
+    list-style: none;
+    padding: 0;
+    flex-wrap: wrap;
+}
+
+.event-selector li button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 28px;
+    border-radius: 50px;
+    border: 2px solid var(--bg-map-border);
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    font-size: 0.95em;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.25s;
+    letter-spacing: 0.01em;
+}
+
+.event-selector li button i {
+    font-size: 1.1em;
+}
+
+.event-selector li button:hover {
+    border-color: var(--color-highlight);
+    color: var(--color-highlight);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--color-shadow);
+}
+
+.event-selector li button.active {
+    background: var(--color-highlight);
+    border-color: var(--color-highlight);
+    color: #fff;
+    box-shadow: 0 4px 16px var(--color-shadow);
+    transform: translateY(-2px);
+}
+
+/* Destaque quando alerta ativo */
+.event-selector li button.alert-active {
+    border-color: var(--color-highlight);
+    color: var(--color-highlight);
+    position: relative;
+}
+
+.event-selector li button.alert-active::after {
+    content: '●';
+    position: absolute;
+    top: -6px;
+    right: -4px;
+    font-size: 0.6em;
+    color: var(--color-highlight);
+    animation: blink-dot 1.2s ease-in-out infinite;
+}
+
+@keyframes blink-dot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+/* ── Painel de conteúdo ── */
+.prep-event-panel {
+    display: none;
+    animation: fadeInUp 0.35s ease both;
+}
+
+.prep-event-panel.active {
+    display: block;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.prep-event-intro {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.prep-event-intro .event-icon-large {
+    font-size: 3em;
+    color: var(--color-highlight);
+    margin-bottom: 12px;
+}
+
+.prep-event-intro h3 {
+    font-size: 1.4em;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+.prep-event-intro p {
+    color: var(--text-secondary);
+    max-width: 580px;
+    margin: 0 auto;
+    font-size: 0.95em;
+    line-height: 1.6;
+}
+
+/* ── Grade de fases ── */
+.phases-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+@media (max-width: 900px) {
+    .phases-grid { grid-template-columns: 1fr; }
+}
+
+.phase-card {
+    background: var(--bg-secondary);
+    border-radius: 16px;
+    padding: 28px 24px;
+    box-shadow: 0 4px 16px var(--color-shadow);
+    border-top: 4px solid transparent;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.phase-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px var(--color-shadow);
+}
+
+.phase-card.phase-before { border-top-color: #3498db; }
+.phase-card.phase-during { border-top-color: var(--color-highlight); }
+.phase-card.phase-after  { border-top-color: #2ecc71; }
+
+.phase-card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.phase-badge {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1em;
+    flex-shrink: 0;
+}
+
+.phase-before .phase-badge { background: rgba(52,152,219,0.15); color: #3498db; }
+.phase-during .phase-badge { background: rgba(217,83,79,0.15);  color: var(--color-highlight); }
+.phase-after  .phase-badge { background: rgba(46,204,113,0.15); color: #2ecc71; }
+
+.phase-card-header h4 {
+    font-size: 1em;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.phase-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.phase-card ul li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 0.9em;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.phase-card ul li::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-top: 6px;
+    flex-shrink: 0;
+}
+
+.phase-before ul li::before { background: #3498db; }
+.phase-during ul li::before { background: var(--color-highlight); }
+.phase-after  ul li::before { background: #2ecc71; }
+
+/* ── Alerta de evento ativo ── */
+.active-alert-notice {
+    display: none;
+    align-items: center;
+    gap: 12px;
+    background: rgba(217,83,79,0.1);
+    border: 1.5px solid var(--color-highlight);
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin-bottom: 28px;
+    font-size: 0.9em;
+    color: var(--color-highlight);
+    font-weight: 600;
+}
+
+.active-alert-notice.show {
+    display: flex;
+}
+
+/* ── Divisor visual ── */
+.prep-divider {
+    border: none;
+    border-top: 2px solid var(--bg-map-border);
+    margin: 0;
+}
+
 @media (max-width: 900px) {
    
     .main-header {
@@ -820,6 +1079,7 @@ body {
         font-size: 14px;
     }
 }
+
 
 
 
