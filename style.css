@@ -1098,6 +1098,170 @@ body {
     margin-top: 10px !important;
 }
 
+/* ── Modal overlay com blur ── */
+.modal {
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    background: rgba(0, 0, 0, 0.55) !important;
+}
+
+/* ── Modal content refinado ── */
+.auth-modal-content {
+    background: var(--bg-secondary);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(217, 83, 79, 0.08);
+    padding: 40px 36px 32px;
+    width: 100%;
+    max-width: 460px;
+}
+
+/* ── Título do modal ── */
+.modal-title {
+    font-size: 1.6em;
+    font-weight: 800;
+    color: var(--color-highlight);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    letter-spacing: -0.02em;
+}
+
+.modal-subtitle {
+    color: var(--text-secondary);
+    font-size: 0.88em;
+    margin-bottom: 24px;
+    line-height: 1.5;
+}
+
+/* ── Inputs refinados ── */
+.auth-modal-content .form-group {
+    margin-bottom: 14px;
+}
+
+.auth-modal-content .form-group label {
+    display: block;
+    font-size: 0.78em;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+}
+
+.auth-modal-content input,
+.auth-modal-content textarea {
+    width: 100%;
+    padding: 11px 14px;
+    background: var(--bg-primary);
+    border: 1.5px solid var(--bg-map-border);
+    border-radius: 10px;
+    color: var(--text-primary);
+    font-size: 0.92em;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
+}
+
+.auth-modal-content input:focus,
+.auth-modal-content textarea:focus {
+    outline: none;
+    border-color: var(--color-highlight);
+    box-shadow: 0 0 0 3px rgba(217, 83, 79, 0.12);
+}
+
+/* ── Botão de submit ── */
+.auth-modal-content .submit-button {
+    width: 100%;
+    padding: 13px;
+    margin-top: 6px;
+    background: linear-gradient(135deg, var(--color-highlight), var(--color-tint));
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 1em;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+    transition: opacity 0.2s, transform 0.2s;
+    box-shadow: 0 4px 16px rgba(217, 83, 79, 0.3);
+}
+
+.auth-modal-content .submit-button:hover {
+    opacity: 0.92;
+    transform: translateY(-1px);
+}
+
+/* ── Links de alternância ── */
+.auth-modal-content .auth-link {
+    font-size: 0.85em;
+    text-align: center;
+}
+
+.auth-modal-content .auth-link a {
+    color: var(--color-highlight);
+    text-decoration: none;
+    font-weight: 600;
+    transition: opacity 0.2s;
+}
+
+.auth-modal-content .auth-link a:hover {
+    opacity: 0.8;
+}
+
+/* ── Separador ── */
+.auth-modal-content hr {
+    border: none;
+    border-top: 1px solid var(--bg-map-border);
+    margin: 12px 0;
+}
+
+/* ── Botão fechar ── */
+.modal-close-button {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: var(--bg-primary);
+    border: 1px solid var(--bg-map-border);
+    color: var(--text-secondary);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85em;
+    transition: background 0.2s, color 0.2s;
+    z-index: 10;
+}
+
+.modal-close-button:hover {
+    background: var(--color-highlight);
+    color: #fff;
+    border-color: var(--color-highlight);
+}
+
+/* ── Posição relativa no content para o botão fechar ── */
+.modal-content.auth-modal-content {
+    position: relative;
+}
+
+/* ── Registro compacto ── */
+#register-form-container .modal-subtitle {
+    margin-bottom: 14px;
+}
+
+#register-form-container .form-group {
+    margin-bottom: 9px;
+}
+
+#register-form-container textarea {
+    min-height: 54px;
+    max-height: 54px;
+    resize: none;
+}
+
 @media (max-width: 900px) {
    
     .main-header {
@@ -1185,6 +1349,7 @@ body {
         font-size: 14px;
     }
 }
+
 
 
 
