@@ -572,7 +572,9 @@ userAccuracy = accuracy;
         const applyButton = document.getElementById('apply-button');
         if (applyButton && currentUser && userRole === 'voluntario') {
             applyButton.addEventListener('click', async () => {
-                if (!confirm(`Inscrever-se na ${ong.nome}?`)) return;
+                const _t = (k) => window.gssaI18n ? window.gssaI18n.t(k) : k;
+const confirmMsg = _t('apply-confirm').replace('{nome}', ong.nome);
+if (!confirm(confirmMsg)) return;
 
                 try {
                     applyButton.disabled = true;
@@ -683,6 +685,7 @@ userAccuracy = accuracy;
     refreshPanelIfOpen();
 });
 });
+
 
 
 
