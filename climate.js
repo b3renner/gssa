@@ -19,15 +19,13 @@ async function fetchClimateAlert() {
         const maxTemp     = Math.max(...temp);
         const totalPrecip = precip.reduce((a, b) => a + b, 0);
 
+        window._lastClimateData = { maxPrecip, maxWind, maxTemp, totalPrecip };
         renderClimateAlert(maxPrecip, maxWind, maxTemp, totalPrecip);
+
     } catch (err) {
         console.warn('Erro ao buscar dados climáticos:', err);
         renderClimateAlert(0, 0, 0, 0, true);
     }
-
-    // Após calcular maxPrecip, maxWind, maxTemp, totalPrecip:
-window._lastClimateData = { maxPrecip, maxWind, maxTemp, totalPrecip };
-renderClimateAlert(maxPrecip, maxWind, maxTemp, totalPrecip);
 }
 
 function renderClimateAlert(maxPrecip, maxWind, maxTemp, totalPrecip, error = false) {
