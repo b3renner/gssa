@@ -117,6 +117,31 @@
     white-space: nowrap;
 }
 
+           /* ── Alerta climático — ajustes modo escuro ── */
+body.dark-mode #climate-alert-bar.level-normal {
+    background: linear-gradient(90deg, #0d2118, #102b1e);
+    color: #4cc97a;
+    border-bottom-color: #27ae60;
+}
+
+body.dark-mode #climate-alert-bar.level-watch {
+    background: linear-gradient(90deg, #231e08, #2e270a);
+    color: #e8c84a;
+    border-bottom-color: #c9a800;
+}
+
+body.dark-mode #climate-alert-bar.level-warning {
+    background: linear-gradient(90deg, #221200, #3a1f00);
+    color: #e8962a;
+    border-bottom-color: #cc6f00;
+}
+
+body.dark-mode #climate-alert-bar.level-danger {
+    background: linear-gradient(90deg, #220000, #3a0000);
+    color: #e85555;
+    border-bottom-color: #c0392b;
+}
+
 @media (max-width: 768px) {
     .alert-metrics { display: none; }
     .alert-text-detail { display: none; }
@@ -373,6 +398,7 @@
 <script type="module" src="app.js"></script>
 </body>
 </html>
+
 
 
 
