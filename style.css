@@ -1262,6 +1262,48 @@ body {
     resize: none;
 }
 
+/* ── Registro em grid 2 colunas ── */
+#register-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    align-items: start;
+}
+
+#register-form .form-group {
+    margin-bottom: 0;
+}
+
+/* Nome e email ocupam linha inteira */
+#register-form .form-group:has(#register-name),
+#register-form .form-group:has(#register-availability) {
+    grid-column: 1 / -1;
+}
+
+/* Botão, links e mensagem também ocupam linha inteira */
+#register-form .submit-button,
+#register-form > div[style*="margin-top"],
+#register-form #register-message {
+    grid-column: 1 / -1;
+}
+
+/* Labels menores para caber */
+#register-form .form-group label {
+    font-size: 0.72em;
+}
+
+/* Textarea de disponibilidade menor */
+#register-form textarea {
+    min-height: 46px;
+    max-height: 46px;
+}
+
+/* Título e subtítulo fora do grid */
+#register-form-container .modal-title,
+#register-form-container .modal-subtitle {
+    display: block;
+}
+
 @media (max-width: 900px) {
    
     .main-header {
@@ -1349,6 +1391,7 @@ body {
         font-size: 14px;
     }
 }
+
 
 
 
