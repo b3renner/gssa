@@ -992,6 +992,18 @@ body {
     margin: 0;
 }
 
+.event-selector li button.active.alert-active {
+    background: var(--color-highlight);
+    border-color: var(--color-highlight);
+    color: #fff;
+}
+
+.event-selector li button.alert-active:not(.active) {
+    background: rgba(217, 83, 79, 0.1);
+    border-color: var(--color-highlight);
+    color: var(--color-highlight);
+}
+
 @media (max-width: 900px) {
    
     .main-header {
@@ -1079,6 +1091,7 @@ body {
         font-size: 14px;
     }
 }
+
 
 
 
