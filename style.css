@@ -324,9 +324,7 @@ body {
 }
 
 /* ── Botão explorar ONGs (estado vazio) ── */
-.empty-state .explore-button,
-.empty-state a.submit-button,
-.empty-state button.submit-button {
+.empty-state .btn-primary {
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -1408,6 +1406,7 @@ body {
         font-size: 14px;
     }
 }
+
 
 
 
