@@ -19,14 +19,9 @@ async function fetchClimateAlert() {
         const maxTemp     = Math.max(...temp);
         const totalPrecip = precip.reduce((a, b) => a + b, 0);
 
-        window._lastClimateData = { maxPrecip, maxWind, maxTemp, totalPrecip };
-renderClimateAlert(maxPrecip, maxWind, maxTemp, totalPrecip);
-syncPrepCenter(
-    maxPrecip >= 60 || maxWind >= 90 ? 'danger'  :
-    maxPrecip >= 30 || maxWind >= 60 || maxTemp >= 40 ? 'warning' :
-    maxPrecip >= 10 || maxWind >= 40 || maxTemp >= 35 ? 'watch'   : 'normal',
-    maxPrecip, maxWind, maxTemp
-);
+        window._lastClimateData = { maxPrecip: 15, maxWind: 20, maxTemp: 28, totalPrecip: 15 };
+renderClimateAlert(15, 20, 28, 15);
+syncPrepCenter('watch', 15, 20, 28);
 
     } catch (err) {
         console.warn('Erro ao buscar dados climáticos:', err);
