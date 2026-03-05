@@ -24,6 +24,10 @@ async function fetchClimateAlert() {
         console.warn('Erro ao buscar dados climáticos:', err);
         renderClimateAlert(0, 0, 0, 0, true);
     }
+
+    // Após calcular maxPrecip, maxWind, maxTemp, totalPrecip:
+window._lastClimateData = { maxPrecip, maxWind, maxTemp, totalPrecip };
+renderClimateAlert(maxPrecip, maxWind, maxTemp, totalPrecip);
 }
 
 function renderClimateAlert(maxPrecip, maxWind, maxTemp, totalPrecip, error = false) {
@@ -32,45 +36,46 @@ function renderClimateAlert(maxPrecip, maxWind, maxTemp, totalPrecip, error = fa
     const detail  = document.getElementById('alert-detail');
     const metrics = document.getElementById('alert-metrics');
     const updated = document.getElementById('alert-updated');
+    const _t      = (k) => window.gssaI18n ? window.gssaI18n.t(k) : k;
 
     if (error) {
-        bar.className  = 'level-normal';
-        title.innerHTML = '<i class="fas fa-wifi"></i> Dados climáticos indisponíveis';
+        bar.className   = 'level-normal';
+        title.innerHTML = `<i class="fas fa-wifi"></i> ${_t('climate-unavailable')}`;
         return;
     }
 
     let level, icon, titleText, detailText;
 
     if (maxPrecip >= 60 || maxWind >= 90) {
-        level      = 'danger';
-        icon       = 'fas fa-tornado';
-        titleText  = '⚠ PERIGO — Risco climático extremo';
+        level     = 'danger';
+        icon      = 'fas fa-tornado';
+        titleText = _t('climate-danger');
         detailText = maxWind >= 90
-            ? `Ventos de ${maxWind.toFixed(0)} km/h — possível ciclone`
-            : `Precipitação de ${maxPrecip.toFixed(1)}mm/h — risco de inundação grave`;
+            ? `${_t('climate-detail-wind-cyc')} ${maxWind.toFixed(0)} ${_t('climate-kmh')} ${_t('climate-detail-wind-suf')}`
+            : `${_t('climate-detail-rain-tor')} ${maxPrecip.toFixed(1)}mm/h ${_t('climate-detail-flood')}`;
     } else if (maxPrecip >= 30 || maxWind >= 60 || maxTemp >= 40) {
-        level      = 'warning';
-        icon       = 'fas fa-cloud-bolt';
-        titleText  = '▲ ALERTA — Condições climáticas severas';
+        level     = 'warning';
+        icon      = 'fas fa-cloud-bolt';
+        titleText = _t('climate-warning');
         detailText = maxPrecip >= 30
-            ? `Chuva intensa: ${maxPrecip.toFixed(1)}mm/h previstos`
+            ? `${_t('climate-detail-rain-int')} ${maxPrecip.toFixed(1)}mm/h ${_t('climate-detail-fcast')}`
             : maxWind >= 60
-            ? `Vento forte: ${maxWind.toFixed(0)} km/h previstos`
-            : `Calor extremo: ${maxTemp.toFixed(0)}°C previsto`;
+            ? `${_t('climate-detail-wind-str')} ${maxWind.toFixed(0)} ${_t('climate-kmh')} ${_t('climate-detail-fcast')}`
+            : `${_t('climate-detail-heat-ext')} ${maxTemp.toFixed(0)}°C ${_t('climate-detail-fcast')}`;
     } else if (maxPrecip >= 10 || maxWind >= 40 || maxTemp >= 35) {
-        level      = 'watch';
-        icon       = 'fas fa-cloud-rain';
-        titleText  = '● ATENÇÃO — Condições adversas possíveis';
+        level     = 'watch';
+        icon      = 'fas fa-cloud-rain';
+        titleText = _t('climate-watch');
         detailText = maxPrecip >= 10
-            ? `Chuva moderada: até ${maxPrecip.toFixed(1)}mm/h`
+            ? `${_t('climate-detail-rain-mod')} ${maxPrecip.toFixed(1)}mm/h`
             : maxWind >= 40
-            ? `Vento moderado: até ${maxWind.toFixed(0)} km/h`
-            : `Temperatura elevada: até ${maxTemp.toFixed(0)}°C`;
+            ? `${_t('climate-detail-wind-mod')} ${maxWind.toFixed(0)} ${_t('climate-kmh')}`
+            : `${_t('climate-detail-heat')} ${maxTemp.toFixed(0)}°C`;
     } else {
-        level      = 'normal';
-        icon       = 'fas fa-sun';
-        titleText  = '✔ Gravataí — Condições climáticas normais';
-        detailText = `Chuva: ${totalPrecip.toFixed(1)}mm · Vento: ${maxWind.toFixed(0)} km/h · Temp: ${maxTemp.toFixed(0)}°C`;
+        level     = 'normal';
+        icon      = 'fas fa-sun';
+        titleText = _t('climate-normal');
+        detailText = `${_t('climate-normal-detail')} ${totalPrecip.toFixed(1)}${_t('climate-mm')} · ${maxWind.toFixed(0)} ${_t('climate-kmh')} · ${maxTemp.toFixed(0)}°C`;
     }
 
     bar.className      = `level-${level}`;
@@ -78,17 +83,26 @@ function renderClimateAlert(maxPrecip, maxWind, maxTemp, totalPrecip, error = fa
     detail.textContent = detailText;
 
     metrics.innerHTML = `
-        <span class="alert-metric"><i class="fas fa-droplet"></i> ${totalPrecip.toFixed(1)}mm</span>
-        <span class="alert-metric"><i class="fas fa-wind"></i> ${maxWind.toFixed(0)} km/h</span>
+        <span class="alert-metric"><i class="fas fa-droplet"></i> ${totalPrecip.toFixed(1)}${_t('climate-mm')}</span>
+        <span class="alert-metric"><i class="fas fa-wind"></i> ${maxWind.toFixed(0)} ${_t('climate-kmh')}</span>
         <span class="alert-metric"><i class="fas fa-temperature-half"></i> ${maxTemp.toFixed(0)}°C</span>
     `;
 
     const now = new Date();
-    updated.textContent = `Atualizado às ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
+    updated.textContent = `${_t('climate-updated')} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
 }
 
 // Busca ao carregar e atualiza a cada 30 minutos
 document.addEventListener('DOMContentLoaded', () => {
     fetchClimateAlert();
     setInterval(fetchClimateAlert, 30 * 60 * 1000);
+
+});
+
+document.addEventListener('gssa-lang-changed', () => {
+    // Reusa os últimos dados sem nova requisição à API
+    if (window._lastClimateData) {
+        const { maxPrecip, maxWind, maxTemp, totalPrecip } = window._lastClimateData;
+        renderClimateAlert(maxPrecip, maxWind, maxTemp, totalPrecip);
+    }
 });
