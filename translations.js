@@ -298,6 +298,9 @@ const TRANSLATIONS = {
 'prep-notice-enchente':     '⚠ Precipitação de {val}mm/h prevista — consulte as recomendações para enchentes.',
 'prep-notice-calor':        '⚠ Temperatura de {val}°C prevista — consulte as recomendações para ondas de calor.',
 'prep-notice-ciclone':      '⚠ Vento de {val} km/h previsto — consulte as recomendações para ciclones.',
+'apply-confirm': 'Inscrever-se em {nome}?',
+
+
 
     },
     en: {
@@ -597,6 +600,7 @@ const TRANSLATIONS = {
 'prep-notice-enchente':     '⚠ Precipitation of {val}mm/h forecast — see flooding recommendations.',
 'prep-notice-calor':        '⚠ Temperature of {val}°C forecast — see heat wave recommendations.',
 'prep-notice-ciclone':      '⚠ Winds of {val} km/h forecast — see cyclone recommendations.',
+'apply-confirm': 'Apply to {nome}?',
     }
 };
 
