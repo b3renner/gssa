@@ -203,7 +203,28 @@ const TRANSLATIONS = {
                 // PT
 'cong-alert-warning': '⚠️ Seu cadastro será analisado manualmente antes da aprovação.',
         'search-placeholder':       'Buscar ONGs por nome, serviço ou bairro...',
-
+/* ── Alertas climáticos ── */
+'climate-loading':        'Carregando dados climáticos...',
+'climate-unavailable':    'Dados climáticos indisponíveis',
+'climate-normal':         '✔ Gravataí — Condições climáticas normais',
+'climate-watch':          '● ATENÇÃO — Condições adversas possíveis',
+'climate-warning':        '▲ ALERTA — Condições climáticas severas',
+'climate-danger':         '⚠ PERIGO — Risco climático extremo',
+'climate-detail-rain-mod':'Chuva moderada: até',
+'climate-detail-rain-int':'Chuva intensa:',
+'climate-detail-rain-tor':'Precipitação de',
+'climate-detail-wind-mod':'Vento moderado: até',
+'climate-detail-wind-str':'Vento forte:',
+'climate-detail-wind-cyc':'Ventos de',
+'climate-detail-wind-suf':'— possível ciclone',
+'climate-detail-heat':    'Temperatura elevada: até',
+'climate-detail-heat-ext':'Calor extremo:',
+'climate-detail-flood':   '— risco de inundação grave',
+'climate-detail-fcast':   'previstos',
+'climate-normal-detail':  'Chuva:',
+'climate-updated':        'Atualizado às',
+'climate-mm':             'mm',
+'climate-kmh':            'km/h',
 
     },
     en: {
@@ -408,6 +429,28 @@ const TRANSLATIONS = {
 // EN
 'cong-alert-warning': '⚠️ Your registration will be manually reviewed before approval.',
         'search-placeholder':       'Search NGOs by name, service or neighbourhood...',
+        /* ── Climate alerts ── */
+'climate-loading':        'Loading weather data...',
+'climate-unavailable':    'Weather data unavailable',
+'climate-normal':         '✔ Gravataí — Normal weather conditions',
+'climate-watch':          '● WATCH — Adverse conditions possible',
+'climate-warning':        '▲ WARNING — Severe weather conditions',
+'climate-danger':         '⚠ DANGER — Extreme weather risk',
+'climate-detail-rain-mod':'Moderate rain: up to',
+'climate-detail-rain-int':'Heavy rain:',
+'climate-detail-rain-tor':'Precipitation of',
+'climate-detail-wind-mod':'Moderate wind: up to',
+'climate-detail-wind-str':'Strong wind:',
+'climate-detail-wind-cyc':'Winds of',
+'climate-detail-wind-suf':'— possible cyclone',
+'climate-detail-heat':    'High temperature: up to',
+'climate-detail-heat-ext':'Extreme heat:',
+'climate-detail-flood':   '— severe flood risk',
+'climate-detail-fcast':   'forecast',
+'climate-normal-detail':  'Rain:',
+'climate-updated':        'Updated at',
+'climate-mm':             'mm',
+'climate-kmh':            'km/h',
     }
 };
 
