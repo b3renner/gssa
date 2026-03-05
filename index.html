@@ -393,83 +393,75 @@ body.dark-mode #climate-alert-bar.level-danger {
 
 <section class="prep-center" id="prep-center">
     <div class="prep-center-header">
-        <h2><i class="fas fa-shield-alt"></i> Central de <span>Preparação</span></h2>
-        <p>Saiba o que fazer antes, durante e depois de cada tipo de evento climático extremo.</p>
+        <h2><i class="fas fa-shield-alt"></i> <span data-i18n="prep-title">Central de <span>Preparação</span></span></h2>
+        <p data-i18n="prep-subtitle">Saiba o que fazer antes, durante e depois de cada tipo de evento climático extremo.</p>
     </div>
 
-    <!-- Alerta de evento ativo -->
     <div class="active-alert-notice" id="prep-alert-notice">
         <i class="fas fa-exclamation-triangle"></i>
-        <span id="prep-alert-notice-text">Alerta ativo detectado — veja as recomendações abaixo.</span>
+        <span id="prep-alert-notice-text" data-i18n="prep-alert-notice">Alerta ativo detectado — veja as recomendações abaixo.</span>
     </div>
 
-    <!-- Seletor de eventos -->
     <ul class="event-selector">
-        <li>
-            <button class="active" data-event="enchente" onclick="selectPrepEvent('enchente')">
-                <i class="fas fa-water"></i> Enchente
-            </button>
-        </li>
-        <li>
-            <button data-event="calor" onclick="selectPrepEvent('calor')">
-                <i class="fas fa-temperature-high"></i> Onda de Calor
-            </button>
-        </li>
-        <li>
-            <button data-event="ciclone" onclick="selectPrepEvent('ciclone')">
-                <i class="fas fa-wind"></i> Ciclone / Vento Forte
-            </button>
-        </li>
+        <li><button class="active" data-event="enchente" onclick="selectPrepEvent('enchente')">
+            <i class="fas fa-water"></i> <span data-i18n="prep-event-enchente">Enchente</span>
+        </button></li>
+        <li><button data-event="calor" onclick="selectPrepEvent('calor')">
+            <i class="fas fa-temperature-high"></i> <span data-i18n="prep-event-calor">Onda de Calor</span>
+        </button></li>
+        <li><button data-event="ciclone" onclick="selectPrepEvent('ciclone')">
+            <i class="fas fa-wind"></i> <span data-i18n="prep-event-ciclone">Ciclone / Vento Forte</span>
+        </button></li>
     </ul>
 
     <!-- ── ENCHENTE ── -->
     <div class="prep-event-panel active" id="panel-enchente">
         <div class="prep-event-intro">
             <div class="event-icon-large"><i class="fas fa-water"></i></div>
-            <h3>Enchentes e Alagamentos</h3>
-            <p>Gravataí está situada em área de risco hídrico. Chuvas intensas podem causar alagamentos rápidos, especialmente em áreas próximas ao Rio Gravataí e em bairros de baixa altitude.</p>
+            <h3 data-i18n="prep-enchente-title">Enchentes e Alagamentos</h3>
+            <p data-i18n="prep-enchente-desc">Gravataí está situada em área de risco hídrico...</p>
         </div>
         <div class="phases-grid">
             <div class="phase-card phase-before">
                 <div class="phase-card-header">
                     <div class="phase-badge"><i class="fas fa-clock"></i></div>
-                    <h4>Antes</h4>
+                    <h4 data-i18n="prep-phase-before">Antes</h4>
                 </div>
                 <ul>
-                    <li>Conheça os pontos de alagamento do seu bairro e as rotas de fuga</li>
-                    <li>Mantenha um kit de emergência: água, documentos, lanternas, medicamentos</li>
-                    <li>Guarde documentos importantes em sacos plásticos vedados</li>
-                    <li>Identifique o abrigo mais próximo (veja o mapa acima)</li>
-                    <li>Instale alertas de chuva no celular e acompanhe as previsões</li>
-                    <li>Não construa em áreas de várzea ou margens de rios</li>
+                    <li data-i18n="prep-enchente-before-1"></li>
+                    <li data-i18n="prep-enchente-before-2"></li>
+                    <li data-i18n="prep-enchente-before-3"></li>
+                    <li data-i18n="prep-enchente-before-4"></li>
+                    <li data-i18n="prep-enchente-before-5"></li>
+                    <li data-i18n="prep-enchente-before-6"></li>
                 </ul>
             </div>
             <div class="phase-card phase-during">
                 <div class="phase-card-header">
                     <div class="phase-badge"><i class="fas fa-bolt"></i></div>
-                    <h4>Durante</h4>
+                    <h4 data-i18n="prep-phase-during">Durante</h4>
                 </div>
                 <ul>
-                    <li>Desligue a energia elétrica da casa ao sair</li>
-                    <li>Nunca tente atravessar ruas alagadas — 30 cm de água podem derrubar um adulto</li>
-                    <li>Vá para lugares mais altos imediatamente</li>
-                    <li>Não retorne à área alagada antes da liberação oficial</li>
-                    <li>Evite contato com a água da enchente — ela é contaminada</li>
-                    <li>Ligue 193 (Bombeiros) ou 199 (Defesa Civil) em emergências</li>
+                    <li data-i18n="prep-enchente-during-1"></li>
+                    <li data-i18n="prep-enchente-during-2"></li>
+                    <li data-i18n="prep-enchente-during-3"></li>
+                    <li data-i18n="prep-enchente-during-4"></li>
+                    <li data-i18n="prep-enchente-during-5"></li>
+                    <li data-i18n="prep-enchente-during-6"></li>
                 </ul>
             </div>
             <div class="phase-card phase-after">
                 <div class="phase-card-header">
                     <div class="phase-badge"><i class="fas fa-heart"></i></div>
-                    <h4>Depois</h4>
+                    <h4 data-i18n="prep-phase-after">Depois</h4>
                 </div>
                 <ul>
-                    <li>Aguarde a liberação das autoridades antes de retornar</li>
-                    <li>Use botas e luvas ao limpar a casa — risco de leptospirose</li>
-                    <li>Não consuma água da torneira sem ferver ou tratar</li>
-                    <li>Registre os danos com fotos para acionamento de seguros</li>
-                    <li>Procure apoio psicológico — o trauma pós-enchente é real</li>
-                    <li>Busque cadastro em programas de assistência da Defesa Civil</li>
+                    <li data-i18n="prep-enchente-after-1"></li>
+                    <li data-i18n="prep-enchente-after-2"></li>
+                    <li data-i18n="prep-enchente-after-3"></li>
+                    <li data-i18n="prep-enchente-after-4"></li>
+                    <li data-i18n="prep-enchente-after-5"></li>
+                    <li data-i18n="prep-enchente-after-6"></li>
                 </ul>
             </div>
         </div>
@@ -479,99 +471,99 @@ body.dark-mode #climate-alert-bar.level-danger {
     <div class="prep-event-panel" id="panel-calor">
         <div class="prep-event-intro">
             <div class="event-icon-large"><i class="fas fa-temperature-high"></i></div>
-            <h3>Ondas de Calor</h3>
-            <p>O Sul do Brasil tem registrado temperaturas recordes. Ondas de calor acima de 38°C são especialmente perigosas para idosos, crianças e pessoas sem acesso a ambientes refrigerados.</p>
+            <h3 data-i18n="prep-calor-title">Ondas de Calor</h3>
+            <p data-i18n="prep-calor-desc">O Sul do Brasil tem registrado temperaturas recordes...</p>
         </div>
         <div class="phases-grid">
             <div class="phase-card phase-before">
                 <div class="phase-card-header">
                     <div class="phase-badge"><i class="fas fa-clock"></i></div>
-                    <h4>Antes</h4>
+                    <h4 data-i18n="prep-phase-before">Antes</h4>
                 </div>
                 <ul>
-                    <li>Identifique locais públicos com ar-condicionado próximos (shoppings, bibliotecas)</li>
-                    <li>Revise a ventilação da sua casa e instale cortinas nas janelas voltadas ao sol</li>
-                    <li>Estoque água filtrada suficiente para pelo menos 3 dias</li>
-                    <li>Verifique se vizinhos idosos ou vulneráveis têm suporte</li>
-                    <li>Evite pintar a cobertura da casa com cores escuras</li>
+                    <li data-i18n="prep-calor-before-1"></li>
+                    <li data-i18n="prep-calor-before-2"></li>
+                    <li data-i18n="prep-calor-before-3"></li>
+                    <li data-i18n="prep-calor-before-4"></li>
+                    <li data-i18n="prep-calor-before-5"></li>
                 </ul>
             </div>
             <div class="phase-card phase-during">
                 <div class="phase-card-header">
                     <div class="phase-badge"><i class="fas fa-bolt"></i></div>
-                    <h4>Durante</h4>
+                    <h4 data-i18n="prep-phase-during">Durante</h4>
                 </div>
                 <ul>
-                    <li>Beba água frequentemente, mesmo sem sentir sede</li>
-                    <li>Evite exposição ao sol entre 10h e 16h</li>
-                    <li>Use roupas leves, de cores claras e chapéu</li>
-                    <li>Molhe a cabeça e os pulsos com água fria regularmente</li>
-                    <li>Nunca deixe crianças ou pets em veículos fechados</li>
-                    <li>Reduza atividades físicas ao ar livre ao mínimo</li>
+                    <li data-i18n="prep-calor-during-1"></li>
+                    <li data-i18n="prep-calor-during-2"></li>
+                    <li data-i18n="prep-calor-during-3"></li>
+                    <li data-i18n="prep-calor-during-4"></li>
+                    <li data-i18n="prep-calor-during-5"></li>
+                    <li data-i18n="prep-calor-during-6"></li>
                 </ul>
             </div>
             <div class="phase-card phase-after">
                 <div class="phase-card-header">
                     <div class="phase-badge"><i class="fas fa-heart"></i></div>
-                    <h4>Depois</h4>
+                    <h4 data-i18n="prep-phase-after">Depois</h4>
                 </div>
                 <ul>
-                    <li>Monitore sintomas de insolação nos dias seguintes: confusão, pele quente e seca</li>
-                    <li>Reponha eletrólitos — água com sal e açúcar ou soro caseiro</li>
-                    <li>Procure atendimento médico se houver febre persistente acima de 39°C</li>
-                    <li>Relate casos de vizinhos afetados à UBS mais próxima</li>
+                    <li data-i18n="prep-calor-after-1"></li>
+                    <li data-i18n="prep-calor-after-2"></li>
+                    <li data-i18n="prep-calor-after-3"></li>
+                    <li data-i18n="prep-calor-after-4"></li>
                 </ul>
             </div>
         </div>
     </div>
 
-    <!-- ── CICLONE / VENTO FORTE ── -->
+    <!-- ── CICLONE ── -->
     <div class="prep-event-panel" id="panel-ciclone">
         <div class="prep-event-intro">
             <div class="event-icon-large"><i class="fas fa-wind"></i></div>
-            <h3>Ciclones e Ventos Fortes</h3>
-            <p>O Rio Grande do Sul é o estado brasileiro mais afetado por ciclones extratropicais. Ventos acima de 90 km/h causam danos estruturais graves e representam risco imediato de vida.</p>
+            <h3 data-i18n="prep-ciclone-title">Ciclones e Ventos Fortes</h3>
+            <p data-i18n="prep-ciclone-desc">O Rio Grande do Sul é o estado brasileiro mais afetado...</p>
         </div>
         <div class="phases-grid">
             <div class="phase-card phase-before">
                 <div class="phase-card-header">
                     <div class="phase-badge"><i class="fas fa-clock"></i></div>
-                    <h4>Antes</h4>
+                    <h4 data-i18n="prep-phase-before">Antes</h4>
                 </div>
                 <ul>
-                    <li>Remova objetos soltos do quintal (vasos, móveis, ferramentas)</li>
-                    <li>Reforce telhas e calhas — verifique estrutura do telhado anualmente</li>
-                    <li>Mantenha árvores podadas longe de fiação elétrica</li>
-                    <li>Carregue celular e lanternas — quedas de energia são comuns</li>
-                    <li>Identifique o cômodo mais seguro da casa (sem janelas, interior)</li>
-                    <li>Abasteça veículo e estoque combustível para gerador se houver</li>
+                    <li data-i18n="prep-ciclone-before-1"></li>
+                    <li data-i18n="prep-ciclone-before-2"></li>
+                    <li data-i18n="prep-ciclone-before-3"></li>
+                    <li data-i18n="prep-ciclone-before-4"></li>
+                    <li data-i18n="prep-ciclone-before-5"></li>
+                    <li data-i18n="prep-ciclone-before-6"></li>
                 </ul>
             </div>
             <div class="phase-card phase-during">
                 <div class="phase-card-header">
                     <div class="phase-badge"><i class="fas fa-bolt"></i></div>
-                    <h4>Durante</h4>
+                    <h4 data-i18n="prep-phase-during">Durante</h4>
                 </div>
                 <ul>
-                    <li>Fique dentro de casa — longe de janelas e portas de vidro</li>
-                    <li>Se estiver ao ar livre, deite-se num vão baixo e proteja a cabeça</li>
-                    <li>Não se abrigue sob árvores ou placas de publicidade</li>
-                    <li>Desligue aparelhos elétricos e fique longe de fios caídos</li>
-                    <li>Não saia de carro durante ventos acima de 80 km/h</li>
-                    <li>Monitore comunicados oficiais da Defesa Civil no rádio</li>
+                    <li data-i18n="prep-ciclone-during-1"></li>
+                    <li data-i18n="prep-ciclone-during-2"></li>
+                    <li data-i18n="prep-ciclone-during-3"></li>
+                    <li data-i18n="prep-ciclone-during-4"></li>
+                    <li data-i18n="prep-ciclone-during-5"></li>
+                    <li data-i18n="prep-ciclone-during-6"></li>
                 </ul>
             </div>
             <div class="phase-card phase-after">
                 <div class="phase-card-header">
                     <div class="phase-badge"><i class="fas fa-heart"></i></div>
-                    <h4>Depois</h4>
+                    <h4 data-i18n="prep-phase-after">Depois</h4>
                 </div>
                 <ul>
-                    <li>Não toque em fios elétricos caídos — ligue para a CEEE/RGE</li>
-                    <li>Inspecione a estrutura da casa antes de reentrar</li>
-                    <li>Fotografe todos os danos para fins de seguro e assistência</li>
-                    <li>Relate danos de infraestrutura à Prefeitura de Gravataí</li>
-                    <li>Ajude vizinhos vulneráveis a limpar e reconstruir</li>
+                    <li data-i18n="prep-ciclone-after-1"></li>
+                    <li data-i18n="prep-ciclone-after-2"></li>
+                    <li data-i18n="prep-ciclone-after-3"></li>
+                    <li data-i18n="prep-ciclone-after-4"></li>
+                    <li data-i18n="prep-ciclone-after-5"></li>
                 </ul>
             </div>
         </div>
@@ -590,6 +582,7 @@ body.dark-mode #climate-alert-bar.level-danger {
 <script type="module" src="app.js"></script>
 </body>
 </html>
+
 
 
 
