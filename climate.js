@@ -107,7 +107,11 @@ document.addEventListener('gssa-lang-changed', () => {
     if (window._lastClimateData) {
         const { maxPrecip, maxWind, maxTemp, totalPrecip } = window._lastClimateData;
         renderClimateAlert(maxPrecip, maxWind, maxTemp, totalPrecip);
-        // syncPrepCenter não precisa de tradução — conteúdo é estático por ora
+        const level =
+            maxPrecip >= 60 || maxWind >= 90               ? 'danger'  :
+            maxPrecip >= 30 || maxWind >= 60 || maxTemp >= 40 ? 'warning' :
+            maxPrecip >= 10 || maxWind >= 40 || maxTemp >= 35 ? 'watch'   : 'normal';
+        syncPrepCenter(level, maxPrecip, maxWind, maxTemp);
     }
 });
 
@@ -116,8 +120,8 @@ function syncPrepCenter(level, maxPrecip, maxWind, maxTemp) {
     const notice     = document.getElementById('prep-alert-notice');
     const noticeText = document.getElementById('prep-alert-notice-text');
     const buttons    = document.querySelectorAll('.event-selector button');
+    const _t         = (k) => window.gssaI18n ? window.gssaI18n.t(k) : k;
 
-    // Remove destaques anteriores
     buttons.forEach(b => b.classList.remove('alert-active'));
 
     if (level === 'normal') {
@@ -125,26 +129,23 @@ function syncPrepCenter(level, maxPrecip, maxWind, maxTemp) {
         return;
     }
 
-    // Determina qual evento é o dominante
     let dominantEvent = 'enchente';
     let noticeMsg     = '';
 
     if (maxWind >= 40) {
         dominantEvent = 'ciclone';
-        noticeMsg     = `⚠ Vento de ${maxWind.toFixed(0)} km/h previsto — consulte as recomendações para ciclones.`;
+        noticeMsg     = _t('prep-notice-ciclone').replace('{val}', maxWind.toFixed(0));
     } else if (maxTemp >= 35) {
         dominantEvent = 'calor';
-        noticeMsg     = `⚠ Temperatura de ${maxTemp.toFixed(0)}°C prevista — consulte as recomendações para ondas de calor.`;
+        noticeMsg     = _t('prep-notice-calor').replace('{val}', maxTemp.toFixed(0));
     } else if (maxPrecip >= 10) {
         dominantEvent = 'enchente';
-        noticeMsg     = `⚠ Precipitação de ${maxPrecip.toFixed(1)}mm/h prevista — consulte as recomendações para enchentes.`;
+        noticeMsg     = _t('prep-notice-enchente').replace('{val}', maxPrecip.toFixed(1));
     }
 
-    // Destaca o botão relevante
     const activeBtn = document.querySelector(`.event-selector button[data-event="${dominantEvent}"]`);
     if (activeBtn) activeBtn.classList.add('alert-active');
 
-    // Mostra aviso e seleciona o painel automaticamente
     if (notice && noticeText) {
         noticeText.textContent = noticeMsg;
         notice.classList.add('show');
