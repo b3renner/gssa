@@ -14,10 +14,13 @@ async function fetchClimateAlert() {
         const wind   = data.hourly.windspeed_10m;
         const temp   = data.hourly.temperature_2m;
 
-        const maxPrecip   = Math.max(...precip);
-        const maxWind     = Math.max(...wind);
-        const maxTemp     = Math.max(...temp);
-        const totalPrecip = precip.reduce((a, b) => a + b, 0);
+        // Hora atual para pegar o dado correspondente
+        const currentHour = new Date().getHours();
+
+        const maxPrecip   = precip[currentHour];
+        const maxWind     = wind[currentHour];
+        const maxTemp     = temp[currentHour];
+        const totalPrecip = precip[currentHour];
 
       window._lastClimateData = { maxPrecip, maxWind, maxTemp, totalPrecip };
 renderClimateAlert(maxPrecip, maxWind, maxTemp, totalPrecip);
@@ -79,8 +82,7 @@ function renderClimateAlert(maxPrecip, maxWind, maxTemp, totalPrecip, error = fa
         level     = 'normal';
         icon      = 'fas fa-sun';
         titleText = _t('climate-normal');
-        detailText = `${_t('climate-normal-detail')} ${totalPrecip.toFixed(1)}${_t('climate-mm')} · ${maxWind.toFixed(0)} ${_t('climate-kmh')} · ${maxTemp.toFixed(0)}°C`;
-    }
+detailText = `${maxPrecip.toFixed(1)}${_t('climate-mm')}/h · ${maxWind.toFixed(0)} ${_t('climate-kmh')} · ${maxTemp.toFixed(0)}°C`;    }
 
     bar.className      = `level-${level}`;
     title.innerHTML    = `<i class="${icon}"></i> ${titleText}`;
