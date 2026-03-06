@@ -598,20 +598,25 @@
                 <label data-i18n="popup-duration-label">Duração do aviso</label>
                 <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:8px;">
                     <label class="popup-duration-opt">
-                        <input type="radio" name="popup-duration" value="1"> 1h
-                    </label>
-                    <label class="popup-duration-opt">
-                        <input type="radio" name="popup-duration" value="12"> 12h
-                    </label>
-                    <label class="popup-duration-opt active">
-                        <input type="radio" name="popup-duration" value="24" checked> 24h
-                    </label>
-                    <label class="popup-duration-opt">
-                        <input type="radio" name="popup-duration" value="72"> 3 dias
-                    </label>
-                    <label class="popup-duration-opt">
-                        <input type="radio" name="popup-duration" value="168"> 1 semana
-                    </label>
+    <input type="radio" name="popup-duration" value="1">
+    <span data-i18n="popup-duration-1h">1h</span>
+</label>
+<label class="popup-duration-opt">
+    <input type="radio" name="popup-duration" value="12">
+    <span data-i18n="popup-duration-12h">12h</span>
+</label>
+<label class="popup-duration-opt active">
+    <input type="radio" name="popup-duration" value="24" checked>
+    <span data-i18n="popup-duration-24h">24h</span>
+</label>
+<label class="popup-duration-opt">
+    <input type="radio" name="popup-duration" value="72">
+    <span data-i18n="popup-duration-3d">3 dias</span>
+</label>
+<label class="popup-duration-opt">
+    <input type="radio" name="popup-duration" value="168">
+    <span data-i18n="popup-duration-1w">1 semana</span>
+</label>
                 </div>
             </div>
 
@@ -1235,6 +1240,7 @@ document.querySelector('[data-tab="popup"]').addEventListener('click', loadActiv
 </body>
 
 </html>
+
 
 
 
