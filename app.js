@@ -554,58 +554,59 @@ userAccuracy = accuracy;
         detailsPanel.classList.add('open');
         setTimeout(() => map.invalidateSize(), 500);
 
-     const cancelButton = document.getElementById('cancel-button');
-if (cancelButton && existingApplicationId) {
-    cancelButton.addEventListener('click', async () => {
-        if (!confirm(_t('cancel-inscription').replace('{nome}', ong.nome))) return;
+   const cancelButton = document.getElementById('cancel-button');
+        if (cancelButton && existingApplicationId) {
+            cancelButton.addEventListener('click', async () => {
+                if (!confirm(_t('cancel-inscription').replace('{nome}', ong.nome))) return;
 
-        try {
-            cancelButton.disabled = true;
-            cancelButton.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${_t('cancel-ing')}`;
+                try {
+                    cancelButton.disabled = true;
+                    cancelButton.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${_t('cancel-ing')}`;
 
-            await deleteDoc(doc(db, 'applications', existingApplicationId));
+                    await deleteDoc(doc(db, 'applications', existingApplicationId));
 
-            alert(_t('cancel-success'));
-            showDetails(ong.id);
-        } catch (error) {
-            console.error('Erro ao cancelar:', error);
-            alert(`Erro: ${error.message}`);
-            cancelButton.disabled = false;
-            cancelButton.innerHTML = `<i class="fas fa-times"></i> ${_t('panel-cancel-text')}`;
-        }
-    });
-}
-
-const applyButton = document.getElementById('apply-button');
-if (applyButton && currentUser && userRole === 'voluntario') {
-    applyButton.addEventListener('click', async () => {
-        const _t = (k) => window.gssaI18n ? window.gssaI18n.t(k) : k;
-        const confirmMsg = _t('apply-confirm').replace('{nome}', ong.nome);
-        if (!confirm(confirmMsg)) return;
-
-        try {
-            applyButton.disabled = true;
-            applyButton.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${_t('apply-ing')}`;
-
-            await addDoc(collection(db, 'applications'), {
-                ongId: String(ong.id),
-                ongName: ong.nome,
-                ongServicos: ong.servicos,
-                userId: currentUser.uid,
-                status: 'pending',
-                createdAt: serverTimestamp()
+                    alert(_t('cancel-success'));
+                    showDetails(ong.id);
+                } catch (error) {
+                    console.error('Erro ao cancelar:', error);
+                    alert(`Erro: ${error.message}`);
+                    cancelButton.disabled = false;
+                    cancelButton.innerHTML = `<i class="fas fa-times"></i> ${_t('panel-cancel-text')}`;
+                }
             });
-
-            alert(_t('apply-success'));
-            showDetails(ong.id);
-        } catch (error) {
-            console.error('Erro ao inscrever:', error);
-            alert(`Erro: ${error.message}`);
-            applyButton.disabled = false;
-            applyButton.innerHTML = `<i class="fas fa-hand-holding-heart"></i> ${_t('apply-error-retry')}`;
         }
-    });
-}
+
+        const applyButton = document.getElementById('apply-button');
+        if (applyButton && currentUser && userRole === 'voluntario') {
+            applyButton.addEventListener('click', async () => {
+                const _t = (k) => window.gssaI18n ? window.gssaI18n.t(k) : k;
+                const confirmMsg = _t('apply-confirm').replace('{nome}', ong.nome);
+                if (!confirm(confirmMsg)) return;
+
+                try {
+                    applyButton.disabled = true;
+                    applyButton.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${_t('apply-ing')}`;
+
+                    await addDoc(collection(db, 'applications'), {
+                        ongId: String(ong.id),
+                        ongName: ong.nome,
+                        ongServicos: ong.servicos,
+                        userId: currentUser.uid,
+                        status: 'pending',
+                        createdAt: serverTimestamp()
+                    });
+
+                    alert(_t('apply-success'));
+                    showDetails(ong.id);
+                } catch (error) {
+                    console.error('Erro ao inscrever:', error);
+                    alert(`Erro: ${error.message}`);
+                    applyButton.disabled = false;
+                    applyButton.innerHTML = `<i class="fas fa-hand-holding-heart"></i> ${_t('apply-error-retry')}`;
+                }
+            });
+        }
+    }
 
     function refreshPanelIfOpen() {
         if (detailsPanel.classList.contains('open')) {
@@ -739,6 +740,7 @@ await loadOngPopups();
     refreshPanelIfOpen();
 });
 });
+
 
 
 
