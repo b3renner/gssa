@@ -614,6 +614,53 @@ if (!confirm(confirmMsg)) return;
 
     loadOngsFromFirestore();
 
+    // ── Carregar pop-ups das ONGs ── //
+async function loadOngPopups() {
+    try {
+        const snapshot = await getDocs(collection(db, 'ong_popups'));
+        const now = new Date();
+
+        snapshot.forEach(docSnap => {
+            const data = docSnap.data();
+            const expires = data.expiresAt?.toDate();
+            if (!expires || expires < now) return;
+
+            const marker = markers.get(String(data.ongId));
+            if (!marker) return;
+
+            const _t = (k) => window.gssaI18n ? window.gssaI18n.t(k) : k;
+
+            const occupationHtml = data.occupation?.max
+                ? `<div style="font-size:0.9em; font-weight:700; color:var(--color-highlight);
+                               margin-bottom:6px;">
+                       <i class="fas fa-users"></i>
+                       ${_t('popup-occupancy-label')} ${data.occupation.current}/${data.occupation.max}
+                   </div>`
+                : '';
+
+            const popupHtml = `
+                <div style="max-width:220px; font-family: inherit;">
+                    ${occupationHtml}
+                    <div style="font-size:0.88em; line-height:1.5;
+                                color:var(--text-primary); margin-bottom:8px;">
+                        ${data.message}
+                    </div>
+                    <div style="font-size:0.75em; color:var(--text-secondary);">
+                        <i class="fas fa-clock"></i>
+                        ${_t('popup-expires-at')} ${expires.toLocaleString(
+                            window.gssaI18n?.currentLang() === 'en' ? 'en-US' : 'pt-BR'
+                        )}
+                    </div>
+                </div>
+            `;
+
+            marker.bindPopup(popupHtml).openPopup();
+        });
+    } catch (e) {
+        console.warn('Erro ao carregar popups:', e);
+    }
+}
+
     const searchButton = document.getElementById('search-button');
     searchButton.addEventListener('click', () => {
         const query = document.getElementById('search-input').value.trim().toLowerCase();
@@ -682,9 +729,11 @@ if (!confirm(confirmMsg)) return;
     }
     // Recria marcadores das ONGs com texto atualizado
     addOngsToMap();
+        await loadOngPopups();
     refreshPanelIfOpen();
 });
 });
+
 
 
 
