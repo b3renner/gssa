@@ -6,57 +6,6 @@ import { getFirestore, collection, getDocs, doc, getDoc,
     from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 document.addEventListener('DOMContentLoaded', () => {
 
-   async function loadOngPopups() {
-    console.log('🔔 loadOngPopups iniciada');
-    try {
-        const snapshot = await getDocs(collection(db, 'ong_popups'));
-        console.log('📦 popups encontrados:', snapshot.size);
-        // ...
-    async function loadOngPopups() {
-        try {
-            const snapshot = await getDocs(collection(db, 'ong_popups'));
-            const now = new Date();
-
-            snapshot.forEach(docSnap => {
-                const data = docSnap.data();
-                const expires = data.expiresAt?.toDate();
-                if (!expires || expires < now) return;
-
-                const marker = markers.get(String(data.ongId));
-                if (!marker) return;
-
-                const _t = (k) => window.gssaI18n ? window.gssaI18n.t(k) : k;
-                const lang = window.gssaI18n ? window.gssaI18n.currentLang() : 'pt';
-
-                const occupationHtml = data.occupation?.max
-                    ? `<div style="font-size:0.9em; font-weight:700; color:#D9534F; margin-bottom:6px;">
-                           <i class="fas fa-users"></i>
-                           ${_t('popup-occupancy-label')} ${data.occupation.current}/${data.occupation.max}
-                       </div>`
-                    : '';
-
-                const popupHtml = `
-                    <div style="max-width:220px; font-family:inherit;">
-                        ${occupationHtml}
-                        <div style="font-size:0.88em; line-height:1.5; margin-bottom:8px;">
-                            ${data.message}
-                        </div>
-                        <div style="font-size:0.75em; opacity:0.6;">
-                            <i class="fas fa-clock"></i>
-                            ${_t('popup-expires-at')} ${expires.toLocaleString(
-                                lang === 'en' ? 'en-US' : 'pt-BR'
-                            )}
-                        </div>
-                    </div>
-                `;
-
-                marker.bindPopup(popupHtml).openPopup();
-            });
-        } catch (e) {
-            console.warn('Erro ao carregar popups:', e);
-        }
-    }
-
 
     const firebaseConfig = {
         apiKey: "AIzaSyDhQs9Kz4LLGaKIhWV9nUiTjlst5YEWhjg",
@@ -386,6 +335,7 @@ let userAccuracy = null;
             }
 
             addOngsToMap();
+await loadOngPopups();
 
         } catch (error) {
             console.error(' Erro ao carregar ONGs:', error);
@@ -396,8 +346,10 @@ let userAccuracy = null;
                     id: String(ong.id)
                 }));
                 addOngsToMap();
+await loadOngPopups();
             }
         }
+             
     }
 
     function addOngsToMap() {
@@ -668,6 +620,7 @@ if (!confirm(confirmMsg)) return;
     }
 
     loadOngsFromFirestore();
+         
 
     // ── Carregar pop-ups das ONGs ── //
 async function loadOngPopups() {
@@ -786,6 +739,7 @@ await loadOngPopups();
     refreshPanelIfOpen();
 });
 });
+
 
 
 
