@@ -670,38 +670,33 @@ async function loadOngPopups() {
             const noticeIcon = L.divIcon({
     className: '',
     html: `
-        <div style="position:relative; cursor:pointer; width:38px; height:38px;">
-            <!-- Corpo do balão -->
+        <div style="position:relative; cursor:pointer; width:30px; height:30px;">
             <div style="
                 position:absolute; top:0; left:0;
-                width:38px; height:32px;
+                width:30px; height:24px;
                 background: linear-gradient(135deg, #D9534F, #c0392b);
-                border-radius: 10px;
+                border-radius: 8px;
                 box-shadow: 0 3px 10px rgba(0,0,0,0.3);
                 display:flex; align-items:center; justify-content:center;
             ">
-                <i class="fas fa-bullhorn" style="color:#fff; font-size:13px;"></i>
+                <i class="fas fa-bullhorn" style="color:#fff; font-size:11px;"></i>
             </div>
-            <!-- Cauda do balão -->
             <div style="
-                position:absolute; bottom:0; left:12px;
+                position:absolute; bottom:0; left:10px;
                 width:0; height:0;
-                border-left:7px solid transparent;
+                border-left:5px solid transparent;
                 border-right:3px solid transparent;
-                border-top:8px solid #c0392b;
+                border-top:6px solid #c0392b;
             "></div>
         </div>`,
-    iconSize: [38, 38],
-iconAnchor: [48, 48],  // desloca o ícone 10px à esquerda e 10px acima do marcador original
-popupAnchor: [0, -42]
+    iconSize: [30, 30],
+    iconAnchor: [-8, 40],
+    popupAnchor: [0, -42]
 });
 
-            const noticeMarker = L.marker(
+const noticeMarker = L.marker(
     [marker.getLatLng().lat, marker.getLatLng().lng],
-    { 
-        icon: noticeIcon, 
-        zIndexOffset: 1000
-    }
+    { icon: noticeIcon, zIndexOffset: 1000 }
 ).addTo(map);
             noticeMarker.bindPopup(popupHtml, {
                 maxWidth: 260,
@@ -788,6 +783,7 @@ await loadOngPopups();
     refreshPanelIfOpen();
 });
 });
+
 
 
 
