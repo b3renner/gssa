@@ -6,7 +6,12 @@ import { getFirestore, collection, getDocs, doc, getDoc,
     from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 document.addEventListener('DOMContentLoaded', () => {
 
-    // ── Pop-ups das ONGs ── //
+   async function loadOngPopups() {
+    console.log('🔔 loadOngPopups iniciada');
+    try {
+        const snapshot = await getDocs(collection(db, 'ong_popups'));
+        console.log('📦 popups encontrados:', snapshot.size);
+        // ...
     async function loadOngPopups() {
         try {
             const snapshot = await getDocs(collection(db, 'ong_popups'));
@@ -781,6 +786,7 @@ await loadOngPopups();
     refreshPanelIfOpen();
 });
 });
+
 
 
 
