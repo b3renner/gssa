@@ -1319,6 +1319,10 @@ body {
 #register-form .form-group:has(#register-skills) {
     grid-column: 1 / -1;
 }
+
+.leaflet-popup-content {
+    color: #222 !important;
+}
 @media (max-width: 900px) {
    
     .main-header {
@@ -1406,6 +1410,7 @@ body {
         font-size: 14px;
     }
 }
+
 
 
 
