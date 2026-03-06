@@ -315,7 +315,8 @@ const TRANSLATIONS = {
 'popup-success':         'Aviso publicado no mapa!',
 'popup-cancel-confirm':  'Remover o aviso do mapa?',
 'popup-cancelled':       'Aviso removido do mapa.',
-
+'popup-occupancy-label': 'Ocupação:',
+'popup-expires-at':      'Expira em',
 
     },
     en: {
@@ -632,6 +633,8 @@ const TRANSLATIONS = {
 'popup-success':         'Notice published on the map!',
 'popup-cancel-confirm':  'Remove the notice from the map?',
 'popup-cancelled':       'Notice removed from the map.',
+        'popup-occupancy-label': 'Occupancy:',
+'popup-expires-at':      'Expires at',
     }
 };
 
