@@ -775,21 +775,22 @@ const _t = (k) => window.gssaI18n ? window.gssaI18n.t(k) : k;
 
         // Verificar autenticação
         onAuthStateChanged(auth, async (user) => {
-            if (!user) {
-                alert('Você precisa estar logado!');
-                window.location.href = 'index.html';
-                return;
-            }
+    const _t = (k) => window.gssaI18n ? window.gssaI18n.t(k) : k;
+    if (!user) {
+        alert(_t('pong-need-login'));
+        window.location.href = 'index.html';
+        return;
+    }
 
-            const userDoc = await getDoc(doc(db, 'users', user.uid));
-            if (!userDoc.exists() || userDoc.data().role !== 'ong') {
-                alert('Acesso negado! Apenas ONGs podem acessar este painel.');
-                window.location.href = 'index.html';
-                return;
-            }
+    const userDoc = await getDoc(doc(db, 'users', user.uid));
+    if (!userDoc.exists() || userDoc.data().role !== 'ong') {
+        alert(_t('pong-access-denied'));
+        window.location.href = 'index.html';
+        return;
+    }
 
-            await loadOngData(user.uid);
-        });
+    await loadOngData(user.uid);
+});
 
         // Carregar dados da ONG
         async function loadOngData(userId) {
@@ -915,8 +916,7 @@ const _t = (k) => window.gssaI18n ? window.gssaI18n.t(k) : k;
                         <strong>${count}</strong>
                     </div>
                 `).join('')
-                : '<p style="color: var(--text-secondary);">Sem dados</p>';
-
+: `<p style="color: var(--text-secondary);">${_t('pong-no-data')}</p>`;
             document.getElementById('top-skills').innerHTML = topSkillsHtml;
         }
 
@@ -1059,50 +1059,33 @@ window.handleReject = async function(appId) {
         });
 
         // Salvar edição da ONG
-        document.getElementById('edit-ong-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
+       document.getElementById('edit-ong-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const _t = (k) => window.gssaI18n ? window.gssaI18n.t(k) : k;
 
-            const updatedData = {
-                basicInfo: {
-                    ...ongData.basicInfo,
-                    name: document.getElementById('edit-name').value,
-                    phone: document.getElementById('edit-phone').value,
-                    email: document.getElementById('edit-email').value
-                },
-                description: document.getElementById('edit-description').value,
-                services: document.getElementById('edit-services').value,
-                capacity: parseInt(document.getElementById('edit-capacity').value) || null,
-                schedule: document.getElementById('edit-schedule').value,
-                updatedAt: serverTimestamp()
-            };
+    const updatedData = {
+        basicInfo: {
+            ...ongData.basicInfo,
+            name: document.getElementById('edit-name').value,
+            phone: document.getElementById('edit-phone').value,
+            email: document.getElementById('edit-email').value
+        },
+        description: document.getElementById('edit-description').value,
+        services: document.getElementById('edit-services').value,
+        capacity: parseInt(document.getElementById('edit-capacity').value) || null,
+        schedule: document.getElementById('edit-schedule').value,
+        updatedAt: serverTimestamp()
+    };
 
-            try {
-                await updateDoc(doc(db, 'ongs', ongId), updatedData);
-                // Dados atualizados
-alert('Dados atualizados com sucesso!');
-// substitua por:
-alert(_t('pong-data-updated'));
-
-// Erro ao salvar
-alert('Erro ao salvar: ' + error.message);
-// substitua por:
-alert(`${_t('pong-data-error')} ${error.message}`);
-
-// Acesso negado
-alert('Acesso negado! Apenas ONGs podem acessar este painel.');
-// substitua por:
-alert(_t('pong-access-denied'));
-
-// Precisa estar logado
-alert('Você precisa estar logado!');
-// substitua por:
-alert(_t('pong-need-login'));
-
-// Sem dados de habilidades
-'<p style="color: var(--text-secondary);">Sem dados</p>'
-// substitua por:
-`<p style="color: var(--text-secondary);">${_t('pong-no-data')}</p>`
-        });
+    try {
+        await updateDoc(doc(db, 'ongs', ongId), updatedData);
+        alert(_t('pong-data-updated'));
+        ongData = { ...ongData, ...updatedData };
+        renderDashboard();
+    } catch (error) {
+        alert(`${_t('pong-data-error')} ${error.message}`);
+    }
+});
 
         document.addEventListener('gssa-lang-changed', () => {
     if (window.gssaI18n) window.gssaI18n.applyTranslations();
@@ -1240,6 +1223,7 @@ document.querySelector('[data-tab="popup"]').addEventListener('click', loadActiv
 </body>
 
 </html>
+
 
 
 
