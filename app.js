@@ -1,7 +1,9 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-import { getFirestore, doc, getDoc, setDoc, addDoc, collection, serverTimestamp, query, where, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
+import { getFirestore, collection, getDocs, doc, getDoc,
+         updateDoc, setDoc, deleteDoc, query, where,
+         serverTimestamp, Timestamp }
+    from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 document.addEventListener('DOMContentLoaded', () => {
     const firebaseConfig = {
         apiKey: "AIzaSyDhQs9Kz4LLGaKIhWV9nUiTjlst5YEWhjg",
@@ -733,6 +735,7 @@ async function loadOngPopups() {
     refreshPanelIfOpen();
 });
 });
+
 
 
 
