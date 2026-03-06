@@ -557,24 +557,45 @@ userAccuracy = accuracy;
         const cancelButton = document.getElementById('cancel-button');
         if (cancelButton && existingApplicationId) {
             cancelButton.addEventListener('click', async () => {
-                if (!confirm(`Cancelar inscrição na ${ong.nome}?`)) return;
+                // Cancelar inscrição
+if (!confirm(`Cancelar inscrição na ${ong.nome}?`)) return;
+// substitua por:
+if (!confirm(_t('cancel-inscription').replace('{nome}', ong.nome))) return;
 
-                try {
-                    cancelButton.disabled = true;
-                    cancelButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Cancelando...';
-                    
-                    await deleteDoc(doc(db, 'applications', existingApplicationId));
-                    
-                    alert(' Inscrição cancelada!');
-                    showDetails(ong.id);
-                } catch (error) {
-                    console.error(' Erro ao cancelar:', error);
-                    alert(`Erro: ${error.message}`);
-                    cancelButton.disabled = false;
-                    cancelButton.innerHTML = '<i class="fas fa-times"></i> Cancelar Inscrição';
-                }
-            });
-        }
+// Feedback de cancelamento
+alert(' Inscrição cancelada!');
+// substitua por:
+alert(_t('cancel-success'));
+
+// Estado do botão cancelando
+cancelButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Cancelando...';
+// substitua por:
+cancelButton.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${_t('cancel-ing')}`;
+
+// Estado do botão enviando
+applyButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+// substitua por:
+applyButton.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${_t('apply-ing')}`;
+
+// Sucesso ao inscrever
+alert(' Inscrição enviada!');
+// substitua por:
+alert(_t('apply-success'));
+
+// Retry do botão
+applyButton.innerHTML = '<i class="fas fa-hand-holding-heart"></i> Inscrever-se';
+// substitua por:
+applyButton.innerHTML = `<i class="fas fa-hand-holding-heart"></i> ${_t('apply-error-retry')}`;
+
+// Busca sem resultado
+alert('Nenhuma ONG encontrada.');
+// substitua por:
+alert(_t('search-not-found'));
+
+// Cancelar texto do botão no painel lateral
+cancelButton.innerHTML = '<i class="fas fa-times"></i> Cancelar Inscrição';
+// substitua por:
+cancelButton.innerHTML = `<i class="fas fa-times"></i> ${_t('panel-cancel-text')}`;
 
         const applyButton = document.getElementById('apply-button');
         if (applyButton && currentUser && userRole === 'voluntario') {
@@ -739,6 +760,7 @@ await loadOngPopups();
     refreshPanelIfOpen();
 });
 });
+
 
 
 
