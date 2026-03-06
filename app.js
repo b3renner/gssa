@@ -635,35 +635,65 @@ async function loadOngPopups() {
             const _t = (k) => window.gssaI18n ? window.gssaI18n.t(k) : k;
 
             const occupationHtml = data.occupation?.max
-                ? `<div style="font-size:0.9em; font-weight:700; color:var(--color-highlight);
-                               margin-bottom:6px;">
+                ? `<div style="font-size:0.9em; font-weight:700; color:#D9534F; margin-bottom:6px;">
                        <i class="fas fa-users"></i>
                        ${_t('popup-occupancy-label')} ${data.occupation.current}/${data.occupation.max}
                    </div>`
                 : '';
 
             const popupHtml = `
-    <div style="max-width:220px; font-family:inherit;">
-        ${occupationHtml}
-        <div style="font-size:0.88em; line-height:1.5; color:#333; margin-bottom:8px;">
-            ${data.message}
-        </div>
-        <div style="font-size:0.75em; color:#888;">
-            <i class="fas fa-clock"></i>
-            ${_t('popup-expires-at')} ${expires.toLocaleString(
-                window.gssaI18n?.currentLang() === 'en' ? 'en-US' : 'pt-BR'
-            )}
-        </div>
-    </div>
-`;
+                <div style="max-width:220px; font-family:inherit;">
+                    ${occupationHtml}
+                    <div style="font-size:0.88em; line-height:1.5; color:#333; margin-bottom:8px;">
+                        ${data.message}
+                    </div>
+                    <div style="font-size:0.75em; color:#888;">
+                        <i class="fas fa-clock"></i>
+                        ${_t('popup-expires-at')} ${expires.toLocaleString(
+                            window.gssaI18n?.currentLang() === 'en' ? 'en-US' : 'pt-BR'
+                        )}
+                    </div>
+                </div>
+            `;
 
-            marker.bindPopup(popupHtml).openPopup();
+            // Ícone de balãozinho vermelho
+            const noticeIcon = L.divIcon({
+                className: '',
+                html: `<div style="
+                    width: 18px; height: 18px;
+                    background: #D9534F;
+                    border: 2px solid #fff;
+                    border-radius: 50% 50% 50% 0;
+                    transform: rotate(-45deg);
+                    box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+                    cursor: pointer;
+                "></div>`,
+                iconSize: [18, 18],
+                iconAnchor: [9, 18],
+                popupAnchor: [0, -20]
+            });
+
+            // Marcador separado só para o popup — não substitui o marcador da ONG
+            const noticeMarker = L.marker([marker.getLatLng().lat + 0.0003, marker.getLatLng().lng], {
+                icon: noticeIcon,
+                zIndexOffset: 1000
+            }).addTo(map);
+
+            noticeMarker.bindPopup(popupHtml, {
+                maxWidth: 240,
+                closeButton: true,
+                autoClose: true,   // fecha o anterior ao abrir outro
+                closeOnClick: false
+            });
+
+            noticeMarker.on('click', () => {
+                noticeMarker.openPopup();
+            });
         });
     } catch (e) {
         console.warn('Erro ao carregar popups:', e);
     }
 }
-
     const searchButton = document.getElementById('search-button');
 searchButton.addEventListener('click', () => {
     const query = document.getElementById('search-input').value.trim().toLowerCase();
@@ -735,6 +765,7 @@ await loadOngPopups();
     refreshPanelIfOpen();
 });
 });
+
 
 
 
