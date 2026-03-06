@@ -1323,6 +1323,23 @@ body {
 .leaflet-popup-content {
     color: #222 !important;
 }
+
+/* Popup de aviso das ONGs */
+.gssa-notice-popup .leaflet-popup-content-wrapper {
+    border-radius: 14px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+    border-top: 3px solid #D9534F;
+    padding: 4px;
+}
+
+.gssa-notice-popup .leaflet-popup-tip {
+    background: #fff;
+}
+
+.gssa-notice-popup .leaflet-popup-content {
+    margin: 12px 14px;
+    color: #333 !important;
+}
 @media (max-width: 900px) {
    
     .main-header {
@@ -1410,6 +1427,7 @@ body {
         font-size: 14px;
     }
 }
+
 
 
 
