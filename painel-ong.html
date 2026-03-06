@@ -9,6 +9,37 @@
      <link rel="stylesheet" href="style.css">
     <script src="translations.js"></script>
     <style>
+
+        /* ── Duração popup ── */
+.popup-duration-opt {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border: 1.5px solid var(--bg-map-border);
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.9em;
+    font-weight: 600;
+    color: var(--text-secondary);
+    transition: all 0.2s;
+    user-select: none;
+}
+
+.popup-duration-opt input[type="radio"] {
+    display: none;
+}
+
+.popup-duration-opt:has(input:checked) {
+    background: var(--color-highlight);
+    border-color: var(--color-highlight);
+    color: #fff;
+}
+
+.popup-duration-opt:hover {
+    border-color: var(--color-highlight);
+    color: var(--color-highlight);
+}
         .admin-ong-container {
             max-width: 1400px;
             margin: 20px auto;
@@ -416,6 +447,10 @@
         <button class="tab-button" data-tab="estatisticas">
             <i class="fas fa-chart-bar"></i> <span data-i18n="pong-tab-stats">Estatísticas</span>
         </button>
+        <button class="tab-button" data-tab="popup">
+    <i class="fas fa-comment-dots"></i>
+    <span data-i18n="pong-tab-popup">Aviso no Mapa</span>
+</button>
     </div>
 
     <div id="tab-inscricoes" class="tab-content active">
@@ -491,6 +526,100 @@
                 </div>
             </div>
         </div>
+    </div>
+</div>
+
+        <div id="tab-popup" class="tab-content">
+    <div class="edit-form">
+        <h2 style="color: var(--color-tint); margin-bottom: 8px;">
+            <i class="fas fa-comment-dots"></i>
+            <span data-i18n="popup-tab-title">Aviso em Tempo Real no Mapa</span>
+        </h2>
+        <p style="color: var(--text-secondary); margin-bottom: 24px; font-size: 0.9em;"
+           data-i18n="popup-tab-desc">
+            Publique um balão de aviso visível no mapa para voluntários e visitantes.
+            Útil para informar demandas e ofertas, anúncios e pedidos de doações e compartilhamento de contatos durante crises.
+        </p>
+
+        <!-- Status do aviso ativo -->
+        <div id="popup-active-banner" style="display:none; margin-bottom: 20px;
+             padding: 14px 18px; border-radius: 10px; background: rgba(46,204,113,0.1);
+             border-left: 4px solid #2ECC71; font-size: 0.9em;">
+            <strong style="color: #2ECC71;">
+                <i class="fas fa-circle" style="font-size:0.6em; vertical-align:middle;
+                   animation: blink-dot 1.2s infinite;"></i>
+                <span data-i18n="popup-active-label">Aviso ativo até</span>
+            </strong>
+            <span id="popup-expires-text" style="color: var(--text-primary); margin-left: 6px;"></span>
+            <button id="popup-cancel-btn" style="margin-left: 16px; padding: 4px 12px;
+                    background: #E74C3C; color: #fff; border: none; border-radius: 6px;
+                    cursor: pointer; font-size: 0.85em;" data-i18n="popup-cancel-btn">
+                Remover aviso
+            </button>
+        </div>
+
+        <form id="popup-form">
+            <!-- Ocupação (opcional) -->
+            <div style="margin-bottom: 16px;">
+                <label style="display:flex; align-items:center; gap:8px; font-weight:700;
+                       font-size:0.85em; text-transform:uppercase; letter-spacing:0.05em;
+                       color:var(--text-secondary); margin-bottom:10px;">
+                    <input type="checkbox" id="popup-use-occupation" style="width:16px;height:16px;">
+                    <span data-i18n="popup-occupation-label">Mostrar ocupação atual</span>
+                </label>
+                <div id="popup-occupation-fields" style="display:none;
+                     display:grid; grid-template-columns:1fr 1fr; gap:12px; display:none;">
+                    <div class="form-group">
+                        <label for="popup-occ-current" data-i18n="popup-occ-current">Ocupação atual</label>
+                        <input type="number" id="popup-occ-current" min="0" placeholder="Ex: 12">
+                    </div>
+                    <div class="form-group">
+                        <label for="popup-occ-max" data-i18n="popup-occ-max">Capacidade máxima</label>
+                        <input type="number" id="popup-occ-max" min="1" placeholder="Ex: 70">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mensagem -->
+            <div class="form-group" style="margin-bottom: 16px;">
+                <label for="popup-message" style="display:flex; justify-content:space-between;">
+                    <span data-i18n="popup-message-label">Mensagem</span>
+                    <span id="popup-char-count" style="color:var(--text-secondary);
+                          font-size:0.85em;">0 / 160</span>
+                </label>
+                <textarea id="popup-message" rows="3" maxlength="160"
+                          style="resize: vertical; min-height: 80px;"
+                          data-i18n-ph="popup-message-ph"
+                          placeholder="Ex: Precisamos de médicos voluntários e alimentos não perecíveis."></textarea>
+            </div>
+
+            <!-- Duração -->
+            <div class="form-group" style="margin-bottom: 24px;">
+                <label data-i18n="popup-duration-label">Duração do aviso</label>
+                <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:8px;">
+                    <label class="popup-duration-opt">
+                        <input type="radio" name="popup-duration" value="1"> 1h
+                    </label>
+                    <label class="popup-duration-opt">
+                        <input type="radio" name="popup-duration" value="12"> 12h
+                    </label>
+                    <label class="popup-duration-opt active">
+                        <input type="radio" name="popup-duration" value="24" checked> 24h
+                    </label>
+                    <label class="popup-duration-opt">
+                        <input type="radio" name="popup-duration" value="72"> 3 dias
+                    </label>
+                    <label class="popup-duration-opt">
+                        <input type="radio" name="popup-duration" value="168"> 1 semana
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-save" style="display:flex;align-items:center;gap:8px;">
+                <i class="fas fa-paper-plane"></i>
+                <span data-i18n="popup-publish-btn">Publicar aviso no mapa</span>
+            </button>
+        </form>
     </div>
 </div>
             
@@ -586,7 +715,10 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, getDocs, doc, getDoc, updateDoc, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, doc, getDoc,
+         updateDoc, setDoc, deleteDoc, query, where,
+         serverTimestamp, Timestamp }
+    from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 const _t = (k) => window.gssaI18n ? window.gssaI18n.t(k) : k;
         const firebaseConfig = {
             apiKey: "AIzaSyDhQs9Kz4LLGaKIhWV9nUiTjlst5YEWhjg",
@@ -954,9 +1086,139 @@ window.handleReject = async function(appId) {
     checkOngStatus();
     renderApplications();
 });
+
+        // ── Sistema de Pop-ups no Mapa ── //
+import { setDoc, deleteDoc, Timestamp }
+    from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+const popupForm        = document.getElementById('popup-form');
+const popupMessage     = document.getElementById('popup-message');
+const popupCharCount   = document.getElementById('popup-char-count');
+const popupActiveBanner= document.getElementById('popup-active-banner');
+const popupExpiresText = document.getElementById('popup-expires-text');
+const popupCancelBtn   = document.getElementById('popup-cancel-btn');
+const useOccupation    = document.getElementById('popup-use-occupation');
+const occFields        = document.getElementById('popup-occupation-fields');
+
+// Contador de caracteres
+popupMessage.addEventListener('input', () => {
+    const len = popupMessage.value.length;
+    popupCharCount.textContent = `${len} / 160`;
+    popupCharCount.style.color = len > 140 ? 'var(--color-highlight)' : 'var(--text-secondary)';
+});
+
+// Toggle campos de ocupação
+useOccupation.addEventListener('change', () => {
+    occFields.style.display = useOccupation.checked ? 'grid' : 'none';
+});
+
+// Carregar aviso ativo ao abrir a aba
+async function loadActivePopup() {
+    if (!ongId) return;
+    try {
+        const popupDoc = await getDoc(doc(db, 'ong_popups', ongId));
+        if (popupDoc.exists()) {
+            const data = popupDoc.data();
+            const now = new Date();
+            const expires = data.expiresAt.toDate();
+            if (expires > now) {
+                showActiveBanner(expires, data);
+            } else {
+                await deleteDoc(doc(db, 'ong_popups', ongId));
+            }
+        }
+    } catch (e) {
+        console.warn('Erro ao carregar popup ativo:', e);
+    }
+}
+
+function showActiveBanner(expiresDate, data) {
+    const _t = (k) => window.gssaI18n ? window.gssaI18n.t(k) : k;
+    const lang = window.gssaI18n ? window.gssaI18n.currentLang() : 'pt';
+    const locale = lang === 'en' ? 'en-US' : 'pt-BR';
+    popupExpiresText.textContent = expiresDate.toLocaleString(locale);
+    popupActiveBanner.style.display = 'block';
+
+    // Pré-preenche o formulário com o aviso atual
+    popupMessage.value = data.message || '';
+    popupCharCount.textContent = `${popupMessage.value.length} / 160`;
+
+    if (data.occupation?.max) {
+        useOccupation.checked = true;
+        occFields.style.display = 'grid';
+        document.getElementById('popup-occ-current').value = data.occupation.current || '';
+        document.getElementById('popup-occ-max').value = data.occupation.max || '';
+    }
+}
+
+// Publicar aviso
+popupForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const _t = (k) => window.gssaI18n ? window.gssaI18n.t(k) : k;
+
+    const message = popupMessage.value.trim();
+    if (!message) {
+        alert(_t('popup-error-empty'));
+        return;
+    }
+
+    const hours = parseInt(document.querySelector('input[name="popup-duration"]:checked').value);
+    const expiresAt = new Date(Date.now() + hours * 60 * 60 * 1000);
+
+    const payload = {
+        message,
+        ongName: ongData.basicInfo.name,
+        ongId,
+        expiresAt: Timestamp.fromDate(expiresAt),
+        createdAt: Timestamp.fromDate(new Date()),
+    };
+
+    if (useOccupation.checked) {
+        const current = parseInt(document.getElementById('popup-occ-current').value) || 0;
+        const max     = parseInt(document.getElementById('popup-occ-max').value) || 0;
+        if (max > 0) payload.occupation = { current, max };
+    }
+
+    try {
+        const submitBtn = popupForm.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+        await setDoc(doc(db, 'ong_popups', ongId), payload);
+
+        alert(_t('popup-success'));
+        showActiveBanner(expiresAt, payload);
+
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = `<i class="fas fa-paper-plane"></i> ${_t('popup-publish-btn')}`;
+    } catch (err) {
+        alert('Erro: ' + err.message);
+    }
+});
+
+// Remover aviso
+popupCancelBtn.addEventListener('click', async () => {
+    const _t = (k) => window.gssaI18n ? window.gssaI18n.t(k) : k;
+    if (!confirm(_t('popup-cancel-confirm'))) return;
+    try {
+        await deleteDoc(doc(db, 'ong_popups', ongId));
+        popupActiveBanner.style.display = 'none';
+        popupMessage.value = '';
+        popupCharCount.textContent = '0 / 160';
+        useOccupation.checked = false;
+        occFields.style.display = 'none';
+        alert(_t('popup-cancelled'));
+    } catch (err) {
+        alert('Erro: ' + err.message);
+    }
+});
+
+// Carregar ao clicar na aba
+document.querySelector('[data-tab="popup"]').addEventListener('click', loadActivePopup);
     </script>
 </body>
 
 </html>
+
 
 
