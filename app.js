@@ -647,20 +647,19 @@ async function loadOngPopups() {
                 : '';
 
             const popupHtml = `
-                <div style="max-width:220px; font-family: inherit;">
-                    ${occupationHtml}
-                    <div style="font-size:0.88em; line-height:1.5;
-                                color:var(--text-primary); margin-bottom:8px;">
-                        ${data.message}
-                    </div>
-                    <div style="font-size:0.75em; color:var(--text-secondary);">
-                        <i class="fas fa-clock"></i>
-                        ${_t('popup-expires-at')} ${expires.toLocaleString(
-                            window.gssaI18n?.currentLang() === 'en' ? 'en-US' : 'pt-BR'
-                        )}
-                    </div>
-                </div>
-            `;
+    <div style="max-width:220px; font-family:inherit;">
+        ${occupationHtml}
+        <div style="font-size:0.88em; line-height:1.5; color:#333; margin-bottom:8px;">
+            ${data.message}
+        </div>
+        <div style="font-size:0.75em; color:#888;">
+            <i class="fas fa-clock"></i>
+            ${_t('popup-expires-at')} ${expires.toLocaleString(
+                window.gssaI18n?.currentLang() === 'en' ? 'en-US' : 'pt-BR'
+            )}
+        </div>
+    </div>
+`;
 
             marker.bindPopup(popupHtml).openPopup();
         });
@@ -740,6 +739,7 @@ await loadOngPopups();
     refreshPanelIfOpen();
 });
 });
+
 
 
 
