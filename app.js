@@ -667,34 +667,34 @@ async function loadOngPopups() {
                 </div>
             `;
 
-            // Ícone balãozinho com megafone
             const noticeIcon = L.divIcon({
-                className: '',
-                html: `
-                    <div style="position:relative; cursor:pointer;">
-                        <div style="
-                            width: 28px; height: 28px;
-                            background: linear-gradient(135deg, #D9534F, #c0392b);
-                            border: 2.5px solid #fff;
-                            border-radius: 50% 50% 50% 0;
-                            transform: rotate(-45deg);
-                            box-shadow: 0 3px 8px rgba(0,0,0,0.35);
-                        "></div>
-                        <div style="
-                            position:absolute; top:3px; left:3px;
-                            width:22px; height:22px;
-                            display:flex; align-items:center; justify-content:center;
-                        ">
-                            <i class="fas fa-bullhorn" style="
-                                color:#fff; font-size:10px;
-                                transform:rotate(45deg);
-                            "></i>
-                        </div>
-                    </div>`,
-                iconSize: [28, 28],
-                iconAnchor: [14, 28],
-                popupAnchor: [0, -32]
-            });
+    className: '',
+    html: `
+        <div style="position:relative; cursor:pointer; width:38px; height:38px;">
+            <!-- Corpo do balão -->
+            <div style="
+                position:absolute; top:0; left:0;
+                width:38px; height:32px;
+                background: linear-gradient(135deg, #D9534F, #c0392b);
+                border-radius: 10px;
+                box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+                display:flex; align-items:center; justify-content:center;
+            ">
+                <i class="fas fa-bullhorn" style="color:#fff; font-size:13px;"></i>
+            </div>
+            <!-- Cauda do balão -->
+            <div style="
+                position:absolute; bottom:0; left:12px;
+                width:0; height:0;
+                border-left:7px solid transparent;
+                border-right:3px solid transparent;
+                border-top:8px solid #c0392b;
+            "></div>
+        </div>`,
+    iconSize: [38, 38],
+    iconAnchor: [19, 38],
+    popupAnchor: [0, -42]
+});
 
             const noticeMarker = L.marker(
                 [marker.getLatLng().lat + 0.0003, marker.getLatLng().lng],
@@ -786,6 +786,7 @@ await loadOngPopups();
     refreshPanelIfOpen();
 });
 });
+
 
 
 
