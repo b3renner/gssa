@@ -1,7 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 import { getFirestore, collection, getDocs, doc, getDoc,
-         updateDoc, setDoc, deleteDoc, query, where,
+         updateDoc, setDoc, deleteDoc, addDoc, query, where,
          serverTimestamp, Timestamp }
     from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 document.addEventListener('DOMContentLoaded', () => {
@@ -783,6 +783,7 @@ await loadOngPopups();
     refreshPanelIfOpen();
 });
 });
+
 
 
 
