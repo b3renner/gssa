@@ -391,13 +391,13 @@ await loadOngPopups();
 userAccuracy = accuracy;
                     
                     const userIcon = L.icon({
-                        iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
-                        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-                        iconSize: [38, 38],
-iconAnchor: [48, 48],  // desloca o ícone 10px à esquerda e 10px acima do marcador original
-popupAnchor: [0, -42],
-                        shadowSize: [41, 41]
-                    });
+    iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
+});
                     
                     userMarker = L.marker([lat, lon], { icon: userIcon })
                         .addTo(map)
@@ -692,8 +692,8 @@ async function loadOngPopups() {
             "></div>
         </div>`,
     iconSize: [38, 38],
-    iconAnchor: [19, 38],
-    popupAnchor: [0, -42]
+iconAnchor: [48, 48],  // desloca o ícone 10px à esquerda e 10px acima do marcador original
+popupAnchor: [0, -42]
 });
 
             const noticeMarker = L.marker(
@@ -788,6 +788,7 @@ await loadOngPopups();
     refreshPanelIfOpen();
 });
 });
+
 
 
 
