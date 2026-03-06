@@ -697,10 +697,9 @@ async function loadOngPopups() {
 });
 
             const noticeMarker = L.marker(
-                [marker.getLatLng().lat + 0.0003, marker.getLatLng().lng],
-                { icon: noticeIcon, zIndexOffset: 1000 }
-            ).addTo(map);
-
+    [marker.getLatLng().lat + 0.0006, marker.getLatLng().lng + 0.0004],
+    { icon: noticeIcon, zIndexOffset: 1000 }
+).addTo(map);
             noticeMarker.bindPopup(popupHtml, {
                 maxWidth: 260,
                 closeButton: true,
@@ -786,6 +785,7 @@ await loadOngPopups();
     refreshPanelIfOpen();
 });
 });
+
 
 
 
