@@ -554,80 +554,58 @@ userAccuracy = accuracy;
         detailsPanel.classList.add('open');
         setTimeout(() => map.invalidateSize(), 500);
 
-        const cancelButton = document.getElementById('cancel-button');
-        if (cancelButton && existingApplicationId) {
-            cancelButton.addEventListener('click', async () => {
-                // Cancelar inscrição
-if (!confirm(`Cancelar inscrição na ${ong.nome}?`)) return;
-// substitua por:
-if (!confirm(_t('cancel-inscription').replace('{nome}', ong.nome))) return;
+     const cancelButton = document.getElementById('cancel-button');
+if (cancelButton && existingApplicationId) {
+    cancelButton.addEventListener('click', async () => {
+        if (!confirm(_t('cancel-inscription').replace('{nome}', ong.nome))) return;
 
-// Feedback de cancelamento
-alert(' Inscrição cancelada!');
-// substitua por:
-alert(_t('cancel-success'));
+        try {
+            cancelButton.disabled = true;
+            cancelButton.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${_t('cancel-ing')}`;
 
-// Estado do botão cancelando
-cancelButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Cancelando...';
-// substitua por:
-cancelButton.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${_t('cancel-ing')}`;
+            await deleteDoc(doc(db, 'applications', existingApplicationId));
 
-// Estado do botão enviando
-applyButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
-// substitua por:
-applyButton.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${_t('apply-ing')}`;
-
-// Sucesso ao inscrever
-alert(' Inscrição enviada!');
-// substitua por:
-alert(_t('apply-success'));
-
-// Retry do botão
-applyButton.innerHTML = '<i class="fas fa-hand-holding-heart"></i> Inscrever-se';
-// substitua por:
-applyButton.innerHTML = `<i class="fas fa-hand-holding-heart"></i> ${_t('apply-error-retry')}`;
-
-// Busca sem resultado
-alert('Nenhuma ONG encontrada.');
-// substitua por:
-alert(_t('search-not-found'));
-
-// Cancelar texto do botão no painel lateral
-cancelButton.innerHTML = '<i class="fas fa-times"></i> Cancelar Inscrição';
-// substitua por:
-cancelButton.innerHTML = `<i class="fas fa-times"></i> ${_t('panel-cancel-text')}`;
-
-        const applyButton = document.getElementById('apply-button');
-        if (applyButton && currentUser && userRole === 'voluntario') {
-            applyButton.addEventListener('click', async () => {
-                const _t = (k) => window.gssaI18n ? window.gssaI18n.t(k) : k;
-const confirmMsg = _t('apply-confirm').replace('{nome}', ong.nome);
-if (!confirm(confirmMsg)) return;
-
-                try {
-                    applyButton.disabled = true;
-                    applyButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
-                    
-                    await addDoc(collection(db, 'applications'), {
-                        ongId: String(ong.id),
-                        ongName: ong.nome,         // ✅ salva nome para evitar "ONG não encontrada"
-                        ongServicos: ong.servicos,  // ✅ salva serviços junto
-                        userId: currentUser.uid,
-                        status: 'pending',
-                        createdAt: serverTimestamp()
-                    });
-                    
-                    alert(' Inscrição enviada!');
-                    showDetails(ong.id);
-                } catch (error) {
-                    console.error(' Erro ao inscrever:', error);
-                    alert(`Erro: ${error.message}`);
-                    applyButton.disabled = false;
-                    applyButton.innerHTML = '<i class="fas fa-hand-holding-heart"></i> Inscrever-se';
-                }
-            });
+            alert(_t('cancel-success'));
+            showDetails(ong.id);
+        } catch (error) {
+            console.error('Erro ao cancelar:', error);
+            alert(`Erro: ${error.message}`);
+            cancelButton.disabled = false;
+            cancelButton.innerHTML = `<i class="fas fa-times"></i> ${_t('panel-cancel-text')}`;
         }
-    }
+    });
+}
+
+const applyButton = document.getElementById('apply-button');
+if (applyButton && currentUser && userRole === 'voluntario') {
+    applyButton.addEventListener('click', async () => {
+        const _t = (k) => window.gssaI18n ? window.gssaI18n.t(k) : k;
+        const confirmMsg = _t('apply-confirm').replace('{nome}', ong.nome);
+        if (!confirm(confirmMsg)) return;
+
+        try {
+            applyButton.disabled = true;
+            applyButton.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${_t('apply-ing')}`;
+
+            await addDoc(collection(db, 'applications'), {
+                ongId: String(ong.id),
+                ongName: ong.nome,
+                ongServicos: ong.servicos,
+                userId: currentUser.uid,
+                status: 'pending',
+                createdAt: serverTimestamp()
+            });
+
+            alert(_t('apply-success'));
+            showDetails(ong.id);
+        } catch (error) {
+            console.error('Erro ao inscrever:', error);
+            alert(`Erro: ${error.message}`);
+            applyButton.disabled = false;
+            applyButton.innerHTML = `<i class="fas fa-hand-holding-heart"></i> ${_t('apply-error-retry')}`;
+        }
+    });
+}
 
     function refreshPanelIfOpen() {
         if (detailsPanel.classList.contains('open')) {
@@ -691,24 +669,25 @@ async function loadOngPopups() {
 }
 
     const searchButton = document.getElementById('search-button');
-    searchButton.addEventListener('click', () => {
-        const query = document.getElementById('search-input').value.trim().toLowerCase();
-        const foundOng = ongsData.find(ong => 
-            ong.nome.toLowerCase().includes(query) || 
-            ong.servicos.toLowerCase().includes(query)
-        );
-        
-        if (foundOng) {
-            const marker = markers.get(String(foundOng.id));
-            if (marker) {
-                map.setView(marker.getLatLng(), 15, { animate: true });
-                marker.openPopup();
-                showDetails(foundOng.id);
-            }
-        } else {
-            alert('Nenhuma ONG encontrada.');
+searchButton.addEventListener('click', () => {
+    const query = document.getElementById('search-input').value.trim().toLowerCase();
+    const foundOng = ongsData.find(ong =>
+        ong.nome.toLowerCase().includes(query) ||
+        ong.servicos.toLowerCase().includes(query)
+    );
+
+    if (foundOng) {
+        const marker = markers.get(String(foundOng.id));
+        if (marker) {
+            map.setView(marker.getLatLng(), 15, { animate: true });
+            marker.openPopup();
+            showDetails(foundOng.id);
         }
-    });
+    } else {
+        const _t = (k) => window.gssaI18n ? window.gssaI18n.t(k) : k;
+        alert(_t('search-not-found'));
+    }
+});
 
     window.showDetails = showDetails;
 
@@ -760,6 +739,7 @@ await loadOngPopups();
     refreshPanelIfOpen();
 });
 });
+
 
 
 
