@@ -635,60 +635,81 @@ async function loadOngPopups() {
             const _t = (k) => window.gssaI18n ? window.gssaI18n.t(k) : k;
 
             const occupationHtml = data.occupation?.max
-                ? `<div style="font-size:0.9em; font-weight:700; color:#D9534F; margin-bottom:6px;">
-                       <i class="fas fa-users"></i>
-                       ${_t('popup-occupancy-label')} ${data.occupation.current}/${data.occupation.max}
+                ? `<div style="display:flex; align-items:center; gap:6px; margin-bottom:10px;
+                              background:#fff0f0; border-radius:8px; padding:6px 10px;">
+                       <i class="fas fa-users" style="color:#D9534F;"></i>
+                       <span style="font-weight:700; color:#D9534F; font-size:0.9em;">
+                           ${_t('popup-occupancy-label')} ${data.occupation.current}/${data.occupation.max}
+                       </span>
                    </div>`
                 : '';
 
             const popupHtml = `
-                <div style="max-width:220px; font-family:inherit;">
-                    ${occupationHtml}
-                    <div style="font-size:0.88em; line-height:1.5; color:#333; margin-bottom:8px;">
-                        ${data.message}
+                <div style="min-width:200px; max-width:240px; font-family:inherit; padding:4px 2px;">
+                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;
+                                padding-bottom:8px; border-bottom:2px solid #f0f0f0;">
+                        <div style="width:32px; height:32px; background:#D9534F; border-radius:50%;
+                                    display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                            <i class="fas fa-bullhorn" style="color:#fff; font-size:0.85em;"></i>
+                        </div>
+                        <strong style="color:#D9534F; font-size:0.95em;">${data.ongName}</strong>
                     </div>
-                    <div style="font-size:0.75em; color:#888;">
+                    ${occupationHtml}
+                    <p style="font-size:0.88em; line-height:1.6; color:#333;
+                              margin:0 0 10px 0;">${data.message}</p>
+                    <div style="display:flex; align-items:center; gap:5px;
+                                font-size:0.72em; color:#999; border-top:1px solid #f0f0f0; padding-top:8px;">
                         <i class="fas fa-clock"></i>
-                        ${_t('popup-expires-at')} ${expires.toLocaleString(
+                        <span>${_t('popup-expires-at')} ${expires.toLocaleString(
                             window.gssaI18n?.currentLang() === 'en' ? 'en-US' : 'pt-BR'
-                        )}
+                        )}</span>
                     </div>
                 </div>
             `;
 
-            // Ícone de balãozinho vermelho
+            // Ícone balãozinho com megafone
             const noticeIcon = L.divIcon({
                 className: '',
-                html: `<div style="
-                    width: 18px; height: 18px;
-                    background: #D9534F;
-                    border: 2px solid #fff;
-                    border-radius: 50% 50% 50% 0;
-                    transform: rotate(-45deg);
-                    box-shadow: 0 2px 6px rgba(0,0,0,0.4);
-                    cursor: pointer;
-                "></div>`,
-                iconSize: [18, 18],
-                iconAnchor: [9, 18],
-                popupAnchor: [0, -20]
+                html: `
+                    <div style="position:relative; cursor:pointer;">
+                        <div style="
+                            width: 28px; height: 28px;
+                            background: linear-gradient(135deg, #D9534F, #c0392b);
+                            border: 2.5px solid #fff;
+                            border-radius: 50% 50% 50% 0;
+                            transform: rotate(-45deg);
+                            box-shadow: 0 3px 8px rgba(0,0,0,0.35);
+                        "></div>
+                        <div style="
+                            position:absolute; top:3px; left:3px;
+                            width:22px; height:22px;
+                            display:flex; align-items:center; justify-content:center;
+                        ">
+                            <i class="fas fa-bullhorn" style="
+                                color:#fff; font-size:10px;
+                                transform:rotate(45deg);
+                            "></i>
+                        </div>
+                    </div>`,
+                iconSize: [28, 28],
+                iconAnchor: [14, 28],
+                popupAnchor: [0, -32]
             });
 
-            // Marcador separado só para o popup — não substitui o marcador da ONG
-            const noticeMarker = L.marker([marker.getLatLng().lat + 0.0003, marker.getLatLng().lng], {
-                icon: noticeIcon,
-                zIndexOffset: 1000
-            }).addTo(map);
+            const noticeMarker = L.marker(
+                [marker.getLatLng().lat + 0.0003, marker.getLatLng().lng],
+                { icon: noticeIcon, zIndexOffset: 1000 }
+            ).addTo(map);
 
             noticeMarker.bindPopup(popupHtml, {
-                maxWidth: 240,
+                maxWidth: 260,
                 closeButton: true,
-                autoClose: true,   // fecha o anterior ao abrir outro
-                closeOnClick: false
+                autoClose: true,
+                closeOnClick: false,
+                className: 'gssa-notice-popup'
             });
 
-            noticeMarker.on('click', () => {
-                noticeMarker.openPopup();
-            });
+            noticeMarker.on('click', () => noticeMarker.openPopup());
         });
     } catch (e) {
         console.warn('Erro ao carregar popups:', e);
@@ -765,6 +786,7 @@ await loadOngPopups();
     refreshPanelIfOpen();
 });
 });
+
 
 
 
