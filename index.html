@@ -352,23 +352,28 @@ body.dark-mode #climate-alert-bar.level-danger {
             <button id="close-inscricoes-modal" class="modal-close-button" aria-label="Fechar">
                 <i class="fas fa-times"></i>
             </button>
-            <h2 class="modal-title"><i class="fas fa-clipboard-list"></i> Minhas Inscrições</h2>
-            <p class="modal-subtitle">Acompanhe o status das suas candidaturas</p>
-            <div id="modal-inscricoes-list" style="margin-top: 20px;">
-                <p style="text-align: center; color: var(--text-secondary);">Carregando...</p>
-            </div>
-        </div>
-    </div>
+            <!-- Modal Inscrições -->
+<h2 class="modal-title">
+    <i class="fas fa-clipboard-list"></i>
+    <span data-i18n="inscricoes-modal-title">Minhas Inscrições</span>
+</h2>
+<p class="modal-subtitle" data-i18n="inscricoes-modal-sub">
+    Acompanhe o status das suas candidaturas
+</p>
+<div id="modal-inscricoes-list" style="margin-top: 20px;">
+    <p style="text-align: center; color: var(--text-secondary);"
+       data-i18n="inscricoes-loading">Carregando...</p>
+</div>
 
-    <div id="perfil-modal" class="modal">
-        <div class="modal-content" style="max-width: 700px; max-height: 90vh; overflow-y: auto;">
-            <button id="close-perfil-modal" class="modal-close-button" aria-label="Fechar">
-                <i class="fas fa-times"></i>
-            </button>
-            <h2 class="modal-title"><i class="fas fa-user-circle"></i> Meu Perfil</h2>
-            <div id="modal-perfil-content" style="margin-top: 20px;">
-                <p style="text-align: center; color: var(--text-secondary);">Carregando...</p>
-            </div>
+<!-- Modal Perfil -->
+<h2 class="modal-title">
+    <i class="fas fa-user-circle"></i>
+    <span data-i18n="perfil-modal-title">Meu Perfil</span>
+</h2>
+<div id="modal-perfil-content" style="margin-top: 20px;">
+    <p style="text-align: center; color: var(--text-secondary);"
+       data-i18n="perfil-loading">Carregando...</p>
+</div>
         </div>
     </div>
 
@@ -582,6 +587,7 @@ body.dark-mode #climate-alert-bar.level-danger {
 <script type="module" src="app.js"></script>
 </body>
 </html>
+
 
 
 
