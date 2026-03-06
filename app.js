@@ -151,6 +151,39 @@ document.addEventListener('DOMContentLoaded', () => {
     menuLogout?.addEventListener('click', handleLogout);
     fixedLogoutButton?.addEventListener('click', handleLogout);
 
+         function updateUI() {
+        if (currentUser) {
+            if (authButton) authButton.style.display = 'none';
+            if (userDropdown) userDropdown.style.display = 'block';
+            if (fixedLogoutButton) fixedLogoutButton.style.display = 'block';
+
+            const adminPanel = document.getElementById('menu-admin-panel');
+            const superAdminPanel = document.getElementById('menu-super-admin');
+            // ✅ FIX: só mostra painel ONG se role for exatamente 'ong'
+            if (adminPanel) {
+                if (userRole === 'ong') {
+                    adminPanel.style.display = 'block';
+                    adminPanel.href = 'painel-ong.html';
+                } else {
+                    adminPanel.style.display = 'none';
+                }
+            }
+            // ✅ FIX: painel super-admin nunca aparece aqui — só é exibido
+            // após confirmação do doc 'superAdmins' no onAuthStateChanged
+            if (superAdminPanel && userRole !== 'superadmin') {
+                superAdminPanel.style.display = 'none';
+            }
+        } else {
+            if (authButton) authButton.style.display = 'block';
+            if (userDropdown) userDropdown.style.display = 'none';
+            if (fixedLogoutButton) fixedLogoutButton.style.display = 'none';
+
+            const adminPanel = document.getElementById('menu-admin-panel');
+            const superAdminPanel = document.getElementById('menu-super-admin');
+            if (adminPanel) adminPanel.style.display = 'none';
+            if (superAdminPanel) superAdminPanel.style.display = 'none';
+        }
+    }
    onAuthStateChanged(auth, async (user) => {
     currentUser = user;
     if (user) {
@@ -702,6 +735,7 @@ await loadOngPopups();
     refreshPanelIfOpen();
 });
 });
+
 
 
 
