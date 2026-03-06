@@ -1073,12 +1073,30 @@ window.handleReject = async function(appId) {
 
             try {
                 await updateDoc(doc(db, 'ongs', ongId), updatedData);
-                alert('Dados atualizados com sucesso!');
-                ongData = { ...ongData, ...updatedData };
-                renderDashboard();
-            } catch (error) {
-                alert('Erro ao salvar: ' + error.message);
-            }
+                // Dados atualizados
+alert('Dados atualizados com sucesso!');
+// substitua por:
+alert(_t('pong-data-updated'));
+
+// Erro ao salvar
+alert('Erro ao salvar: ' + error.message);
+// substitua por:
+alert(`${_t('pong-data-error')} ${error.message}`);
+
+// Acesso negado
+alert('Acesso negado! Apenas ONGs podem acessar este painel.');
+// substitua por:
+alert(_t('pong-access-denied'));
+
+// Precisa estar logado
+alert('Você precisa estar logado!');
+// substitua por:
+alert(_t('pong-need-login'));
+
+// Sem dados de habilidades
+'<p style="color: var(--text-secondary);">Sem dados</p>'
+// substitua por:
+`<p style="color: var(--text-secondary);">${_t('pong-no-data')}</p>`
         });
 
         document.addEventListener('gssa-lang-changed', () => {
@@ -1217,6 +1235,7 @@ document.querySelector('[data-tab="popup"]').addEventListener('click', loadActiv
 </body>
 
 </html>
+
 
 
 
