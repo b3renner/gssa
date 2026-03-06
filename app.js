@@ -721,20 +721,19 @@ async function loadOngPopups() {
 
     setTimeout(() => map.invalidateSize(), 200);
 
-    document.addEventListener('gssa-lang-changed', () => {
-    // Atualiza popup do marcador do usuário
+document.addEventListener('gssa-lang-changed', async () => {
     if (userMarker && userAccuracy !== null) {
         const _t = (key) => window.gssaI18n ? window.gssaI18n.t(key) : key;
         userMarker.setPopupContent(
             `${_t('popup-you-are-here')} (${_t('popup-accuracy')} ${userAccuracy.toFixed(0)}m)`
         );
     }
-    // Recria marcadores das ONGs com texto atualizado
     addOngsToMap();
-        await loadOngPopups();
+    await loadOngPopups();
     refreshPanelIfOpen();
 });
 });
+
 
 
 
