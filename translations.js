@@ -317,6 +317,43 @@ const TRANSLATIONS = {
 'popup-cancelled':       'Aviso removido do mapa.',
 'popup-occupancy-label': 'Ocupação:',
 'popup-expires-at':      'Expira em',
+        /* ── Ações gerais (alerts/confirms) ── */
+'cancel-inscription':       'Cancelar inscrição na {nome}?',
+'cancel-success':           'Inscrição cancelada!',
+'cancel-ing':               'Cancelando...',
+'apply-ing':                'Enviando...',
+'apply-success':            'Inscrição enviada!',
+'apply-error-retry':        'Inscrever-se',
+
+/* ── Duração dos pop-ups ── */
+'popup-duration-1h':        '1h',
+'popup-duration-12h':       '12h',
+'popup-duration-24h':       '24h',
+'popup-duration-3d':        '3 dias',
+'popup-duration-1w':        '1 semana',
+
+/* ── Painel ONG — alertas JS ── */
+'pong-data-updated':        'Dados atualizados com sucesso!',
+'pong-data-error':          'Erro ao salvar:',
+'pong-access-denied':       'Acesso negado! Apenas ONGs podem acessar este painel.',
+'pong-need-login':          'Você precisa estar logado!',
+'pong-ong-not-found':       'ONG não encontrada',
+'pong-load-error':          'Erro ao carregar dados:',
+'pong-no-data':             'Sem dados',
+
+/* ── Modais secundários (index) ── */
+'inscricoes-modal-title':   'Minhas Inscrições',
+'inscricoes-modal-sub':     'Acompanhe o status das suas candidaturas',
+'inscricoes-loading':       'Carregando...',
+'perfil-modal-title':       'Meu Perfil',
+'perfil-loading':           'Carregando...',
+
+/* ── Busca ── */
+'search-not-found':         'Nenhuma ONG encontrada.',
+
+/* ── Painel lateral ── */
+'panel-cancel-ing':         'Cancelando...',
+'panel-cancel-text':        'Cancelar Inscrição',
 
     },
     en: {
@@ -635,6 +672,43 @@ const TRANSLATIONS = {
 'popup-cancelled':       'Notice removed from the map.',
         'popup-occupancy-label': 'Occupancy:',
 'popup-expires-at':      'Expires at',
+        /* ── General actions ── */
+'cancel-inscription':       'Cancel application to {nome}?',
+'cancel-success':           'Application cancelled!',
+'cancel-ing':               'Cancelling...',
+'apply-ing':                'Sending...',
+'apply-success':            'Application submitted!',
+'apply-error-retry':        'Apply',
+
+/* ── Popup durations ── */
+'popup-duration-1h':        '1h',
+'popup-duration-12h':       '12h',
+'popup-duration-24h':       '24h',
+'popup-duration-3d':        '3 days',
+'popup-duration-1w':        '1 week',
+
+/* ── NGO Panel — JS alerts ── */
+'pong-data-updated':        'Data updated successfully!',
+'pong-data-error':          'Error saving:',
+'pong-access-denied':       'Access denied! Only NGOs can access this panel.',
+'pong-need-login':          'You need to be logged in!',
+'pong-ong-not-found':       'NGO not found',
+'pong-load-error':          'Error loading data:',
+'pong-no-data':             'No data',
+
+/* ── Secondary modals (index) ── */
+'inscricoes-modal-title':   'My Applications',
+'inscricoes-modal-sub':     'Track the status of your volunteer applications',
+'inscricoes-loading':       'Loading...',
+'perfil-modal-title':       'My Profile',
+'perfil-loading':           'Loading...',
+
+/* ── Search ── */
+'search-not-found':         'No NGO found.',
+
+/* ── Side panel ── */
+'panel-cancel-ing':         'Cancelling...',
+'panel-cancel-text':        'Cancel Application',
     }
 };
 
