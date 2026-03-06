@@ -690,7 +690,7 @@ async function loadOngPopups() {
             "></div>
         </div>`,
     iconSize: [30, 30],
-    iconAnchor: [-8, 46],
+    iconAnchor: [-8, 50],
     popupAnchor: [0, -42]
 });
 
@@ -783,6 +783,7 @@ await loadOngPopups();
     refreshPanelIfOpen();
 });
 });
+
 
 
 
